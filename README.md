@@ -35,7 +35,7 @@ lattedb runserver
 You can access the interface in your browser.
 
 ## Development
-Table schemas are implemented in `lattedb.base.models`.
+Table schemas are implemented in `espressodb.base.models`.
 See also [the Django model doc](https://docs.djangoproject.com/en/2.2/topics/db/models/).
 
 ### Changing models workflow
