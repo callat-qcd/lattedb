@@ -1,3 +1,3 @@
-from django.contrib import admin
+from espressodb.base.admin import register_admins
 
-# Register your models here.
+register_admins("lattedb.quarksmear")

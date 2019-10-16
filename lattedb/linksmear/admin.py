@@ -1,10 +1,4 @@
-from django.contrib import admin
+from espressodb.base.admin import register_admins
 
-from lattedb.base.admin import BaseAdmin
 
-from lattedb.linksmear.models import Unsmeared
-from lattedb.linksmear.models import WilsonFlow
-
-# Register your models here.
-admin.site.register(Unsmeared, BaseAdmin)
-admin.site.register(WilsonFlow, BaseAdmin)
+register_admins("lattedb.linksmear")

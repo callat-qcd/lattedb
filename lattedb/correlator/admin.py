@@ -1,7 +1,7 @@
 """Admin view for correlation functions
 """
 from django.contrib import admin
-from lattedb.base.admin import BaseAdmin
+from espressodb.base.admin import BaseAdmin
 from lattedb.correlator.models import Baryon2pt
 
 

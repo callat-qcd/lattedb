@@ -1,6 +1,5 @@
 """Admin view for interaction operators
 """
-from django.contrib import admin
+from espressodb.base.admin import register_admins
 
-from lattedb.base.admin import BaseAdmin
-from lattedb.current.models import Local
+register_admins("lattedb.current")
