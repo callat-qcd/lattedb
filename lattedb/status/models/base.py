@@ -1,6 +1,6 @@
 from django.db import models
 
-from lattedb.base.models import Base
+from espressodb.base.models import Base
 
 STATUS_CHOICES = (
     (0, ("Unknown")),
