@@ -11,38 +11,40 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import yaml
+
+from espressodb.management.utilities.files import get_project_settings
+from espressodb.management.utilities.files import get_db_config
+from espressodb.management.utilities.files import ESPRESSO_DB_ROOT
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
-SETTINGS_FILE = os.path.join(ROOT_DIR, "settings.yaml")
+_SETTINGS = get_project_settings(ROOT_DIR)
+SECRET_KEY = _SETTINGS.get("SECRET_KEY")
+PROJECT_APPS = _SETTINGS.get("PROJECT_APPS", [])
+ALLOWED_HOSTS = _SETTINGS.get("ALLOWED_HOSTS", [])
+DEBUG = _SETTINGS.get("DEBUG", False)
 
-with open(SETTINGS_FILE, "r") as fin:
-    _SETTINGS = yaml.safe_load(fin.read())
-    SECRET_KEY = _SETTINGS["SECRET_KEY"]
-    PROJECT_APPS = _SETTINGS["PROJECT_APPS"]
-    ALLOWED_HOSTS = _SETTINGS.get("ALLOWED_HOSTS", [])
-    DEBUG = _SETTINGS.get("DEBUG", False)
-
-READ_CONFIG = True
-
-# Application definition
-
-INSTALLED_APPS = PROJECT_APPS + [
-    "lattedb.config",
-    "django_tables2",
-    "bootstrap4",
-    "widget_tweaks",
-    "django_extensions",
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-]
+INSTALLED_APPS = (
+    PROJECT_APPS
+    + [
+        "espressodb.base",
+        "espressodb.documentation",
+        "espressodb.management",
+        "espressodb.notifications",
+    ]
+    + ["bootstrap4", "widget_tweaks", "django_extensions"]
+    + [
+        "django.contrib.admin",
+        "django.contrib.auth",
+        "django.contrib.contenttypes",
+        "django.contrib.sessions",
+        "django.contrib.messages",
+        "django.contrib.staticfiles",
+    ]
+)
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -60,9 +62,9 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(BASE_DIR, "config", "templates"),
-            os.path.join(BASE_DIR, "correlator", "templates"),
-            os.path.join(BASE_DIR, "documentation", "templates"),
+            os.path.join(ESPRESSO_DB_ROOT, "espressodb", "base", "templates"),
+            os.path.join(ESPRESSO_DB_ROOT, "espressodb", "documentation", "templates"),
+            os.path.join(ESPRESSO_DB_ROOT, "espressodb", "notifications", "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -76,25 +78,19 @@ TEMPLATES = [
     }
 ]
 
+for app in PROJECT_APPS[::-1]:
+    _template_dir = os.path.join(ROOT_DIR, app.replace(".", os.sep), "templates")
+    if os.path.exists(_template_dir):
+        TEMPLATES[0]["DIRS"].insert(0, _template_dir)
+
+
 WSGI_APPLICATION = "lattedb.config.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-
-if READ_CONFIG:
-    with open(os.path.join(ROOT_DIR, "db-config.yaml"), "r") as fin:
-        CONFIG = yaml.safe_load(fin.read())
-    DATABASES = {"default": CONFIG}
-
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-        }
-    }
+DB_CONFIG = get_db_config(ROOT_DIR)
+DATABASES = {"default": DB_CONFIG}
 
 
 # Password validation
@@ -127,13 +123,16 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "base", "static"),
-    os.path.join(BASE_DIR, "correlator", "static"),
-]
+STATICFILES_DIRS = []
+for app in PROJECT_APPS[::-1]:
+    _static_dir = os.path.join(ROOT_DIR, app.replace(".", os.sep), "static")
+    if os.path.exists(_static_dir):
+        STATICFILES_DIRS.insert(0, _static_dir)
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+STATIC_ROOT = os.path.join(ROOT_DIR, "static")
+MEDIA_ROOT = os.path.join(ROOT_DIR, "media")
+
 
 LOGGING = {
     "version": 1,
@@ -145,16 +144,12 @@ LOGGING = {
         }
     },
     "loggers": {
-        "main.commands": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
-        "base": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
+        "espressodb": {"handlers": ["console"], "level": "DEBUG", "propagate": True}
     },
 }
 
-LOGIN_REDIRECT_URL = "index"
-LOGOUT_REDIRECT_URL = "index"
-
-
-DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
+LOGIN_REDIRECT_URL = "base:index"
+LOGOUT_REDIRECT_URL = "base:index"
 
 GRAPH_MODELS = {
     "all_applications": True,
@@ -178,6 +173,11 @@ GRAPH_MODELS = {
     "output": "models.pdf",
     "exclude_columns": ["user", "id", "description", "last_modified", "misc", "type"],
 }
+
+PROJECT_NAME = "lattedb"
+
+MIGRATION_MODULES = {"notifications": "lattedb.config.migrations.notifications"}
+
 
 if not DEBUG:
     CSRF_COOKIE_SECURE = True

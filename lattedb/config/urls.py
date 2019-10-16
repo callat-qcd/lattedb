@@ -20,10 +20,25 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
-from lattedb.config.settings import PROJECT_APPS, ROOT_DIR
-from lattedb.config.views import IndexView
+from espressodb.management.utilities.settings import PROJECT_APPS
+from espressodb.management.utilities.settings import ROOT_DIR
 
-urlpatterns = []
+urlpatterns = [
+    path("", include("espressodb.base.urls", namespace="base")),
+    path("admin/", admin.site.urls),
+    path(
+        "login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"
+    ),
+    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path(
+        r"documentation/",
+        include("espressodb.documentation.urls", namespace="documentation"),
+    ),
+    path(
+        r"notifications/",
+        include("espressodb.notifications.urls", namespace="notifications"),
+    ),
+]
 
 for app in PROJECT_APPS:
     url_file = os.path.join(ROOT_DIR, app.replace(".", "/"), "urls.py")
@@ -34,13 +49,3 @@ for app in PROJECT_APPS:
         urlpatterns.append(
             path(rf"{app_name}/", include(app + ".urls", namespace=app_name))
         )
-
-
-urlpatterns += [
-    path("admin/", admin.site.urls),
-    path(
-        "login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"
-    ),
-    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
-    path("", IndexView.as_view(), name="index"),
-]
