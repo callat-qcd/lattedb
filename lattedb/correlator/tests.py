@@ -3,7 +3,7 @@
 
 from django.test import TestCase
 
-from lattedb.base.tests import BaseTest
+from espressodb.base.tests import BaseTest
 
 from lattedb.correlator.models import Meson2pt
 
