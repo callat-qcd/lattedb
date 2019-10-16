@@ -5,7 +5,7 @@ from typing import Optional
 from django.db import models
 from django.core.exceptions import ValidationError
 
-from lattedb.base.models import Base
+from espressodb.base.models import Base
 
 from lattedb.gaugeconfig.models import GaugeConfig
 

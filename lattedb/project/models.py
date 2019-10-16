@@ -1,4 +1,4 @@
-from lattedb.base.models import Base
+from espressodb.base.models import Base
 
 
 class Data(Base):
