@@ -1,7 +1,3 @@
-from django.contrib import admin
-from lattedb.project.fhcompare.models.data import SourceAvg2pt
-class DataAdmin(admin.ModelAdmin):
-    pass
+from espressodb.base.admin import register_admins
 
-admin.site.register(SourceAvg2pt, DataAdmin)
-# Register your models here.
+register_admins("lattedb.project.fhcompare")

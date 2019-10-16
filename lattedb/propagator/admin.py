@@ -1,9 +1,5 @@
 """Admin view for propagator
 """
-from django.contrib import admin
+from espressodb.base.admin import register_admins
 
-from lattedb.base.admin import BaseAdmin
-
-from lattedb.propagator.models import OneToAll
-
-admin.site.register(OneToAll, BaseAdmin)
+register_admins("lattedb.propagator")

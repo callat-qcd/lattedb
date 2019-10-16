@@ -1,6 +1,6 @@
 from django.db import models
 
-from lattedb.base.models import Base
+from espressodb.base.models import Base
 
 
 class Propagator(Base):

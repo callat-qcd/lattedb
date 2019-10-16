@@ -1,10 +1,3 @@
-"""Admin view for interpolating operators
-"""
-from django.contrib import admin
+from espressodb.base.admin import register_admins
 
-from lattedb.base.admin import BaseAdmin
-
-from lattedb.wavefunction.models import Hadron
-
-
-admin.site.register(Hadron, BaseAdmin)
+register_admins("lattedb.wavefunction")
