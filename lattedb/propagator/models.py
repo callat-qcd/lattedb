@@ -20,7 +20,8 @@ class OneToAll(Propagator):
     fermionaction = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
-        help_text="ForeignKey pointing to valence lattice fermion action",
+        help_text="ForeignKey pointing to valence lattice fermion action."
+        " This is the valence action.",
     )
     origin_x = models.PositiveSmallIntegerField(
         null=False,
@@ -111,7 +112,9 @@ class CoherentSeq(Propagator):
         related_name="+",
         help_text="ForeignKey: Pointer to sink interpolating operator",
     )
-    sinksep = models.SmallIntegerField(help_text="SmallInt: Source-sink separation time")
+    sinksep = models.SmallIntegerField(
+        help_text="SmallInt: Source-sink separation time"
+    )
     sourcesmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
