@@ -43,7 +43,7 @@ urlpatterns = [
 for app in PROJECT_APPS:
     url_file = os.path.join(ROOT_DIR, app.replace(".", "/"), "urls.py")
     if os.path.exists(url_file):
-        _, app_name = app.split(".")
+        app_name = ".".join(app.split(".")[1:])
         if app_name == "config":
             continue
         urlpatterns.append(
