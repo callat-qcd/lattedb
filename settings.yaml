@@ -11,6 +11,7 @@ PROJECT_APPS:
     - lattedb.current
     - lattedb.correlator
     - lattedb.ensemble
+    - lattedb.project.ga_q2
     # - lattedb.project.fhcompare
 ALLOWED_HOSTS:
     - 127.0.0.1
