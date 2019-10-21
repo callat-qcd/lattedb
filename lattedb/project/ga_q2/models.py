@@ -40,7 +40,7 @@ class OneToAllStatus(Base):
         max_length=40, help_text="The source group the file belongs to. E.g., `0-8`"
     )
 
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods, missing-docstring
         unique_together = ["propagator", "machine", "file_location", "src_set"]
 
     def check_consistency(self, data):
