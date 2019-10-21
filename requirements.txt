@@ -4,3 +4,4 @@ django-bootstrap4
 django-extensions
 django-widget-tweaks
 pandas
+bokeh
