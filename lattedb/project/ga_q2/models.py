@@ -1,7 +1,10 @@
 """Models of ga_q2
 """
+from typing import Dict, Any
 
-# Note: if you want your models to use espressodb features, they must inherit from Base
+import os
+import datetime
+import pytz
 
 from django.db import models
 from espressodb.base.models import Base
@@ -21,8 +24,8 @@ class OneToAllStatus(Base):
         max_length=120, help_text="The machine hosting the file."
     )
     file_location = models.TextField(help_text="The path to the file.")
-    file_size = models.CharField(
-        max_length=120, help_text="The size of the file in Bytes."
+    file_size = models.PositiveIntegerField(
+        null=True, help_text="The size of the file in Bytes."
     )
     mtime = models.DateTimeField(
         null=True, help_text="The last time the file was modified."
@@ -44,3 +47,33 @@ class OneToAllStatus(Base):
         """Checks if the ensemble of the propagator is quantified properly
         """
         assert data["propagator"].gaugeconfig.short_tag == data["short_tag"]
+
+    @staticmethod
+    def get_file_info(file_path: str, timezone="Etc/GMT-5") -> Dict[str, Any]:
+        """Returns dict with keys ``file_size``, ``mtime``, ``exists`` and ``file_path``
+
+        Arguments:
+            file_path: The file path to check
+            timezone: The local timezone
+        """
+        exists = os.path.exists(file_path)
+
+        data = {"exists": exists, "file_path": file_path}
+
+        if file_path:
+            local = pytz.timezone(timezone)
+            utc = pytz.timezone("UTC")
+
+            stats = os.stat(file_path)
+
+            data["file_size"] = int(stats.st_size)
+            data["mtime"] = (
+                datetime.datetime.fromtimestamp(stats.st_mtime)
+                .replace(tzinfo=local)
+                .astimezone(utc)
+            )
+        else:
+            data["file_size"] = None
+            data["mtime"] = None
+
+        return data
