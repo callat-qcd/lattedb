@@ -49,22 +49,22 @@ class OneToAllStatus(Base):
         assert data["propagator"].gaugeconfig.short_tag == data["short_tag"]
 
     @staticmethod
-    def get_file_info(file_path: str, timezone="Etc/GMT-5") -> Dict[str, Any]:
-        """Returns dict with keys ``file_size``, ``mtime``, ``exists`` and ``file_path``
+    def get_file_info(file_location: str, timezone="Etc/GMT-5") -> Dict[str, Any]:
+        """Returns dict with keys ``file_size``, ``mtime``, ``exists`` and ``file_location``
 
         Arguments:
-            file_path: The file path to check
+            file_location: The file path to check
             timezone: The local timezone
         """
-        exists = os.path.exists(file_path)
+        exists = os.path.exists(file_location)
 
-        data = {"exists": exists, "file_path": file_path}
+        data = {"exists": exists, "file_location": file_location}
 
-        if file_path:
+        if exists:
             local = pytz.timezone(timezone)
             utc = pytz.timezone("UTC")
 
-            stats = os.stat(file_path)
+            stats = os.stat(file_location)
 
             data["file_size"] = int(stats.st_size)
             data["mtime"] = (
