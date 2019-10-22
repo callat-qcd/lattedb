@@ -1,10 +1,12 @@
 """Models of ga_q2
 """
-from typing import Dict, Any
+from typing import Optional, Dict, Any
 
 import os
 import datetime
 import pytz
+
+from pandas import DataFrame
 
 from django.db import models
 from espressodb.base.models import Base
@@ -33,20 +35,12 @@ class OneToAllStatus(Base):
     exists = models.BooleanField(
         default=False, help_text="File exists at `file_location` on `machine`"
     )
-    short_tag = models.CharField(
-        max_length=20, help_text="Ensemble short quantifier like `a09m130`."
-    )
     src_set = models.CharField(
         max_length=40, help_text="The source group the file belongs to. E.g., `0-8`"
     )
 
     class Meta:  # pylint: disable=too-few-public-methods, missing-docstring
         unique_together = ["propagator", "machine", "file_location", "src_set"]
-
-    def check_consistency(self, data):
-        """Checks if the ensemble of the propagator is quantified properly
-        """
-        assert data["propagator"].gaugeconfig.short_tag == data["short_tag"]
 
     @staticmethod
     def get_file_info(file_location: str, timezone="Etc/GMT-5") -> Dict[str, Any]:
@@ -77,3 +71,28 @@ class OneToAllStatus(Base):
             data["mtime"] = None
 
         return data
+
+    @classmethod
+    def get_summary(
+        cls,
+        query: Optional[Dict[str, Any]] = None,
+        columns=(
+            "propagator__gaugeconfig__nf211__short_tag",
+            "propagator__gaugeconfig__nf211__stream",
+            "propagator__gaugeconfig__nf211__config",
+            "propagator__origin_x",
+            "propagator__origin_y",
+            "propagator__origin_z",
+            "src_set",
+            "propagator__fermionaction__mobiusdw__quark_mass",
+            "exists",
+            "file_size",
+            "mtime",
+            "file_location",
+        ),
+    ) -> DataFrame:
+        """Returns a summary table for the queryset
+        """
+        qs = cls.objects.filter(**query) if query else cls.objects.all()
+        df = qs.to_dataframe(fieldnames=columns, index="id")
+        return df.rename(columns={col: col.split("__")[-1] for col in df.columns})
