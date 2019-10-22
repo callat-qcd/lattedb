@@ -91,7 +91,18 @@ class OneToAllStatus(Base):
             "file_location",
         ),
     ) -> DataFrame:
-        """Returns a summary table for the queryset
+        """Returns a summary table for the given query.
+
+        Arguments:
+            query:
+            Dictionary of field lookups. Uses Django's filter.
+            columns:
+                The columns which will be present in the DataFrame.
+                The final column name will be the last string after a ``__``.
+
+        Note:
+            See also https://docs.djangoproject.com/en/2.2/topics/db/queries/ for
+            lookups.
         """
         qs = cls.objects.filter(**query) if query else cls.objects.all()
         df = qs.to_dataframe(fieldnames=columns, index="id")
