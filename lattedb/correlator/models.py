@@ -1,3 +1,4 @@
+from typing import Dict, Any
 from django.db import models
 from django.core.exceptions import ValidationError
 
@@ -257,6 +258,10 @@ class BaryonSeq3pt(Correlator):
                 name="unique_correlator_baryonseq3pt",
             )
         ]
+
+    def check_consistency(self, data: Dict[str, Any]):
+        assert data["seqpropagator"].type == "CoherentSeq"
+        assert data["propagator"].type == "OneToAll"
 
 
 class BaryonFH3pt(Correlator):

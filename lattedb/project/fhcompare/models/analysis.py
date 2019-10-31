@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.postgres.fields import JSONField
 
 from lattedb.project.models import Project
 
@@ -22,6 +21,6 @@ class Fhcompare(Project):
         help_text="Int: Limit from 1 to 5, default = 1. Rate your own fits.",
     )
 
-    result = JSONField(
-        null=False, blank=False, help_text="JSON: {'your_results': 'all dumped here'}"
+    result = models.TextField(
+        null=False, blank=False, help_text="Text: {'your_results': 'all dumped here'}"
     )
