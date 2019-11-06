@@ -1,3 +1,10 @@
-from django.shortcuts import render
+"""Views for the Form Factor project
+"""
+from django.views.generic import TemplateView
 
-# Create your views here.
+
+class IndexView(TemplateView):
+    """Index view of the Form Factor project
+    """
+
+    template_name = "formfac-index.html"
