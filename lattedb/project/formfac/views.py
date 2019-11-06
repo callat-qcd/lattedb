@@ -54,8 +54,6 @@ class FileStatusView(TemplateView, ABC):
             fieldnames=list(self.fieldnames.keys())
         ).rename(columns=self.fieldnames)
 
-        print(df.columns)
-
         count = df["Exists"].value_counts()
 
         context["status"] = {
