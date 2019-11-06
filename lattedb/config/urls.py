@@ -47,5 +47,8 @@ for app in PROJECT_APPS:
         if app_name == "config":
             continue
         urlpatterns.append(
-            path(rf"{app_name}/", include(app + ".urls", namespace=app_name))
+            path(
+                rf"{app_name.replace('.', '-')}/",
+                include(app + ".urls", namespace=app_name),
+            )
         )
