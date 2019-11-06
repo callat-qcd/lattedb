@@ -67,7 +67,7 @@ class TapeFormFactor4DFile(Base):
         help_text="The file meta information.",
     )
     path = models.TextField(help_text="The directory path on tape.")
-    exits = models.BooleanField(
+    exists = models.BooleanField(
         null=False,
         help_text="Can the file be found `tape_file.path/tape_file.file.name`?.",
     )
@@ -97,7 +97,7 @@ class DiskFormFactor4DFile(Base):
         help_text="The file meta information.",
     )
     path = models.TextField(help_text="The directory path on disk.")
-    exits = models.BooleanField(
+    exists = models.BooleanField(
         null=False,
         help_text="Can the file be found `disk_file.path/disk_file.file.name`?.",
     )
