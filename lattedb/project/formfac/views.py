@@ -57,8 +57,8 @@ class FileStatusView(TemplateView, ABC):
         count = df["Exists"].value_counts()
 
         context["status"] = {
-            "done": count.get(True),
-            "pending": count.get(False),
+            "done": count.get(True, 0),
+            "pending": count.get(False, 0),
             "total": count.sum(),
         }
         context["title"] = "Status view for Form Factor files"
