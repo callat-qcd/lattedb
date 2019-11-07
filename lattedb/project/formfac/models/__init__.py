@@ -1,10 +1,10 @@
 """Imports all models from the formfac.models submodules
 """
 
-from lattedb.project.formfac.models.data.ff4d import (
-    FormFactor4DFile,
-    DiskFormFactor4DFile,
-)
+# from lattedb.project.formfac.models.data.ff4d import (
+#     FormFactor4DFile,
+#     DiskFormFactor4DFile,
+# )
 from lattedb.project.formfac.models.data.tsliced_ff4d import (
     TSlicedFormFactor4DFile,
     DiskTSlicedFormFactor4DFile,
