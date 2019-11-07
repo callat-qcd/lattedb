@@ -74,7 +74,7 @@ class TapeFormFactor4DFile(Base):
     machine = models.CharField(
         max_length=100, help_text="The machine the file can be found on."
     )
-    size = models.IntegerField(null=True, help_text="Size of the file in Bytes.")
+    size = models.BigIntegerField(null=True, help_text="Size of the file in Bytes.")
     date_modified = models.DateTimeField(
         null=True, help_text="The last time the file was modified."
     )
@@ -104,7 +104,7 @@ class DiskFormFactor4DFile(Base):
     machine = models.CharField(
         max_length=100, help_text="The machine the file can be found on."
     )
-    size = models.IntegerField(null=True, help_text="Size of the file in Bytes.")
+    size = models.BigIntegerField(null=True, help_text="Size of the file in Bytes.")
     date_modified = models.DateTimeField(
         null=True, help_text="The last time the file was modified."
     )
