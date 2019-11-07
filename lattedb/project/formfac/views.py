@@ -64,7 +64,7 @@ class FileStatusView(TemplateView, ABC):
         }
         context["title"] = "Status view for Form Factor files"
         context["subtitle"] = "Considering files on tape"
-        context["table"], context["script"] = to_table(df, id_name="File information")
+        context["table"], context["script"] = to_table(df, id_name="file-information")
 
         return context
 
