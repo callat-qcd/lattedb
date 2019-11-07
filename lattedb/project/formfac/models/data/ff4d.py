@@ -14,7 +14,7 @@ class FormFactor4DFile(AbstractFormFactor4DFile):
     """
 
     configuration = models.IntegerField(help_text="Number of configuration.")
-    t_separation = models.IntegerField(help_text="Source sink separation.")
+    t_separation = models.IntegerField(help_text="Source sink time separation.")
     source = models.CharField(
         max_length=100, help_text="Source location in format `xXyYzZtT`."
     )
