@@ -14,7 +14,7 @@ class TSlicedSAveragedFormFactor4DFile(AbstractFormFactor4DFile):
     """
 
     configuration = models.IntegerField(help_text="Number of configuration.")
-    t_separation = models.IntegerField(help_text="Source sink separation.")
+    t_separation = models.IntegerField(help_text="Source sink time separation.")
 
     class Meta:  # pylint: disable=C0111, R0903
         unique_together = [
