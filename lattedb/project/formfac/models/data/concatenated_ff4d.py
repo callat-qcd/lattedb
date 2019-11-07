@@ -8,7 +8,8 @@ from lattedb.project.formfac.models.data import (
 
 
 class ConcatenatedFormFactor4DFile(AbstractFormFactor4DFile):
-    """Table storing information about form factor files.
+    """Table storing information about concatenated source averated and time sliced
+    form factor files.
 
     This is not the "physical" file information but rather the meta info.
     """
@@ -33,7 +34,8 @@ class ConcatenatedFormFactor4DFile(AbstractFormFactor4DFile):
 
 
 class TapeConcatenatedFormFactor4DFile(PhysicalFormFactor4DFile):
-    """Table associates Form Factor file meta information with a physical file on tape.
+    """Table associates concatenated source averated and time sliced form factor file
+    meta information with a physical file on tape.
     """
 
     file = models.ForeignKey(
@@ -45,7 +47,8 @@ class TapeConcatenatedFormFactor4DFile(PhysicalFormFactor4DFile):
 
 
 class DiskConcatenatedFormFactor4DFile(PhysicalFormFactor4DFile):
-    """Table associates Form Factor file meta information with a physical file on disk.
+    """Table associates concatenated source averated and time sliced form factor file
+    meta information with a physical file on disk.
     """
 
     file = models.ForeignKey(
