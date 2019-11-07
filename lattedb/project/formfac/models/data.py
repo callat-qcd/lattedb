@@ -6,7 +6,7 @@ from django.db import models
 from espressodb.base.models import Base
 
 
-class FormFactor4DFile(Base):
+class ConcatenatedFormFactor4DFile(Base):
     """Table storing information about form factor files.
 
     This is not the "physical" file information but rather the meta info.
@@ -56,12 +56,12 @@ class FormFactor4DFile(Base):
         ]
 
 
-class TapeFormFactor4DFile(Base):
+class TapeConcatenatedFormFactor4DFile(Base):
     """Table associates Form Factor file meta information with a physical file on tape.
     """
 
     file = models.ForeignKey(
-        FormFactor4DFile,
+        ConcatenatedFormFactor4DFile,
         on_delete=models.CASCADE,
         related_name="tape",
         help_text="The file meta information.",
@@ -86,12 +86,12 @@ class TapeFormFactor4DFile(Base):
         return join(self.path, self.file.name)
 
 
-class DiskFormFactor4DFile(Base):
+class DiskConcatenatedFormFactor4DFile(Base):
     """Table associates Form Factor file meta information with a physical file on disk.
     """
 
     file = models.ForeignKey(
-        FormFactor4DFile,
+        ConcatenatedFormFactor4DFile,
         on_delete=models.CASCADE,
         related_name="disk",
         help_text="The file meta information.",

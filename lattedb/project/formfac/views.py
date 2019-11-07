@@ -5,7 +5,8 @@ from abc import ABC
 from django.views.generic import TemplateView
 
 from lattedb.utilities.tables import to_table
-from lattedb.project.formfac.models import DiskFormFactor4DFile, TapeFormFactor4DFile
+from lattedb.project.formfac.models import DiskConcatenatedFormFactor4DFile
+from lattedb.project.formfac.models import TapeConcatenatedFormFactor4DFile
 
 
 class IndexView(TemplateView):
@@ -68,9 +69,9 @@ class FileStatusView(TemplateView, ABC):
         return context
 
 
-class DiskStatusView(FileStatusView):
-    model = DiskFormFactor4DFile
+class DiskConcatenatedFormFactor4DStatusView(FileStatusView):
+    model = DiskConcatenatedFormFactor4DFile
 
 
-class TapeStatusView(FileStatusView):
-    model = TapeFormFactor4DFile
+class TapeConcatenatedFormFactor4DStatusView(FileStatusView):
+    model = TapeConcatenatedFormFactor4DFile

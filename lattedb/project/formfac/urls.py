@@ -15,11 +15,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from lattedb.project.formfac.views import IndexView, DiskStatusView, TapeStatusView
+from lattedb.project.formfac.views import IndexView
+from lattedb.project.formfac.views import DiskConcatenatedFormFactor4DStatusView
+from lattedb.project.formfac.views import TapeConcatenatedFormFactor4DStatusView
 
 app_name = "Project formfac"
 urlpatterns = [
     path("", IndexView.as_view(), name="Form Factor"),
-    path("disk-status", DiskStatusView.as_view(), name="Form Factor Disk Status"),
-    path("tape-status", TapeStatusView.as_view(), name="Form Factor Tape Status"),
+    path(
+        "disk-status",
+        DiskConcatenatedFormFactor4DStatusView.as_view(),
+        name="Form Factor Disk Status",
+    ),
+    path(
+        "tape-status",
+        TapeConcatenatedFormFactor4DStatusView.as_view(),
+        name="Form Factor Tape Status",
+    ),
 ]
