@@ -21,11 +21,6 @@ class TSlicedSAveragedFormFactor4DFile(AbstractFormFactor4DFile):
             "ensemble",
             "stream",
             "source_set",
-            "current",
-            "state",
-            "parity",
-            "flavor",
-            "spin",
             "configuration",
             "t_separation",
         ]

@@ -25,19 +25,6 @@ class AbstractFormFactor4DFile(Base):
     source_set = models.CharField(
         max_length=100, help_text="Set of sources in this file. E.g., `16-23`."
     )
-    current = models.CharField(
-        max_length=20, help_text="Name of the current. E.g., `V2`."
-    )
-    state = models.CharField(
-        max_length=100, help_text="Name of the state. E.g., `proton`."
-    )
-    parity = models.IntegerField(help_text="Parity of the state. E.g., + or -1.")
-    flavor = models.CharField(
-        max_length=20, help_text="Flavor of the state. E.g., `UU`."
-    )
-    spin = models.CharField(
-        max_length=20, help_text="Spin of the state. E.g., `up_up`."
-    )
 
     class Meta:  # pylint: disable=C0111, R0903
         abstract = True

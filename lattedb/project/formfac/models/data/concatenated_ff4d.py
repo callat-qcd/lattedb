@@ -14,6 +14,19 @@ class ConcatenatedFormFactor4DFile(AbstractFormFactor4DFile):
     This is not the "physical" file information but rather the meta info.
     """
 
+    current = models.CharField(
+        max_length=20, help_text="Name of the current. E.g., `V2`."
+    )
+    state = models.CharField(
+        max_length=100, help_text="Name of the state. E.g., `proton`."
+    )
+    parity = models.IntegerField(help_text="Parity of the state. E.g., + or -1.")
+    flavor = models.CharField(
+        max_length=20, help_text="Flavor of the state. E.g., `UU`."
+    )
+    spin = models.CharField(
+        max_length=20, help_text="Spin of the state. E.g., `up_up`."
+    )
     configuration_range = models.CharField(
         max_length=100,
         help_text="Range of configuration in this file. E.g., `500-1745`.",
