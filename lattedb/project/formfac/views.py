@@ -35,7 +35,7 @@ class FileStatusView(TemplateView, ABC):
         "file__flavor": "Flavor",
         "file__spin": "Spin",
         # "path": "path",
-        "exits": "Exists",
+        "exists": "Exists",
         "machine": "Machine",
         "size": "Size",
         "date_modified": "Date",
