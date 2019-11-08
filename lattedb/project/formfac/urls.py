@@ -18,18 +18,42 @@ from django.urls import path
 from lattedb.project.formfac.views import IndexView
 from lattedb.project.formfac.views import DiskConcatenatedFormFactor4DStatusView
 from lattedb.project.formfac.views import TapeConcatenatedFormFactor4DStatusView
+from lattedb.project.formfac.views import DiskTSlicedSAveragedFormFactor4DStatusView
+from lattedb.project.formfac.views import TapeTSlicedSAveragedFormFactor4DStatusView
+from lattedb.project.formfac.views import DiskTSlicedFormFactor4DStatusView
+from lattedb.project.formfac.views import DiskFormFactor4DStatusView
 
 app_name = "Project formfac"
 urlpatterns = [
     path("", IndexView.as_view(), name="Form Factor"),
     path(
-        "disk-status",
+        "disk-concat-status",
         DiskConcatenatedFormFactor4DStatusView.as_view(),
-        name="Form Factor Disk Status",
+        name="Contaneted Form Factor Disk Status",
     ),
     path(
-        "tape-status",
+        "tape-concat-status",
         TapeConcatenatedFormFactor4DStatusView.as_view(),
-        name="Form Factor Tape Status",
+        name="Contaneted Form Factor Tape Status",
+    ),
+    path(
+        "disk-sliced-averaged-status",
+        DiskTSlicedSAveragedFormFactor4DStatusView.as_view(),
+        name="Sliced Averaged Form Factor Disk Status",
+    ),
+    path(
+        "tape-sliced-averaged-status",
+        TapeTSlicedSAveragedFormFactor4DStatusView.as_view(),
+        name="Sliced Averaged Form Factor Tape Status",
+    ),
+    path(
+        "disk-sliced-status",
+        DiskTSlicedFormFactor4DStatusView.as_view(),
+        name="Sliced Form Factor Disk Status",
+    ),
+    path(
+        "disk-status",
+        DiskFormFactor4DStatusView.as_view(),
+        name="Form Factor Disk Status",
     ),
 ]

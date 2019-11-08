@@ -7,6 +7,10 @@ from django.views.generic import TemplateView
 from lattedb.utilities.tables import to_table
 from lattedb.project.formfac.models import DiskConcatenatedFormFactor4DFile
 from lattedb.project.formfac.models import TapeConcatenatedFormFactor4DFile
+from lattedb.project.formfac.models import TapeTSlicedSAveragedFormFactor4DFile
+from lattedb.project.formfac.models import DiskTSlicedSAveragedFormFactor4DFile
+from lattedb.project.formfac.models import DiskFormFactor4DFile
+from lattedb.project.formfac.models import DiskTSlicedFormFactor4DFile
 
 
 class IndexView(TemplateView):
@@ -65,6 +69,7 @@ class FileStatusView(TemplateView, ABC):
         context["title"] = "Status view for Form Factor files"
         context["subtitle"] = "Considering files on tape"
         context["table"], context["script"] = to_table(df, id_name="file-information")
+        context["model"] = self.model
 
         return context
 
@@ -75,3 +80,73 @@ class DiskConcatenatedFormFactor4DStatusView(FileStatusView):
 
 class TapeConcatenatedFormFactor4DStatusView(FileStatusView):
     model = TapeConcatenatedFormFactor4DFile
+
+
+class DiskTSlicedSAveragedFormFactor4DStatusView(FileStatusView):
+    model = DiskTSlicedSAveragedFormFactor4DFile
+    fieldnames = {
+        # "file__name": "file",
+        "file__ensemble": "Ens",
+        "file__stream": "Stream",
+        "file__source_set": "Src set",
+        "file__configuration": "Cfg",
+        "file__t_separation": "T sep",
+        # "path": "path",
+        "exists": "Exists",
+        "machine": "Machine",
+        "size": "Size",
+        "date_modified": "Date",
+    }
+
+
+class TapeTSlicedSAveragedFormFactor4DStatusView(FileStatusView):
+    model = TapeTSlicedSAveragedFormFactor4DFile
+    fieldnames = {
+        # "file__name": "file",
+        "file__ensemble": "Ens",
+        "file__stream": "Stream",
+        "file__source_set": "Src set",
+        "file__configuration": "Cfg",
+        "file__t_separation": "T sep",
+        # "path": "path",
+        "exists": "Exists",
+        "machine": "Machine",
+        "size": "Size",
+        "date_modified": "Date",
+    }
+
+
+class DiskTSlicedFormFactor4DStatusView(FileStatusView):
+    model = DiskTSlicedFormFactor4DFile
+    fieldnames = {
+        # "file__name": "file",
+        "file__ensemble": "Ens",
+        "file__stream": "Stream",
+        "file__source_set": "Src set",
+        "file__configuration": "Cfg",
+        "file__t_separation": "T sep",
+        "file__source": "Src",
+        # "path": "path",
+        "exists": "Exists",
+        "machine": "Machine",
+        "size": "Size",
+        "date_modified": "Date",
+    }
+
+
+class DiskFormFactor4DStatusView(FileStatusView):
+    model = DiskFormFactor4DFile
+    fieldnames = {
+        # "file__name": "file",
+        "file__ensemble": "Ens",
+        "file__stream": "Stream",
+        "file__source_set": "Src set",
+        "file__configuration": "Cfg",
+        "file__t_separation": "T sep",
+        "file__source": "Src",
+        # "path": "path",
+        "exists": "Exists",
+        "machine": "Machine",
+        "size": "Size",
+        "date_modified": "Date",
+    }

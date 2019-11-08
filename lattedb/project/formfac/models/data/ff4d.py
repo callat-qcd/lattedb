@@ -13,6 +13,8 @@ class FormFactor4DFile(AbstractFormFactor4DFile):
     This is not the "physical" file information but rather the meta info.
     """
 
+    verbose_name = "FormFactor4D File"
+
     configuration = models.IntegerField(help_text="Number of configuration.")
     t_separation = models.IntegerField(help_text="Source sink time separation.")
     source = models.CharField(
@@ -33,6 +35,8 @@ class FormFactor4DFile(AbstractFormFactor4DFile):
 class DiskFormFactor4DFile(PhysicalFormFactor4DFile):
     """Table associates form factor file meta information with a physical file on disk.
     """
+
+    verbose_name = "FormFactor4D File on Disk"
 
     file = models.ForeignKey(
         FormFactor4DFile,

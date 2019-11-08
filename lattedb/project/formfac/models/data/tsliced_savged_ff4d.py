@@ -13,6 +13,8 @@ class TSlicedSAveragedFormFactor4DFile(AbstractFormFactor4DFile):
     This is not the "physical" file information but rather the meta info.
     """
 
+    verbose_name = " TSliced Source Averaged Form Factor 4D File"
+
     configuration = models.IntegerField(help_text="Number of configuration.")
     t_separation = models.IntegerField(help_text="Source sink time separation.")
 
@@ -31,6 +33,8 @@ class TapeTSlicedSAveragedFormFactor4DFile(PhysicalFormFactor4DFile):
     with a physical file on tape.
     """
 
+    verbose_name = " TSliced Source Averaged Form Factor 4D File on Tape"
+
     file = models.ForeignKey(
         TSlicedSAveragedFormFactor4DFile,
         on_delete=models.CASCADE,
@@ -43,6 +47,8 @@ class DiskTSlicedSAveragedFormFactor4DFile(PhysicalFormFactor4DFile):
     """Table associates time sliced and source averaged form factor file meta information
     with a physical file on disk.
     """
+
+    verbose_name = " TSliced Source Averaged Form Factor 4D File on Disk"
 
     file = models.ForeignKey(
         TSlicedSAveragedFormFactor4DFile,

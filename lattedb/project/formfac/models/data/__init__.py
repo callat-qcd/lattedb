@@ -29,6 +29,12 @@ class AbstractFormFactor4DFile(Base):
     class Meta:  # pylint: disable=C0111, R0903
         abstract = True
 
+    @classmethod
+    def get_doc(cls) -> str:
+        """Returns the doc string
+        """
+        return cls.__doc__
+
 
 class PhysicalFormFactor4DFile(Base):
     """Abstract table for physical file information summarizing disk or file status.
@@ -61,3 +67,9 @@ class PhysicalFormFactor4DFile(Base):
         """The actual path to the file.
         """
         return join(self.path, self.file.name)
+
+    @classmethod
+    def get_doc(cls) -> str:
+        """Returns the doc string
+        """
+        return cls.__doc__

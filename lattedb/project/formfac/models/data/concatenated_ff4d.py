@@ -14,6 +14,8 @@ class ConcatenatedFormFactor4DFile(AbstractFormFactor4DFile):
     This is not the "physical" file information but rather the meta info.
     """
 
+    verbose_name = "Concatenated Form Factor 4D File"
+
     current = models.CharField(
         max_length=20, help_text="Name of the current. E.g., `V2`."
     )
@@ -51,6 +53,8 @@ class TapeConcatenatedFormFactor4DFile(PhysicalFormFactor4DFile):
     meta information with a physical file on tape.
     """
 
+    verbose_name = "Concatenated Form Factor 4D File on Tape"
+
     file = models.ForeignKey(
         ConcatenatedFormFactor4DFile,
         on_delete=models.CASCADE,
@@ -63,6 +67,8 @@ class DiskConcatenatedFormFactor4DFile(PhysicalFormFactor4DFile):
     """Table associates concatenated source averated and time sliced form factor file
     meta information with a physical file on disk.
     """
+
+    verbose_name = "Concatenated Form Factor 4D File on Disk"
 
     file = models.ForeignKey(
         ConcatenatedFormFactor4DFile,
