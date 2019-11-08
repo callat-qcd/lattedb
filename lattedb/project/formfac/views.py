@@ -3,6 +3,8 @@
 from abc import ABC
 
 from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 from lattedb.utilities.tables import to_table
 from lattedb.project.formfac.models import DiskConcatenatedFormFactor4DFile
@@ -20,11 +22,13 @@ class IndexView(TemplateView):
     template_name = "formfac-index.html"
 
 
-class FileStatusView(TemplateView, ABC):
+class FileStatusView(LoginRequiredMixin, TemplateView, ABC):  # pylint: disable=R0901
     """Status view for Form Factor files.
 
     This view is abstract. You should use the Disk and tape specific views.
     """
+
+    login_url = "/login/"
 
     model = None
     template_name = "table.html"
