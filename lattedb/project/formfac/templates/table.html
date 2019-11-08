@@ -20,12 +20,20 @@
     <h1>{{title}}</h1>
     {% if subtitle %}<h5>{{subtitle}}</h2>{% endif %}
 </div>
-<div class="container">
+<div class="w-100 px-5">
     {% if status.total > 0 %}
+    <div class="container">
+        <h5>Current progress</h5>
         {% render_progress_bar status.pending 0 0 status.done status.total %}
+    </div>
     {% endif %}
-    {% if info %}<p>{{info|safe}}</p>{% endif %}
+    <div class="container-fluid my-2">
+    <h5>Data</h5>
+    {% if info %}
+        <p>{{info|safe}}</p>
+    {% endif %}
     {{ table|safe }}
+    </div>
 </div>
 {{script|safe}}
 {% endblock %}

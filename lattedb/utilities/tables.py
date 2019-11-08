@@ -7,7 +7,7 @@ def to_table(df: DataFrame, id_name: str) -> str:  # pylint: disable=C0103
     """Renders pandas dataframe to html sortable table
     """
     table = df.to_html(
-        classes="table table-striped table-bordered table-sm",
+        classes="table table-hover table-bordered table-compact table-sm",
         table_id=id_name,
         index=False,
     )
