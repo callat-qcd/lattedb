@@ -5,6 +5,7 @@ from abc import ABC
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from django.urls import reverse_lazy
 
 from lattedb.utilities.tables import to_table
 from lattedb.project.formfac.models import DiskConcatenatedFormFactor4DFile
@@ -28,7 +29,7 @@ class FileStatusView(LoginRequiredMixin, TemplateView, ABC):  # pylint: disable=
     This view is abstract. You should use the Disk and tape specific views.
     """
 
-    login_url = "/login/"
+    login_url = reverse_lazy("login")
 
     model = None
     template_name = "table.html"
