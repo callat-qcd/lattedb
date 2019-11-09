@@ -70,6 +70,10 @@ class FileStatusView(LoginRequiredMixin, TemplateView, ABC):  # pylint: disable=
         )
         context["model"] = self.model
         context["columns"] = self.fieldnames
+        context["api_url"] = (
+            reverse_lazy(f"Project formfac:{self.model.__name__.lower()}-list")
+            + "?format=datatables"
+        )
 
         return context
 
@@ -85,13 +89,11 @@ class TapeConcatenatedFormFactor4DStatusView(FileStatusView):
 class DiskTSlicedSAveragedFormFactor4DStatusView(FileStatusView):
     model = DiskTSlicedSAveragedFormFactor4DFile
     fieldnames = {
-        # "file__name": "file",
-        "file__ensemble": "Ens",
-        "file__stream": "Stream",
-        "file__source_set": "Src set",
-        "file__configuration": "Cfg",
-        "file__t_separation": "T sep",
-        # "path": "path",
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.source_set": "Src set",
+        "file.configuration": "Cfg",
+        "file.t_separation": "T sep",
         "exists": "Exists",
         "machine": "Machine",
         "size": "Size",
@@ -102,13 +104,11 @@ class DiskTSlicedSAveragedFormFactor4DStatusView(FileStatusView):
 class TapeTSlicedSAveragedFormFactor4DStatusView(FileStatusView):
     model = TapeTSlicedSAveragedFormFactor4DFile
     fieldnames = {
-        # "file__name": "file",
-        "file__ensemble": "Ens",
-        "file__stream": "Stream",
-        "file__source_set": "Src set",
-        "file__configuration": "Cfg",
-        "file__t_separation": "T sep",
-        # "path": "path",
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.source_set": "Src set",
+        "file.configuration": "Cfg",
+        "file.t_separation": "T sep",
         "exists": "Exists",
         "machine": "Machine",
         "size": "Size",
@@ -119,14 +119,12 @@ class TapeTSlicedSAveragedFormFactor4DStatusView(FileStatusView):
 class DiskTSlicedFormFactor4DStatusView(FileStatusView):
     model = DiskTSlicedFormFactor4DFile
     fieldnames = {
-        # "file__name": "file",
-        "file__ensemble": "Ens",
-        "file__stream": "Stream",
-        "file__source_set": "Src set",
-        "file__configuration": "Cfg",
-        "file__t_separation": "T sep",
-        "file__source": "Src",
-        # "path": "path",
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.source_Set": "Src set",
+        "file.configuration": "Cfg",
+        "file.t_separation": "T sep",
+        "file.source": "Src",
         "exists": "Exists",
         "machine": "Machine",
         "size": "Size",
@@ -137,14 +135,12 @@ class DiskTSlicedFormFactor4DStatusView(FileStatusView):
 class DiskFormFactor4DStatusView(FileStatusView):
     model = DiskFormFactor4DFile
     fieldnames = {
-        # "file__name": "file",
-        "file__ensemble": "Ens",
-        "file__stream": "Stream",
-        "file__source_set": "Src set",
-        "file__configuration": "Cfg",
-        "file__t_separation": "T sep",
-        "file__source": "Src",
-        # "path": "path",
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.source": "Src set",
+        "file.configuration": "Cfg",
+        "file.t_separation": "T sep",
+        "file.source": "Src",
         "exists": "Exists",
         "machine": "Machine",
         "size": "Size",

@@ -29,7 +29,7 @@
     {% endif %}
     <div class="container-fluid my-2">
         <h5>Data</h5>
-        <table id="table" class="table table-striped table-bordered" style="width:100%" data-server-side="true" data-ajax="/project-formfac/api/DiskConcatenatedFormFactor4DFile/?format=datatables">
+        <table id="table" class="table table-hover table-bordered" style="width:100%" data-server-side="true" data-ajax="{{api_url}}">
             <thead>
                 <tr>
                     {% for column, name in columns.items %}
