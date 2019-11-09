@@ -25,6 +25,7 @@ from espressodb.management.utilities.settings import ROOT_DIR
 
 urlpatterns = [
     path("", include("espressodb.base.urls", namespace="base")),
+    path(r"api-auth/", include("rest_framework.urls", namespace="api-auth")),
     path("admin/", admin.site.urls),
     path(
         "login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"

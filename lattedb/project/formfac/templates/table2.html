@@ -29,22 +29,11 @@
     {% endif %}
     <div class="container-fluid my-2">
     <h5>Data</h5>
-    <table id="table" class="table table-striped table-bordered" style="width:100%" data-server-side="true" data-ajax="/project-formfac/api/DiskConcatenatedFormFactor4DFile/?format=datatables">
-              <thead>
-                <tr>
-                  <th data-data="file.ensemble" data-name="file.ensemble">Ensemble</th>
-                  <th data-data="exists">Exists</th>
-                  <th data-data="machine">Machine</th>
-                  <th data-data="size">Size</th>
-                  <th data-data="date_modified">Date</th>
-                </tr>
-              </thead>
-            </table>
+    {% if info %}
+        <p>{{info|safe}}</p>
+    {% endif %}
+    {{ table|safe }}
     </div>
 </div>
-<script>
-    $(document).ready(function() {
-        $('#table').DataTable();
-    });
-</script>
+{{script|safe}}
 {% endblock %}
