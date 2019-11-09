@@ -2,26 +2,19 @@ from lattedb.project.formfac.models import DiskConcatenatedFormFactor4DFile
 from lattedb.project.formfac.models import ConcatenatedFormFactor4DFile
 from rest_framework import routers, serializers, viewsets
 
-# Serializers define the API representation.
+
 class ConcatenatedFormFactor4DFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConcatenatedFormFactor4DFile
-        fields = ["id", "ensemble"]
+        fields = "__all__"
 
 
-# Serializers define the API representation.
 class DiskConcatenatedFormFactor4DFileSerializer(serializers.ModelSerializer):
     file = ConcatenatedFormFactor4DFileSerializer()
 
     class Meta:
         model = DiskConcatenatedFormFactor4DFile
-        fields = [
-            "file",
-            "exists",
-            "machine",
-            "size",
-            "date_modified",
-        ]
+        fields = "__all__"
 
 
 # ViewSets define the view behavior.
