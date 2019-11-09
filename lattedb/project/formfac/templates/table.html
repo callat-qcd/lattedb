@@ -1,17 +1,13 @@
 {% extends 'base.html' %}
 {% load status_extras %}
+{% load staticfiles %}
 
 {% block head-extra %}
 <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-<style>
-    thead input {
-        width: 100%;
-        padding: 3px;
-        box-sizing: border-box;
-    }
-</style>
+<link href="{% static 'formfac.css' %}" rel="stylesheet">
+<script type="text/javascript" src="{% static 'formfac.js' %}"></script>
 {% endblock %}
 
 
@@ -45,39 +41,4 @@
         </table>
     </div>
 </div>
-<script>
-    $(document).ready(function() {
-        // Add footer with serach
-        $('#table tfoot th').each(function() {
-            var title = $(this).text();
-            $(this).html('<input type="text" placeholder="' + title + '"/>');
-        });
-        // Create table
-        var table = $('#table').DataTable({
-            "lengthMenu": [
-                [10, 25, 50, -1],
-                [10, 25, 50, "All"]
-            ],
-            "pageLength": 50,
-            initComplete: function() {
-                var r = $('#table tfoot tr');
-                r.find('th').each(function() {
-                    $(this).css('padding', 8);
-                });
-                $('#table thead').append(r);
-                $('#search_0').css('text-align', 'center');
-            },
-        });
-        // Apply the search
-        table.columns().every(function() {
-            var that = this;
-            $('input', this.footer()).on('keyup change clear', function() {
-                if (that.search() !== this.value) {
-                    that.search(this.value).draw();
-                }
-            });
-        });
-
-    });
-</script>
 {% endblock %}
