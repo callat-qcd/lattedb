@@ -121,7 +121,7 @@ class DiskTSlicedFormFactor4DStatusView(FileStatusView):
     fieldnames = {
         "file.ensemble": "Ens",
         "file.stream": "Stream",
-        "file.source_Set": "Src set",
+        "file.source_set": "Src set",
         "file.configuration": "Cfg",
         "file.t_separation": "T sep",
         "file.source": "Src",
