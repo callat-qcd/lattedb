@@ -1,3 +1,4 @@
+# pylint: disable=C0111, R0901
 """Views for the Form Factor project
 """
 from abc import ABC
@@ -7,7 +8,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.urls import reverse_lazy
 
-from lattedb.utilities.tables import to_table
 from lattedb.project.formfac.models import DiskConcatenatedFormFactor4DFile
 from lattedb.project.formfac.models import TapeConcatenatedFormFactor4DFile
 from lattedb.project.formfac.models import TapeTSlicedSAveragedFormFactor4DFile
@@ -137,7 +137,7 @@ class DiskFormFactor4DStatusView(FileStatusView):
     fieldnames = {
         "file.ensemble": "Ens",
         "file.stream": "Stream",
-        "file.source": "Src set",
+        "file.source_set": "Src set",
         "file.configuration": "Cfg",
         "file.t_separation": "T sep",
         "file.source": "Src",
