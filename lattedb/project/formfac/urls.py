@@ -17,7 +17,6 @@ Including another URLconf
 from django.urls import path
 from django.urls import include
 
-from lattedb.project.formfac.views import IndexView
 from lattedb.project.formfac.views import DiskConcatenatedFormFactor4DStatusView
 from lattedb.project.formfac.views import TapeConcatenatedFormFactor4DStatusView
 from lattedb.project.formfac.views import DiskTSlicedSAveragedFormFactor4DStatusView
@@ -28,7 +27,6 @@ from lattedb.project.formfac.rest.serializers import ROUTER
 
 app_name = "Project formfac"
 urlpatterns = [
-    path("", IndexView.as_view(), name="Form Factor"),
     path(r"api/", include(ROUTER.urls)),
     path(
         "disk-concat-status",
