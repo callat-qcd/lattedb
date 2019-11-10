@@ -24,7 +24,7 @@ from lattedb.project.formfac.views import DiskTSlicedSAveragedFormFactor4DStatus
 from lattedb.project.formfac.views import TapeTSlicedSAveragedFormFactor4DStatusView
 from lattedb.project.formfac.views import DiskTSlicedFormFactor4DStatusView
 from lattedb.project.formfac.views import DiskFormFactor4DStatusView
-from lattedb.project.formfac.rest_api import ROUTER
+from lattedb.project.formfac.rest.serializers import ROUTER
 
 app_name = "Project formfac"
 urlpatterns = [

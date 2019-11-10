@@ -35,7 +35,13 @@ INSTALLED_APPS = (
         "espressodb.management",
         "espressodb.notifications",
     ]
-    + ["bootstrap4", "widget_tweaks", "django_extensions", "rest_framework_datatables"]
+    + [
+        "bootstrap4",
+        "widget_tweaks",
+        "django_extensions",
+        "rest_framework",
+        "rest_framework_datatables",
+    ]
     + [
         "django.contrib.admin",
         "django.contrib.auth",
@@ -191,7 +197,7 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": (
         "rest_framework_datatables.filters.DatatablesFilterBackend",
     ),
-    "DEFAULT_PAGINATION_CLASS": "rest_framework_datatables.pagination.DatatablesPageNumberPagination",
+    "DEFAULT_PAGINATION_CLASS": "lattedb.project.formfac.rest.pagination.Paginator",
     "PAGE_SIZE": 50,
 }
 

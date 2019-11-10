@@ -10,6 +10,7 @@ $(document).ready(function() {
             [10, 25, 50, -1],
             [10, 25, 50, "All"]
         ],
+        "deferRender": true,
         "pageLength": 50,
         initComplete: function() {
             var r = $('#table tfoot tr');
@@ -29,5 +30,17 @@ $(document).ready(function() {
             }
         });
     });
-
+    // Update progress bar
+    table.on('xhr.dt', function() {
+        var json = table.ajax.json();
+        if (json.recordsTotal > 0) {
+            var exists = json.recordsExist / json.recordsFiltered * 100;
+            var pending = 100 - exists;
+            $("#progress-success").attr("aria-valuenow", exists).css("width", exists.toString() + "%");
+            $("#progress-error").attr("aria-valuenow", pending).css("width", pending.toString() + "%");
+        } else {
+            $("#progress-success").attr("aria-valuenow", 0).css("width", "0%");
+            $("#progress-error").attr("aria-valuenow", 0).css("width", "0%");
+        }
+    });
 });

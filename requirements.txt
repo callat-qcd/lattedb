@@ -5,3 +5,7 @@ django-extensions
 django-widget-tweaks
 pandas
 bokeh
+markdown
+django-filter
+djangorestframework
+djangorestframework-datatables
