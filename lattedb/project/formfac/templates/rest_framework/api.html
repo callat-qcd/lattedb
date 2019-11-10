@@ -1,0 +1,48 @@
+{% extends "rest_framework/base.html" %}
+{% load bootstrap4 %}
+{% load base_extras %}
+{% load notifications_extras %}
+{% load staticfiles %}
+
+{% block title %}{% if name %}{{ name }} – {% endif %} Project Form Factor 4D{% endblock %}
+
+{% block bootstrap_theme %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+<link href="{% static 'css/fa-all.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/base.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block navbar %}
+<nav class="navbar navbar-expand-sm navbar-light bg-light mb-5">
+    <!-- Brand -->
+    <a class="navbar-brand" href="{% url 'base:index' %}">
+        <img src="{% static 'logo.svg' %}" alt="{% project_name %}" style="height: 35px" class="align-top">
+    </a>
+    <!-- Links -->
+    <ul class="navbar-nav">
+        {% render_link_list %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'base:populate' %}">
+                <i class="fas fa-plus mx-1"></i>Populate
+            </a>
+        </li>
+        {% if user.is_authenticated %}{% render_notification_links user %}{% endif %}
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+            <span class="navbar-text"><b>{{user}}</b></span>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout'%}"><i class="fas fa-sign-out-alt mx-1"></i>Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'login'%}"><i class="fas fa-sign-in-alt mx-1"></i>Login</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endblock %}
