@@ -52,6 +52,7 @@ class TapeConcatenatedFormFactor4DFileSerializer(serializers.ModelSerializer):
 
 class DiskConcatenatedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
     name = "disk-concat"
+    exclude_from_nav = True
     queryset = DiskConcatenatedFormFactor4DFile.objects.all()
     serializer_class = DiskConcatenatedFormFactor4DFileSerializer
 
@@ -61,6 +62,7 @@ VIEWSETS.append(DiskConcatenatedFormFactor4DFileViewSet)
 
 class TapeConcatenatedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
     name = "tape-concat"
+    exclude_from_nav = True
     queryset = TapeConcatenatedFormFactor4DFile.objects.all()
     serializer_class = TapeConcatenatedFormFactor4DFileSerializer
 
@@ -94,6 +96,7 @@ class TapeTSlicedSAveragedFormFactor4DFileSerializer(serializers.ModelSerializer
 
 class DiskTSlicedSAveragedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
     name = "disk-sliced-averaged"
+    exclude_from_nav = True
     queryset = DiskTSlicedSAveragedFormFactor4DFile.objects.all()
     serializer_class = DiskTSlicedSAveragedFormFactor4DFileSerializer
 
@@ -103,6 +106,7 @@ VIEWSETS.append(DiskTSlicedSAveragedFormFactor4DFileViewSet)
 
 class TapeTSlicedSAveragedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
     name = "tape-sliced-averaged-status"
+    exclude_from_nav = True
     queryset = TapeTSlicedSAveragedFormFactor4DFile.objects.all()
     serializer_class = TapeTSlicedSAveragedFormFactor4DFileSerializer
 
@@ -128,6 +132,7 @@ class DiskTSlicedFormFactor4DFileSerializer(serializers.ModelSerializer):
 
 class DiskTSlicedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
     name = "disk-sliced"
+    exclude_from_nav = True
     queryset = DiskTSlicedFormFactor4DFile.objects.all()
     serializer_class = DiskTSlicedFormFactor4DFileSerializer
 
@@ -154,6 +159,7 @@ class DiskFormFactor4DFileSerializer(serializers.ModelSerializer):
 
 class DiskFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
     name = "disk"
+    exclude_from_nav = True
     queryset = DiskFormFactor4DFile.objects.all()
     serializer_class = DiskFormFactor4DFileSerializer
 
