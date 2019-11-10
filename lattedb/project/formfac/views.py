@@ -1,3 +1,4 @@
+# pylint: disable=C0111, R0901
 """Views for the Form Factor project
 """
 from abc import ABC
@@ -7,7 +8,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.urls import reverse_lazy
 
-from lattedb.utilities.tables import to_table
 from lattedb.project.formfac.models import DiskConcatenatedFormFactor4DFile
 from lattedb.project.formfac.models import TapeConcatenatedFormFactor4DFile
 from lattedb.project.formfac.models import TapeTSlicedSAveragedFormFactor4DFile
@@ -34,17 +34,15 @@ class FileStatusView(LoginRequiredMixin, TemplateView, ABC):  # pylint: disable=
     model = None
     template_name = "table.html"
     fieldnames = {
-        # "file__name": "file",
-        "file__ensemble": "Ens",
-        "file__stream": "Stream",
-        "file__configuration_range": "Cfg range",
-        "file__source_set": "Src set",
-        "file__current": "Curr",
-        "file__state": "State",
-        "file__parity": "Parity",
-        "file__flavor": "Flavor",
-        "file__spin": "Spin",
-        # "path": "path",
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.configuration_range": "Cfg range",
+        "file.source_set": "Src set",
+        "file.current": "Curr",
+        "file.state": "State",
+        "file.parity": "Parity",
+        "file.flavor": "Flavor",
+        "file.spin": "Spin",
         "exists": "Exists",
         "machine": "Machine",
         "size": "Size",
@@ -60,21 +58,22 @@ class FileStatusView(LoginRequiredMixin, TemplateView, ABC):  # pylint: disable=
             )
 
         context = super().get_context_data(**kwargs)
-        df = self.model.objects.to_dataframe(
-            fieldnames=list(self.fieldnames.keys())
-        ).rename(columns=self.fieldnames)
 
-        count = df["Exists"].value_counts()
+        instances = self.model.objects.all()
 
         context["status"] = {
-            "done": count.get(True, 0),
-            "pending": count.get(False, 0),
-            "total": count.sum(),
+            "done": instances.filter(exists=True).count(),
+            "total": instances.count(),
         }
-        context["title"] = "Status view for Form Factor files"
-        context["subtitle"] = "Considering files on tape"
-        context["table"], context["script"] = to_table(df, id_name="file-information")
+        context["status"]["pending"] = (
+            context["status"]["total"] - context["status"]["done"]
+        )
         context["model"] = self.model
+        context["columns"] = self.fieldnames
+        context["api_url"] = (
+            reverse_lazy(f"Project formfac:{self.model.__name__.lower()}-list")
+            + "?format=datatables"
+        )
 
         return context
 
@@ -90,13 +89,11 @@ class TapeConcatenatedFormFactor4DStatusView(FileStatusView):
 class DiskTSlicedSAveragedFormFactor4DStatusView(FileStatusView):
     model = DiskTSlicedSAveragedFormFactor4DFile
     fieldnames = {
-        # "file__name": "file",
-        "file__ensemble": "Ens",
-        "file__stream": "Stream",
-        "file__source_set": "Src set",
-        "file__configuration": "Cfg",
-        "file__t_separation": "T sep",
-        # "path": "path",
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.source_set": "Src set",
+        "file.configuration": "Cfg",
+        "file.t_separation": "T sep",
         "exists": "Exists",
         "machine": "Machine",
         "size": "Size",
@@ -107,13 +104,11 @@ class DiskTSlicedSAveragedFormFactor4DStatusView(FileStatusView):
 class TapeTSlicedSAveragedFormFactor4DStatusView(FileStatusView):
     model = TapeTSlicedSAveragedFormFactor4DFile
     fieldnames = {
-        # "file__name": "file",
-        "file__ensemble": "Ens",
-        "file__stream": "Stream",
-        "file__source_set": "Src set",
-        "file__configuration": "Cfg",
-        "file__t_separation": "T sep",
-        # "path": "path",
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.source_set": "Src set",
+        "file.configuration": "Cfg",
+        "file.t_separation": "T sep",
         "exists": "Exists",
         "machine": "Machine",
         "size": "Size",
@@ -124,14 +119,12 @@ class TapeTSlicedSAveragedFormFactor4DStatusView(FileStatusView):
 class DiskTSlicedFormFactor4DStatusView(FileStatusView):
     model = DiskTSlicedFormFactor4DFile
     fieldnames = {
-        # "file__name": "file",
-        "file__ensemble": "Ens",
-        "file__stream": "Stream",
-        "file__source_set": "Src set",
-        "file__configuration": "Cfg",
-        "file__t_separation": "T sep",
-        "file__source": "Src",
-        # "path": "path",
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.source_set": "Src set",
+        "file.configuration": "Cfg",
+        "file.t_separation": "T sep",
+        "file.source": "Src",
         "exists": "Exists",
         "machine": "Machine",
         "size": "Size",
@@ -142,14 +135,12 @@ class DiskTSlicedFormFactor4DStatusView(FileStatusView):
 class DiskFormFactor4DStatusView(FileStatusView):
     model = DiskFormFactor4DFile
     fieldnames = {
-        # "file__name": "file",
-        "file__ensemble": "Ens",
-        "file__stream": "Stream",
-        "file__source_set": "Src set",
-        "file__configuration": "Cfg",
-        "file__t_separation": "T sep",
-        "file__source": "Src",
-        # "path": "path",
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.source_set": "Src set",
+        "file.configuration": "Cfg",
+        "file.t_separation": "T sep",
+        "file.source": "Src",
         "exists": "Exists",
         "machine": "Machine",
         "size": "Size",

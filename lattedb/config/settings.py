@@ -35,7 +35,13 @@ INSTALLED_APPS = (
         "espressodb.management",
         "espressodb.notifications",
     ]
-    + ["bootstrap4", "widget_tweaks", "django_extensions"]
+    + [
+        "bootstrap4",
+        "widget_tweaks",
+        "django_extensions",
+        "rest_framework",
+        "rest_framework_datatables",
+    ]
     + [
         "django.contrib.admin",
         "django.contrib.auth",
@@ -97,7 +103,9 @@ DATABASES = {"default": DB_CONFIG}
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -177,6 +185,21 @@ GRAPH_MODELS = {
 PROJECT_NAME = "lattedb"
 
 MIGRATION_MODULES = {"notifications": "lattedb.config.migrations.notifications"}
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    "DEFAULT_RENDERER_CLASSES": (
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+        "rest_framework_datatables.renderers.DatatablesRenderer",
+    ),
+    "DEFAULT_FILTER_BACKENDS": (
+        "rest_framework_datatables.filters.DatatablesFilterBackend",
+    ),
+    "DEFAULT_PAGINATION_CLASS": "lattedb.project.formfac.rest.pagination.Paginator",
+    "PAGE_SIZE": 50,
+}
 
 
 if not DEBUG:

@@ -15,17 +15,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from lattedb.project.formfac.views import IndexView
+from django.urls import include
+
 from lattedb.project.formfac.views import DiskConcatenatedFormFactor4DStatusView
 from lattedb.project.formfac.views import TapeConcatenatedFormFactor4DStatusView
 from lattedb.project.formfac.views import DiskTSlicedSAveragedFormFactor4DStatusView
 from lattedb.project.formfac.views import TapeTSlicedSAveragedFormFactor4DStatusView
 from lattedb.project.formfac.views import DiskTSlicedFormFactor4DStatusView
 from lattedb.project.formfac.views import DiskFormFactor4DStatusView
+from lattedb.project.formfac.rest.serializers import ROUTER
 
 app_name = "Project formfac"
 urlpatterns = [
-    path("", IndexView.as_view(), name="Form Factor"),
+    path(r"api/", include(ROUTER.urls)),
     path(
         "disk-concat-status",
         DiskConcatenatedFormFactor4DStatusView.as_view(),
