@@ -46,7 +46,7 @@ class DiskFormFactor4DFile(PhysicalFormFactor4DFile):
 
     verbose_name = "FormFactor4D File on Disk"
 
-    file = models.ForeignKey(
+    file = models.OneToOneField(
         FormFactor4DFile,
         on_delete=models.CASCADE,
         related_name="disk",

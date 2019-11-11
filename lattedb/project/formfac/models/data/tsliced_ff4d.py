@@ -52,7 +52,7 @@ class DiskTSlicedFormFactor4DFile(PhysicalFormFactor4DFile):
 
     verbose_name = " TSliced Form Factor 4D File on Disk"
 
-    file = models.ForeignKey(
+    file = models.OneToOneField(
         TSlicedFormFactor4DFile,
         on_delete=models.CASCADE,
         related_name="disk",

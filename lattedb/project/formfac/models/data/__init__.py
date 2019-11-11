@@ -40,7 +40,7 @@ class PhysicalFormFactor4DFile(Base):
     """Abstract table for physical file information summarizing disk or file status.
     """
 
-    file = models.ForeignKey(
+    file = models.OneToOneField(
         AbstractFormFactor4DFile,
         on_delete=models.CASCADE,
         related_name="disk",

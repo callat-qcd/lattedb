@@ -55,7 +55,7 @@ class TapeConcatenatedFormFactor4DFile(PhysicalFormFactor4DFile):
 
     verbose_name = "Concatenated Form Factor 4D File on Tape"
 
-    file = models.ForeignKey(
+    file = models.OneToOneField(
         ConcatenatedFormFactor4DFile,
         on_delete=models.CASCADE,
         related_name="tape",
@@ -70,7 +70,7 @@ class DiskConcatenatedFormFactor4DFile(PhysicalFormFactor4DFile):
 
     verbose_name = "Concatenated Form Factor 4D File on Disk"
 
-    file = models.ForeignKey(
+    file = models.OneToOneField(
         ConcatenatedFormFactor4DFile,
         on_delete=models.CASCADE,
         related_name="disk",
