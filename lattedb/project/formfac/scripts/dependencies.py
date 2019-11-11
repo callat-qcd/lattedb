@@ -6,7 +6,11 @@ from logging import getLogger
 
 from tqdm import tqdm
 
-from lattedb.project.formfac.models import FormFactor4DFile, TSlicedFormFactor4DFile
+from lattedb.project.formfac.models import (
+    FormFactor4DFile,
+    TSlicedFormFactor4DFile,
+    TSlicedSAveragedFormFactor4DFile,
+)
 
 LOGGER = getLogger("espressodb")
 
@@ -96,7 +100,13 @@ def main():
             "t_separation",
             "source",
         ],
-    ).update(batch_size=1000)
+    ).update(batch_size=10000)
+
+    DepencyUpdater(
+        TSlicedFormFactor4DFile,
+        dependet=TSlicedSAveragedFormFactor4DFile,
+        keys=["ensemble", "stream", "source_set", "configuration", "t_separation",],
+    ).update(batch_size=10000)
 
 
 if __name__ == "__main__":
