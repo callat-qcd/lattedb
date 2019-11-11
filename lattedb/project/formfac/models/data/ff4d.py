@@ -5,6 +5,7 @@ from lattedb.project.formfac.models.data import (
     AbstractFormFactor4DFile,
     PhysicalFormFactor4DFile,
 )
+from lattedb.project.formfac.models.data.tsliced_ff4d import TSlicedFormFactor4DFile
 
 
 class FormFactor4DFile(AbstractFormFactor4DFile):
@@ -19,6 +20,13 @@ class FormFactor4DFile(AbstractFormFactor4DFile):
     t_separation = models.IntegerField(help_text="Source sink time separation.")
     source = models.CharField(
         max_length=100, help_text="Source location in format `xXyYzZtT`."
+    )
+    dependent = models.OneToOneField(
+        TSlicedFormFactor4DFile,
+        null=True,
+        on_delete=models.SET_NULL,
+        help_text="Link to t-sliced form factor file.",
+        related_name="dependency",
     )
 
     class Meta:  # pylint: disable=C0111, R0903
