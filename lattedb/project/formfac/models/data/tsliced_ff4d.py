@@ -69,7 +69,7 @@ class DiskTSlicedFormFactor4DFile(PhysicalFormFactor4DFile):
     def get_missing_files(cls) -> List["DiskTSlicedFormFactor4DFile"]:
         """Get all DiskTSlicedFormFactor4DFile which don't exist.
         """
-        cls.objects.filter(exists=False)
+        return cls.objects.filter(exists=False)
 
     @classmethod
     def get_files_with_missing_dependencies(cls) -> List["DiskTSlicedFormFactor4DFile"]:
