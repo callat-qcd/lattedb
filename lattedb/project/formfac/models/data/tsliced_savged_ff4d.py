@@ -63,7 +63,7 @@ class DiskTSlicedSAveragedFormFactor4DFile(PhysicalFormFactor4DFile):
     def n_sources(self):
         """Computes the number of sources from the source string.
         """
-        n_min, n_max = self.file.source_set.replace("-", "")
+        n_min, n_max = self.file.source_set.split("-")
         return int(n_max) - int(n_min) + 1
 
     @property
@@ -77,7 +77,7 @@ class DiskTSlicedSAveragedFormFactor4DFile(PhysicalFormFactor4DFile):
         """
         exist = False
         if self.file.dependencies.count() == self.n_sources:
-            if all(self.file.dependencies.values_list("disk__exists")):
+            if all(self.file.dependencies.values_list("disk__exists", flat=True)):
                 exist = True
         return exist
 
@@ -102,8 +102,12 @@ class DiskTSlicedSAveragedFormFactor4DFile(PhysicalFormFactor4DFile):
             2. No file status is associated with the dependency file,
             3. The file status of the dependency file is does not exist.
         """
-        return cls.objects.annotate(models.Count("file__dependencies")).filter(
-            models.Q(file__dependencies__count__ne=expected_dependencies)
-            | models.Q(file__dependencies__disk__isnull=True)
-            | models.Q(file__dependencies__disk__exists=False)
-        )
+        return cls.objects.annotate(
+            dependency_count=models.Count(
+                models.Case(
+                    models.When(
+                        file__dependencies__disk__exists=True, then=models.Value(1)
+                    )
+                )
+            )
+        ).filter(~models.Q(dependency_count=expected_dependencies))
