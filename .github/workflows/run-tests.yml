@@ -18,6 +18,13 @@ jobs:
               with:
                   python-version: ${{ matrix.python-version }}
 
+            - name: Install latest espressodb
+              working-directory: ./modules
+              run: |
+                git clone --single-branch --branch v1.0.0 https://github.com/callat-qcd/espressodb.git espressodb
+                ls
+                pip install espressodb
+
             - name: Install dependencies
               run: |
                   python -m pip install --upgrade pip
