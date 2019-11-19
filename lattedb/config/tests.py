@@ -6,3 +6,6 @@ from espressodb.base.tests.views.index import IndexViewTest
 from espressodb.base.tests.views.urls import URLViewTest
 
 from espressodb.management.tests.commands.info import InfoCommandTest
+
+
+IndexViewTest.exclude_urls = ["/project-formfac/api/.*"]
