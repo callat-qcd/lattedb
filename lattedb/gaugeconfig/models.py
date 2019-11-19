@@ -1,3 +1,4 @@
+from typing import Dict, Any
 from django.db import models
 
 from espressodb.base.models import Base
@@ -47,7 +48,7 @@ class Nf211(GaugeConfig):
         "gaugeaction.GaugeAction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to lattice $\texttt{gaugeaction}$",
+        help_text=r"Foreign Key pointing to lattice \(\texttt{gaugeaction}\)",
     )
     nx = models.PositiveSmallIntegerField(
         null=False, help_text="Spatial length in lattice units"
@@ -65,19 +66,19 @@ class Nf211(GaugeConfig):
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to lattice $\texttt{fermionaction}$",
+        help_text=r"Foreign Key pointing to lattice \(\texttt{fermionaction}\)",
     )
     strange = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to lattice $\texttt{fermionaction}$",
+        help_text=r"Foreign Key pointing to lattice \(\texttt{fermionaction}\)",
     )
     charm = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to lattice $\texttt{fermionaction}$",
+        help_text=r"Foreign Key pointing to lattice \(\texttt{fermionaction}\)",
     )
     mpi = models.PositiveSmallIntegerField(null=True, help_text="Pion mass in MeV")
 
@@ -116,14 +117,10 @@ class Nf211(GaugeConfig):
     @classmethod
     def check_consistency(cls, data: Dict[str, Any]):
         if data["light"].type.quark_type not in ["light"]:
-            raise TypeError(
-                "Requires light to be quark_type = light in FermionAction."
-            )
+            raise TypeError("Requires light to be quark_type = light in FermionAction.")
         if data["strange"].type.quark_type not in ["strange"]:
             raise TypeError(
                 "Requires strange to be quark_type = strange in FermionAction."
             )
         if data["charm"].type.quark_type not in ["charm"]:
-            raise TypeError(
-                "Requires charm to be quark_type = charm in FermionAction."
-            )
+            raise TypeError("Requires charm to be quark_type = charm in FermionAction.")

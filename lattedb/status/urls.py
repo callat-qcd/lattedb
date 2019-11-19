@@ -5,5 +5,5 @@ from django.urls import path
 
 from lattedb.status import views
 
-app_name = "Status"
+app_name = "status"
 urlpatterns = []

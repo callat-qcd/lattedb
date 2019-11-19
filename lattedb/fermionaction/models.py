@@ -1,3 +1,4 @@
+from typing import Dict, Any
 from django.db import models
 
 from espressodb.base.models import Base
@@ -16,14 +17,9 @@ class Hisq(FermionAction):
     """
 
     quark_mass = models.DecimalField(
-        max_digits=10,
-        decimal_places=6,
-        null=False,
-        help_text="Input quark mass",
+        max_digits=10, decimal_places=6, null=False, help_text="Input quark mass",
     )
-    quark_tag = models.TextField(
-        blank=False, null=False, help_text="Type of quark"
-    )
+    quark_tag = models.TextField(blank=False, null=False, help_text="Type of quark")
 
     naik = models.DecimalField(
         max_digits=10,
@@ -34,7 +30,7 @@ class Hisq(FermionAction):
     linksmear = models.ForeignKey(
         "linksmear.LinkSmear",
         on_delete=models.CASCADE,
-        help_text=r"Foreign Key pointing to additional gauge $\texttt{linksmear}$ outside of Monte Carlo.",
+        help_text=r"Foreign Key pointing to additional gauge \(\texttt{linksmear}\) outside of Monte Carlo.",
     )
 
     class Meta:
@@ -65,23 +61,13 @@ class MobiusDW(FermionAction):
     """
 
     quark_mass = models.DecimalField(
-        max_digits=10,
-        decimal_places=6,
-        null=False,
-        help_text="Input quark mass",
+        max_digits=10, decimal_places=6, null=False, help_text="Input quark mass",
     )
-    quark_tag = models.TextField(
-        blank=False, null=False, help_text="Type of quark"
-    )
+    quark_tag = models.TextField(blank=False, null=False, help_text="Type of quark")
 
-    l5 = models.PositiveSmallIntegerField(
-        help_text="Length of 5th dimension"
-    )
+    l5 = models.PositiveSmallIntegerField(help_text="Length of 5th dimension")
     m5 = models.DecimalField(
-        max_digits=10,
-        decimal_places=6,
-        null=False,
-        help_text="5th dimensional mass",
+        max_digits=10, decimal_places=6, null=False, help_text="5th dimensional mass",
     )
     b5 = models.DecimalField(
         max_digits=10,
@@ -98,7 +84,7 @@ class MobiusDW(FermionAction):
     linksmear = models.ForeignKey(
         "linksmear.LinkSmear",
         on_delete=models.CASCADE,
-        help_text=r"Foreign Key pointing to additional gauge $\texttt{linksmear}$ outside of Monte Carlo.",
+        help_text=r"Foreign Key pointing to additional gauge \(\texttt{linksmear}\) outside of Monte Carlo.",
     )
 
     class Meta:

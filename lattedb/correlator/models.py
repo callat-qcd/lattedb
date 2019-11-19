@@ -22,13 +22,13 @@ class DWFTuning(Correlator):
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to $\texttt{propagator}$",
+        help_text=r"Foreign Key to \(\texttt{propagator}\)",
     )
     wave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to source spin color space $\texttt{wavefunction}$",
+        help_text=r"Foreign Key to source spin color space \(\texttt{wavefunction}\)",
     )
     sink5 = models.BooleanField(null=False, help_text="Is the sink on the domain wall?")
 
@@ -63,25 +63,25 @@ class Meson2pt(Correlator):
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to first $\texttt{propagator}$",
+        help_text=r"Foreign Key to first \(\texttt{propagator}\)",
     )
     propagator1 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to second $\texttt{propagator}$, and must be $\leq \texttt{propagator0}$ (also Foreign Key)",
+        help_text=r"Foreign Key to second \(\texttt{propagator}\), and must be \(\leq \texttt{propagator0}\) (also Foreign Key)",
     )
     sourcewave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to source interpolating operator $\texttt{wavefunction}$",
+        help_text=r"Foreign Key to source interpolating operator \(\texttt{wavefunction}\)",
     )
     sinkwave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to sink interpolating operator $\texttt{wavefunction}$",
+        help_text=r"Foreign Key to sink interpolating operator \(\texttt{wavefunction}\)",
     )
 
     class Meta:
@@ -153,32 +153,31 @@ class Baryon2pt(Correlator):
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to first $\texttt{propagator}$",
+        help_text=r"Foreign Key to first \(\texttt{propagator}\)",
     )
     propagator1 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to second $\texttt{propagator}$, and must be $\leq \texttt{propagator0}$ (also Foreign Key)",
-        help_text=r"Foreign Key to second $\texttt{propagator}$, and must be $\leq \texttt{propagator0}$ (also Foreign Key)",
+        help_text=r"Foreign Key to second \(\texttt{propagator}\), and must be \(\leq \texttt{propagator0}\) (also Foreign Key)",
     )
     propagator2 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to third $\texttt{propagator}$, and must be $\leq \texttt{propagator1}$ (also Foreign Key)",
+        help_text=r"Foreign Key to third \(\texttt{propagator}\), and must be \(\leq \texttt{propagator1}\) (also Foreign Key)",
     )
     sourcewave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to source interpolating operator $\texttt{wavefunction}$",
+        help_text=r"Foreign Key to source interpolating operator \(\texttt{wavefunction}\)",
     )
     sinkwave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to sink interpolating operator $\texttt{wavefunction}$",
+        help_text=r"Foreign Key to sink interpolating operator \(\texttt{wavefunction}\)",
     )
 
     class Meta:
@@ -277,24 +276,24 @@ class BaryonSeq3pt(Correlator):
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to source operator $\texttt{wavefunction}$",
+        help_text=r"Foreign Key pointing to source operator \(\texttt{wavefunction}\)",
     )
     current = models.ForeignKey(
         "current.Current",
         on_delete=models.CASCADE,
-        help_text=r"Foreign Key to current interaction operator $\texttt{wavefunction}$",
+        help_text=r"Foreign Key to current interaction operator \(\texttt{wavefunction}\)",
     )
     seqpropagator = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to sequential $\texttt{propagator}$ (2 spectator quarks + 1 daughter)",
+        help_text=r"Foreign Key pointing to sequential \(\texttt{propagator}\) (2 spectator quarks + 1 daughter)",
     )
     propagator = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to daughter quark $\texttt{propagator}$",
+        help_text=r"Foreign Key pointing to daughter quark \(\texttt{propagator}\)",
     )
 
     class Meta:
@@ -322,32 +321,32 @@ class BaryonFH3pt(Correlator):
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to source operator $\texttt{wavefunction}$",
+        help_text=r"Foreign Key pointing to source operator \(\texttt{wavefunction}\)",
     )
     sinkwave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to sink operator $\texttt{wavefunction}$",
+        help_text=r"Foreign Key pointing to sink operator \(\texttt{wavefunction}\)",
     )
 
     fhpropagator = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to Feynman-Hellmann $\texttt{propagator}$",
+        help_text=r"Foreign Key pointing to Feynman-Hellmann \(\texttt{propagator}\)",
     )
     propagator0 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to spectator $\texttt{propagator}$",
+        help_text=r"Foreign Key pointing to spectator \(\texttt{propagator}\)",
     )
     propagator1 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to spectator $\texttt{propagator}$",
+        help_text=r"Foreign Key pointing to spectator \(\texttt{propagator}\)",
     )
 
     class Meta:

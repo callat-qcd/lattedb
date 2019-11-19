@@ -12,7 +12,7 @@ PROJECT_APPS:
     - lattedb.correlator
     - lattedb.ensemble
     - lattedb.project.ga_q2
-#    - lattedb.project.fhcompare
+    # - lattedb.project.fhcompare
     - lattedb.project.formfac
 ALLOWED_HOSTS:
     - 127.0.0.1

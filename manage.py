@@ -1,0 +1,1 @@
+lattedb/manage.py
