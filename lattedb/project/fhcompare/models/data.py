@@ -65,7 +65,7 @@ class SourceAvgSeq3pt(Data):
 
     tins = models.PositiveSmallIntegerField(
         null=False,
-        help_text="Source-insertion time separation. Source-sink time (sinksep)∂ is in seq3pt metadata."
+        help_text="Source-insertion time separation. Source-sink time (sinksep)∂ is in seq3pt metadata"
     )
 
     # @property

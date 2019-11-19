@@ -13,15 +13,15 @@ class Local(Current):
     """
 
     diracstruct = models.TextField(
-        null=False, blank=False, help_text="Text: Dirac structure of the current"
+        null=False, blank=False, help_text="Dirac structure of the current"
     )
 
     momentum = models.SmallIntegerField(
-        help_text="SmallInt: Current insertion momentum in units of 2 pi / L"
+        help_text="Current insertion momentum in units of 2 pi / L"
     )
 
     description = models.TextField(
-        null=True, blank=True, help_text="(Optional) Text: Description of current"
+        null=True, blank=True, help_text="Description of current"
     )
 
     class Meta:
@@ -36,11 +36,11 @@ class Local4D(Current):
     """
 
     diracstruct = models.TextField(
-        null=False, blank=False, help_text="Text: Dirac structure of the current"
+        null=False, blank=False, help_text="Dirac structure of the current"
     )
 
     description = models.TextField(
-        null=True, blank=True, help_text="(Optional) Text: Description of current"
+        null=True, blank=True, help_text="Description of current"
     )
 
     class Meta:

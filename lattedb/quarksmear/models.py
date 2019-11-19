@@ -10,7 +10,7 @@ class QuarkSmear(Base):
     description = models.TextField(
         null=True,
         blank=True,
-        help_text="(Optional) Text: Description of the quark smearing operator",
+        help_text="Description of the quark smearing operator",
     )
 
 
@@ -28,10 +28,10 @@ class GaugeCovariantGaussian(QuarkSmear):
     radius = models.DecimalField(
         max_digits=10,
         decimal_places=6,
-        help_text="Decimal(10,6): Smearing radius in lattice units",
+        help_text="Smearing radius in lattice units",
     )
     step = models.PositiveSmallIntegerField(
-        help_text="PositiveSmallInt: Number of smearing steps"
+        help_text="Number of smearing steps"
     )
 
     class Meta:

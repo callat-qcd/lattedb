@@ -10,20 +10,22 @@ class LinkSmear(Base):
 
 class Unsmeared(LinkSmear):
     """
+    Empty table for Foreign Key references to unsmeared gauge links.
     """
 
 
 class WilsonFlow(LinkSmear):
     """
+    Wilson flow smearing for gauge links.
     """
 
     flowtime = models.DecimalField(
         max_digits=10,
         decimal_places=6,
-        help_text="Decimal(10,6): Flow time in lattice units",
+        help_text="Flow time in lattice units",
     )
     flowstep = models.PositiveSmallIntegerField(
-        help_text="PositiveSmallInt: Number of diffusion steps"
+        help_text="Number of diffusion steps"
     )
 
     class Meta:
