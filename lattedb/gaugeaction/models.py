@@ -16,19 +16,19 @@ class LuescherWeisz(GaugeAction):
         max_digits=10,
         decimal_places=6,
         null=False,
-        help_text="Decimal(10,6): Coupling constant",
+        help_text="Strong coupling constant",
     )
     a_fm = models.DecimalField(
         max_digits=10,
         decimal_places=6,
         null=True,
-        help_text="(Optional) Decimal(10,6): Lattice spacing in fermi",
+        help_text="Lattice spacing in fermi",
     )
     u0 = models.DecimalField(
         max_digits=10,
         decimal_places=6,
         null=False,
-        help_text="Decimal(10,6): Tadpole improvement coefficient",
+        help_text="Tadpole improvement coefficient",
     )
 
     class Meta:

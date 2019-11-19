@@ -18,7 +18,7 @@ class Jason0(Fhcompare):
     corrseq = models.ManyToManyField(Correlator)
 
     listofcorrs = ArrayField(
-        models.TextField(), default=list, help_text="Text: A list of correlators used"
+        models.TextField(), default=list, help_text="A list of correlators used"
     )
 
     trange = JSONField(

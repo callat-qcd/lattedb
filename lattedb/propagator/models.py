@@ -4,29 +4,34 @@ from espressodb.base.models import Base
 
 
 class Propagator(Base):
-    """ Base table for application
+    """
+    Base table for application.
+    All types of propagators are listed here.
+    Consistency is enforced in check_consistency under each table that references propagator.propagator.
     """
 
 
 class OneToAll(Propagator):
     """
+    General table for a one-to-all propagator.
+    Table is independent of sea and valence action.
     """
 
     gaugeconfig = models.ForeignKey(
         "gaugeconfig.GaugeConfig",
         on_delete=models.CASCADE,
-        help_text="ForeignKey pointing to specific gauge configuration inverted on",
+        help_text=r"Foreign Key pointing to specific \texttt{gaugeconfig} inverted on",
     )
     fermionaction = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
-        help_text="ForeignKey pointing to valence lattice fermion action."
+        help_text=r"Foreign Key pointing to valence lattice $\texttt{fermionaction}$."
         " This is the valence action.",
     )
     origin_x = models.PositiveSmallIntegerField(
         null=False,
         blank=False,
-        help_text="PositiveSmallInt: x-coordinate origin location of the propagator",
+        help_text="x-coordinate origin location of the propagator",
     )
     origin_y = models.PositiveSmallIntegerField(
         null=False,

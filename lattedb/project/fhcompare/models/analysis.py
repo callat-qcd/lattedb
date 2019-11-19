@@ -8,19 +8,19 @@ class Fhcompare(Project):
     """ Base table for application
     """
 
-    mn = models.FloatField(null=False, help_text="Float: nucleon mass")
+    mn = models.FloatField(null=False, help_text="Nucleon mass")
 
-    ga = models.FloatField(null=False, help_text="Float: axial charge")
+    ga = models.FloatField(null=False, help_text="Axial charge")
 
-    gv = models.FloatField(null=False, help_text="Float: vector charge")
+    gv = models.FloatField(null=False, help_text="Vector charge")
 
     rating = models.SmallIntegerField(
         null=False,
         default=1,
         validators=[MinValueValidator(1), MaxValueValidator(5)],
-        help_text="Int: Limit from 1 to 5, default = 1. Rate your own fits.",
+        help_text="Limit from 1 to 5, default = 1 and rate your own fits",
     )
 
     result = models.TextField(
-        null=False, blank=False, help_text="Text: {'your_results': 'all dumped here'}"
+        null=False, blank=False, help_text="{'your_results': 'all dumped here'} as text field (not dict)"
     )
