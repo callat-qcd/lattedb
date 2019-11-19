@@ -51,7 +51,7 @@ class DWFTuning(Correlator):
         if data["propagator"].type not in ["OneToAll"]:
             raise TypeError("Requires propagator type OneToAll.")
         if data["propagator"].type.fermionaction.type not in ["MobiusDW"]:
-            rasise TypeError("Requires propagator action to be MobiusDW.")
+            raise TypeError("Requires propagator action to be MobiusDW.")
 
 
 class Meson2pt(Correlator):
