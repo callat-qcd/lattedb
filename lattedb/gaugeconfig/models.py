@@ -5,7 +5,10 @@ from espressodb.base.models import Base
 
 
 class GaugeConfig(Base):
-    """ Base table for application
+    r"""
+    Base table for application.
+    All types of gauge configurations are listed here.
+    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{gaugeconfig.gaugeconfig}$.
     """
 
     def same_ensemble(self, config: "GaugeConfig") -> bool:
@@ -25,7 +28,11 @@ class GaugeConfig(Base):
 
 
 class Nf211(GaugeConfig):
-    """
+    r"""
+    All types of 2+1+1 flavor gauge configurations are listed here.
+    For specific valence and sea actions, query through gauge action and quark references.
+    In particular, each configuration has its own entry.
+    Ensembles can be found in $\texttt{ensemble.ensemble}$ which references $\texttt{gaugeconfig}$.
     """
 
     short_tag = models.TextField(

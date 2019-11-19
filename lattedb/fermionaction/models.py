@@ -5,7 +5,10 @@ from espressodb.base.models import Base
 
 
 class FermionAction(Base):
-    """ Base table for application
+    r"""
+    Base table for application.
+    All types of fermion actions are listed here.
+    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{fermionaction.fermionaction}$.
     """
 
 

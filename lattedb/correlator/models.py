@@ -6,12 +6,18 @@ from espressodb.base.models import Base
 
 
 class Correlator(Base):
-    """ Base table for application
+    r"""
+    Base table for application.
+    All types of correlators are listed here.
+    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{correlator.correlator}$.
     """
 
 
 # Create your models here.
 class DWFTuning(Correlator):
+    """
+    Two point correlation functions used to calculate residual mass for domain-wall action.
+    """
     propagator = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
@@ -44,9 +50,15 @@ class DWFTuning(Correlator):
     def check_consistency(cls, data: Dict[str, Any]):
         if data["propagator"].type not in ["OneToAll"]:
             raise TypeError("Requires propagator type OneToAll.")
+        if data["propagator"].type.fermionaction.type not in ["MobiusDW"]:
+            raise TypeError("Requires propagator action to be MobiusDW.")
 
 
 class Meson2pt(Correlator):
+    """
+    All types of meson two point correlators are listed here.
+    For specific hadrons and actions, query through foreign key references.
+    """
     propagator0 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
@@ -133,6 +145,10 @@ class Meson2pt(Correlator):
 
 
 class Baryon2pt(Correlator):
+    """
+    All types of baryon two point correlators are listed here.
+    For specific hadrons and actions, query through foreign key references.
+    """
     propagator0 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
@@ -252,6 +268,10 @@ class Baryon2pt(Correlator):
 
 
 class BaryonSeq3pt(Correlator):
+    r"""
+    All types of baryon three point correlators created with a $\texttt{CoherentSeq}$ propagator are listed here.
+    For specific hadrons and actions, query through foreign key references.
+    """
     sourcewave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
@@ -293,6 +313,10 @@ class BaryonSeq3pt(Correlator):
 
 
 class BaryonFH3pt(Correlator):
+    r"""
+    All types of baryon three point correlators created with a $\texttt{FeynmanHellmann}$ propagator are listed here.
+    For specific hadrons and actions, query through foreign key references.
+    """
     sourcewave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,

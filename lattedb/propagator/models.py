@@ -14,8 +14,7 @@ class Propagator(Base):
 
 class OneToAll(Propagator):
     """
-    General table for a one-to-all propagator.
-    Table is independent of sea and valence action.
+    All one-to-all propagators are listed here.
     """
 
     gaugeconfig = models.ForeignKey(
@@ -82,6 +81,7 @@ class OneToAll(Propagator):
 
 class CoherentSeq(Propagator):
     """
+    All coherence sequential propagators are listed here.
     """
 
     gaugeconfig = models.ForeignKey(
@@ -163,6 +163,7 @@ class CoherentSeq(Propagator):
 
 class FeynmanHellmann(Propagator):
     """
+    All Feynman-Hellmann type propagators, where the inversion is done at the current insertion, are listed here.
     """
 
     gaugeconfig = models.ForeignKey(

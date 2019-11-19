@@ -4,7 +4,10 @@ from espressodb.base.models import Base
 
 
 class QuarkSmear(Base):
-    """ Base table for application
+    r"""
+    Base table for application.
+    All types of quark smearings (interpolating operator smearing) are listed here.
+    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{quarksmear.quarksmear}$.
     """
 
     description = models.TextField(
@@ -22,7 +25,8 @@ class Point(QuarkSmear):
 
 
 class GaugeCovariantGaussian(QuarkSmear):
-    """ Gauge invariant Gaussian smearing
+    """
+    Gauge invariant Gaussian smearing
     """
 
     radius = models.DecimalField(
