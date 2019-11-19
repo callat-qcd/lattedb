@@ -11,7 +11,10 @@ from lattedb.gaugeconfig.models import GaugeConfig
 
 
 class Ensemble(Base):
-    """Implementation of ensemble of configurations table
+    """
+    Implementation of ensemble of configurations table.
+    All types of ensembles are listed here.
+    $\texttt{short_tag}$ and $\texttt{long_tag}$ are available to identify which type of ensembles are listed.
     """
 
     configurations = models.ManyToManyField(GaugeConfig)

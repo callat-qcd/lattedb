@@ -4,12 +4,18 @@ from espressodb.base.models import Base
 
 
 class SCSWaveFunction(Base):
-    """ Base table for application
+    r"""
+    Base table for application.
+    All types of interpolating operators are listed here.
+    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{wavefunction.scswavefunction}$.
     """
-
 
 class Hadron4D(SCSWaveFunction):
-    """
+    r"""
+    Hadronic interpolating operators.
+    No momentum projection is performed here.
+    The entries should have counterparts at $\texttt{wavefunction.hadron}$.
+    Reference to Basak operators: https://arxiv.org/abs/hep-lat/0508018.
     """
 
     description = models.TextField(
@@ -73,7 +79,12 @@ class Hadron4D(SCSWaveFunction):
             raise ValueError("Magnitude of isospin_z is greater than isospin.")
 
 class Hadron(SCSWaveFunction):
-
+    r"""
+    Hadronic interpolating operators.
+    Momentum projection is performed here.
+    The entries should have counterparts at $\texttt{wavefunction.hadron4d}$.
+    Reference to Basak operators: https://arxiv.org/abs/hep-lat/0508018.
+    """
     description = models.TextField(
         null=True,
         blank=True,

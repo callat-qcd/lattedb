@@ -4,12 +4,16 @@ from espressodb.base.models import Base
 
 
 class GaugeAction(Base):
-    """ Base table for application
+    r"""
+    Base table for application.
+    All types of gauge actions are listed here.
+    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{gaugeaction.gaugeaction}$.
     """
 
 
 class LuescherWeisz(GaugeAction):
     """
+    Table for L\"uscher-Weisz action parameters.
     """
 
     beta = models.DecimalField(

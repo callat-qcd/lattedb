@@ -4,9 +4,11 @@ from espressodb.base.models import Base
 
 
 class LinkSmear(Base):
-    """ Base table for application"
+    r"""
+    Base table for application.
+    All types of link smearings are listed here.
+    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{linksmear.linksmear}$.
     """
-
 
 class Unsmeared(LinkSmear):
     """
