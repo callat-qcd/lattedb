@@ -17,7 +17,5 @@ Including another URLconf
 from django.urls import path
 
 
-app_name = "correlator"
-urlpatterns = [
-    # path("", index, name="correlator-index")
-]
+app_name = "fhcompare"
+urlpatterns = []
