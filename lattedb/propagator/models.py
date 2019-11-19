@@ -1,3 +1,4 @@
+from typing import Dict, Any
 from django.db import models
 
 from espressodb.base.models import Base
@@ -7,7 +8,7 @@ class Propagator(Base):
     r"""
     Base table for application.
     All types of propagators are listed here.
-    Consistency is enforced in check_consistency under each table that references $\texttt{propagator.propagator}$.
+    Consistency is enforced in check_consistency under each table that references \(\texttt{propagator.propagator}\).
     """
 
 
@@ -25,7 +26,7 @@ class OneToAll(Propagator):
     fermionaction = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
-        help_text=r"Foreign Key pointing to valence lattice $\texttt{fermionaction}$."
+        help_text=r"Foreign Key pointing to valence lattice \(\texttt{fermionaction}\)."
         " This is the valence action.",
     )
     origin_x = models.PositiveSmallIntegerField(
@@ -52,13 +53,13 @@ class OneToAll(Propagator):
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to source $\texttt{quarksmear}$",
+        help_text=r"Foreign Key pointing to source \(\texttt{quarksmear}\)",
     )
     sinksmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to sink $\texttt{quarksmear}$",
+        help_text=r"Foreign Key pointing to sink \(\texttt{quarksmear}\)",
     )
 
     class Meta:
@@ -86,24 +87,24 @@ class CoherentSeq(Propagator):
     gaugeconfig = models.ForeignKey(
         "gaugeconfig.GaugeConfig",
         on_delete=models.CASCADE,
-        help_text=r"Foreign Key referencing specific $\texttt{gaugeconfig}$ inverted on",
+        help_text=r"Foreign Key referencing specific \(\texttt{gaugeconfig}\) inverted on",
     )
     fermionaction = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
-        help_text=r"Foreign Key referencing valence lattice $\texttt{fermionaction}$",
+        help_text=r"Foreign Key referencing valence lattice \(\texttt{fermionaction}\)",
     )
     propagator0 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key referencing OneToAll $\texttt{propagator}$ (spectator 0)",
+        help_text=r"Foreign Key referencing OneToAll \(\texttt{propagator}\) (spectator 0)",
     )
     propagator1 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key referencing OneToAll $\texttt{propagator}$ (spectator 1)",
+        help_text=r"Foreign Key referencing OneToAll \(\texttt{propagator}\) (spectator 1)",
     )
     groupsize = models.PositiveSmallIntegerField(
         help_text="Total number of propagators sharing a coherent sink"
@@ -115,22 +116,20 @@ class CoherentSeq(Propagator):
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key referencing sink interpolating operator $\texttt{wavefunction}$",
+        help_text=r"Foreign Key referencing sink interpolating operator \(\texttt{wavefunction}\)",
     )
-    sinksep = models.SmallIntegerField(
-        help_text="Source-sink separation time"
-    )
+    sinksep = models.SmallIntegerField(help_text="Source-sink separation time")
     sourcesmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key referencing source $\texttt{quarksmear}$",
+        help_text=r"Foreign Key referencing source \(\texttt{quarksmear}\)",
     )
     sinksmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key referencing sink $\texttt{quarksmear}$",
+        help_text=r"Foreign Key referencing sink \(\texttt{quarksmear}\)",
     )
 
     class Meta:
@@ -169,36 +168,36 @@ class FeynmanHellmann(Propagator):
     gaugeconfig = models.ForeignKey(
         "gaugeconfig.GaugeConfig",
         on_delete=models.CASCADE,
-        help_text=r"Foreign Key pointing to specific $\texttt{gaugeconfig}$ inverted on",
+        help_text=r"Foreign Key pointing to specific \(\texttt{gaugeconfig}\) inverted on",
     )
     fermionaction = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
-        help_text=r"Foreign Key pointing to valence lattice $\texttt{fermionaction}$",
+        help_text=r"Foreign Key pointing to valence lattice \(\texttt{fermionaction}\)",
     )
     propagator = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key linking RHS OneToAll $\texttt{propagator}$",
+        help_text=r"Foreign Key linking RHS OneToAll \(\texttt{propagator}\)",
     )
     current = models.ForeignKey(
         "current.Current",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key linking momentum space $\texttt{current}$ insertion",
+        help_text=r"Foreign Key linking momentum space \(\texttt{current}\) insertion",
     )
     sourcesmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to source $\texttt{quarksmear}$",
+        help_text=r"Foreign Key pointing to source \(\texttt{quarksmear}\)",
     )
     sinksmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to sink $\texttt{quarksmear}$",
+        help_text=r"Foreign Key pointing to sink \(\texttt{quarksmear}\)",
     )
 
     class Meta:

@@ -1,3 +1,4 @@
+from typing import Dict, Any
 from django.db import models
 
 from espressodb.base.models import Base
@@ -35,7 +36,7 @@ class Hadron4D(SCSWaveFunction):
     )
 
     spin_z_x2 = models.SmallIntegerField(
-        null=False, help_text="Spin in $z$-direction times 2"
+        null=False, help_text="Spin in \(z\)-direction times 2"
     )
 
     isospin_x2 = models.PositiveSmallIntegerField(
@@ -43,7 +44,7 @@ class Hadron4D(SCSWaveFunction):
     )
 
     isospin_z_x2 = models.SmallIntegerField(
-        null=False, help_text="Isospin in $z$-direction times 2"
+        null=False, help_text="Isospin in \(z\)-direction times 2"
     )
 
     class Meta:
@@ -72,16 +73,14 @@ class Hadron4D(SCSWaveFunction):
         if abs(data["isospin_z_x2"]) > data["isospin_x2"]:
             raise ValueError("Magnitude of isospin_z is greater than isospin.")
 
+
 class Hadron(SCSWaveFunction):
 
     description = models.TextField(
-        null=True,
-        blank=True,
-        help_text="Description of the interpolating operator",
+        null=True, blank=True, help_text="Description of the interpolating operator",
     )
     strangeness = models.PositiveSmallIntegerField(
-        null=False,
-        help_text="Strangeness of hadronic operator",
+        null=False, help_text="Strangeness of hadronic operator",
     )
     irrep = models.TextField(
         null=False,
@@ -89,9 +88,7 @@ class Hadron(SCSWaveFunction):
         help_text="Irreducible representations of O^D_h (octahedral group)",
     )
     embedding = models.PositiveSmallIntegerField(
-        null=False,
-        blank=False,
-        help_text="k-th embedding of O^D_h irrep.",
+        null=False, blank=False, help_text="k-th embedding of O^D_h irrep.",
     )
 
     parity = models.SmallIntegerField(
@@ -102,7 +99,7 @@ class Hadron(SCSWaveFunction):
     )
 
     spin_z_x2 = models.SmallIntegerField(
-        null=False, help_text="Spin in $z$-direction"
+        null=False, help_text="Spin in \(z\)-direction"
     )
 
     isospin_x2 = models.PositiveSmallIntegerField(
@@ -110,12 +107,10 @@ class Hadron(SCSWaveFunction):
     )
 
     isospin_z_x2 = models.SmallIntegerField(
-        null=False, help_text="Isospin in $z$-direction times 2"
+        null=False, help_text="Isospin in \(z\)-direction times 2"
     )
 
-    momentum = models.SmallIntegerField(
-        help_text="Momentum in units of 2 pi / L"
-    )
+    momentum = models.SmallIntegerField(help_text="Momentum in units of 2 pi / L")
 
     class Meta:
         constraints = [
