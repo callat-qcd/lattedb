@@ -24,6 +24,12 @@ jobs:
                   pip install -r requirements.txt
                   pip install -r requirements-dev.txt
 
+            - name: Creating db-config
+              run: |
+                  touch db-config.yaml
+                  echo "ENGINE: django.db.backends.sqlite3" >> db-config.yaml
+                  echo "NAME: test-db.sqlite" >> db-config.yaml
+
             - name: Install lattedb
               run: pip install -e .
 
