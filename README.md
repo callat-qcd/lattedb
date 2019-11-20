@@ -36,7 +36,7 @@ print(files.count())
 ### Notes on testing
 Run
 ```bash
-pip install -r requirement-dev.txt
+pip install -r requirements-dev.txt
 pytest
 ```
 in the repo root to run the tests.
