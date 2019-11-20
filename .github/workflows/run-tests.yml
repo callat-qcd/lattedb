@@ -29,11 +29,13 @@ jobs:
                   path: .modules/espressodb
 
             - name: Install latest espressodb
+              run: ls -lah
+            
+            - name: Install latest espressodb
               working-directory: .modules/espressodb
               run: pwd
 
-            - name: Install latest espressodb
-              run: ls -lah
+
 
             - name: Install latest espressodb
               working-directory: .modules/espressodb
