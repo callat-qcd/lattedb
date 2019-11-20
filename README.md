@@ -1,3 +1,6 @@
+[![Tests](https://github.com/callat-qcd/lattedb/workflows/Tests/badge.svg)](https://github.com/callat-qcd/lattedb/actions)
+
+
 # LatteDB
 
 Lattice QCD database interface using [Django](https://docs.djangoproject.com/en/2.2/intro/tutorial01/) as the content manager.
@@ -49,7 +52,7 @@ If you are not sure, ask before continuing.
 5. Commit and push all new migration files.
 
 ### git workflow
-* New features should be added to `devel-{feature}`, and will be mereged into `master` once they work 
+* New features should be added to `devel-{feature}`, and will be mereged into `master` once they work
 * Developers should add tests for new features and make sure **all tests** don't fail before running `migrate` and `push`
 * All `migrated` changes must be pushed to master
 
