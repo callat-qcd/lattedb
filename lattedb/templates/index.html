@@ -6,17 +6,59 @@
 <div class="jumbotron">
     <h1>Welcome to LatteDB</h1>
     <h2>A programmatic object-relational database for Lattice QCD</h2>
+</div>
+<div class="container">
+    <h4>What is LatteDB?</h4>
     <p>
-        <a href="https://github.com/callat-qcd/lattedb"> LatteDB</a> is built on top of  <a href="https://github.com/callat-qcd/espressodb">EspressoDB</a>
+        LatteDB aims to integrate all aspects of a Lattice QCD calculation, ensuring data integrity and provenance.
         <br>
-        See also the
-        <a href="https://docs.djangoproject.com/en/2.2/ref/templates/language/">Django</a> template documentation
+        By offering this framework, the hope is that lattice practitioners can then spend more time thinking about science, and less about these well-understood, yet complex and time consuming, workflow challenges.
+        <br>
+        <a href="https://github.com/callat-qcd/lattedb"> LatteDB</a> is built on top of  <a href="https://github.com/callat-qcd/espressodb">EspressoDB</a> and is publicly available under a BSD license.
+        <br>
+        For more information, see also the <a href="https://ithems.lbl.gov/lattedb">LatteDB manuscript</a> and the <a href="https://docs.djangoproject.com/en/2.2/ref/templates/language/">Django</a> documentation.
     </p>
 </div>
 <div class="container">
-    <h2>This is what this file looks like</h2>
-    <pre><code>
-        ...
-    </code></pre>
+    <h4>The Lattice QCD workflow</h4>
+    <p>
+        Once an explicit Lattice QCD calculation is embarked on, the process may be summarized in a few broad steps:
+        <ol>
+            <li>Define all input parameters for the given project.</li>
+            <li>Perform calculations, track the progress, and store the resulting data.</li>
+            <li>Perform analysis on the data and store the results.</li>
+        </ol>
+        Furthermore, each step is typically broken down into a series of tasks with nested dependencies.
+        <br>
+        For example, calculating a two-point correlation function requires:
+        <ol>
+            <li>Generating gauge configurations.</li>
+            <li>Calculating propagators from gauge configurations.</li>
+            <li>Contract propagators to form correlators.</li>
+        </ol>
+        LatteDB naturally defines and enforces dependencies using an underlying relational database.
+    </p>
+</div>
+<div class="container">
+    <h4>A future-proof design</h4>
+    <p>
+        In addition to database constraints, the Django ORM (object-relational manager) allows for definitions of additional constraints not supported by a relational-database, but useful for Lattice QCD applications:
+        <ul>
+            <li>A constraint enforced by the ORM allows LatteDB the flexibility to include new tables under a parent table.
+                For example, LatteDB defines a parent table <code>fermionaction</code> which contains all possible fermion actions, one in each row.
+                Specific fermion actions references the parent, while having the flexibility for the child to define its own columns.
+                For example, the HISQ child table has different columns compared to a domain-wall table, yet they can both be accessed at the parent.
+                As a result, a constraint can be defined by the ORM on the propagator table which allow only HISQ fermion action, providing granular control.
+                On the other hand, the generality of the parent tables allow LatteDB to accommodate developments in Lattice QCD as new methods are introduced.</li>
+            <li>Another constraint that is require to be enforced by the ORM involved aggregation of multiple rows to a single row with constraints.
+                An example of this occurs when one defines tables describing gauge ensembles from a table containing individual gauge configurations.</li>
+        </ul>
+    </p>
+</div>
+<div class="container">
+    <h4>Low barrier of entry</h4>
+    <p>
+        LatteDB provides database visualization (in the form of tables, or status bars), and tools for populating tables, lowering the barrier for interacting with the framework for the general user.
+    </p>
 </div>
 {% endblock %}
