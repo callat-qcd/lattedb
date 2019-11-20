@@ -18,6 +18,7 @@ class DWFTuning(Correlator):
     """
     Two point correlation functions used to calculate residual mass for domain-wall action.
     """
+
     propagator = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
@@ -59,6 +60,7 @@ class Meson2pt(Correlator):
     All types of meson two point correlators are listed here.
     For specific hadrons and actions, query through foreign key references.
     """
+
     propagator0 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
@@ -69,7 +71,7 @@ class Meson2pt(Correlator):
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to second `propagator`, and must be \(\leq \texttt{propagator0}\) (also Foreign Key)",
+        help_text=r"Foreign Key to second `propagator`, and must be \(\leq\) `propagator0` (also Foreign Key)",
     )
     sourcewave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
@@ -149,6 +151,7 @@ class Baryon2pt(Correlator):
     All types of baryon two point correlators are listed here.
     For specific hadrons and actions, query through foreign key references.
     """
+
     propagator0 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
@@ -159,13 +162,13 @@ class Baryon2pt(Correlator):
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to second `propagator`, and must be \(\leq \texttt{propagator0}\) (also Foreign Key)",
+        help_text=r"Foreign Key to second `propagator`, and must be \(\leq\) `propagator0` (also Foreign Key)",
     )
     propagator2 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key to third `propagator`, and must be \(\leq \texttt{propagator1}\) (also Foreign Key)",
+        help_text=r"Foreign Key to third `propagator`, and must be \(\leq\) `propagator1` (also Foreign Key)",
     )
     sourcewave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
