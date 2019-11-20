@@ -45,7 +45,7 @@
         In addition to database constraints, the Django ORM (object-relational manager) allows for definitions of additional constraints not supported by a relational-database, but useful for Lattice QCD applications:
         <ul>
             <li>A constraint enforced by the ORM allows LatteDB the flexibility to include new tables under a parent table.
-                For example, LatteDB defines a parent table `fermionaction` which contains all possible fermion actions, one in each row.
+                For example, LatteDB defines a parent table <code>fermionaction</code> which contains all possible fermion actions, one in each row.
                 Specific fermion actions references the parent, while having the flexibility for the child to define its own columns.
                 For example, the HISQ child table has different columns compared to a domain-wall table, yet they can both be accessed at the parent.
                 As a result, a constraint can be defined by the ORM on the propagator table which allow only HISQ fermion action, providing granular control.
