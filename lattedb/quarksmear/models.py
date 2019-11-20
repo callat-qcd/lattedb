@@ -7,7 +7,7 @@ class QuarkSmear(Base):
     r"""
     Base table for application.
     All types of quark smearings (interpolating operator smearing) are listed here.
-    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{quarksmear.quarksmear}$.
+    If applicable, consistency is enforced in check_consistency under each table that references `quarksmear.quarksmear`.
     """
 
     description = models.TextField(

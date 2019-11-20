@@ -7,7 +7,7 @@ class LinkSmear(Base):
     r"""
     Base table for application.
     All types of link smearings are listed here.
-    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{linksmear.linksmear}$.
+    If applicable, consistency is enforced in check_consistency under each table that references `linksmear.linksmear`.
     """
 
 class Unsmeared(LinkSmear):

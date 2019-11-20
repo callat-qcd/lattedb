@@ -8,7 +8,7 @@ class FermionAction(Base):
     r"""
     Base table for application.
     All types of fermion actions are listed here.
-    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{fermionaction.fermionaction}$.
+    If applicable, consistency is enforced in check_consistency under each table that references `fermionaction.fermionaction`.
     """
 
 
@@ -30,7 +30,7 @@ class Hisq(FermionAction):
     linksmear = models.ForeignKey(
         "linksmear.LinkSmear",
         on_delete=models.CASCADE,
-        help_text=r"Foreign Key pointing to additional gauge \(\texttt{linksmear}\) outside of Monte Carlo.",
+        help_text=r"Foreign Key pointing to additional gauge `linksmear` outside of Monte Carlo.",
     )
 
     class Meta:
@@ -84,7 +84,7 @@ class MobiusDW(FermionAction):
     linksmear = models.ForeignKey(
         "linksmear.LinkSmear",
         on_delete=models.CASCADE,
-        help_text=r"Foreign Key pointing to additional gauge \(\texttt{linksmear}\) outside of Monte Carlo.",
+        help_text=r"Foreign Key pointing to additional gauge `linksmear` outside of Monte Carlo.",
     )
 
     class Meta:

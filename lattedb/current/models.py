@@ -7,7 +7,7 @@ class Current(Base):
     """
     Base table for application.
     All types of currents are listed here.
-    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{current.current}$.
+    If applicable, consistency is enforced in check_consistency under each table that references `current.current`.
     """
 
 

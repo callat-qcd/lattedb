@@ -8,14 +8,14 @@ class SCSWaveFunction(Base):
     r"""
     Base table for application.
     All types of interpolating operators are listed here.
-    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{wavefunction.scswavefunction}$.
+    If applicable, consistency is enforced in check_consistency under each table that references `wavefunction.scswavefunction`.
     """
 
 class Hadron4D(SCSWaveFunction):
     r"""
     Hadronic interpolating operators.
     No momentum projection is performed here.
-    The entries should have counterparts at $\texttt{wavefunction.hadron}$.
+    The entries should have counterparts at `wavefunction.hadron`.
     Reference to Basak operators: https://arxiv.org/abs/hep-lat/0508018.
     """
 
@@ -84,7 +84,7 @@ class Hadron(SCSWaveFunction):
     r"""
     Hadronic interpolating operators.
     Momentum projection is performed here.
-    The entries should have counterparts at $\texttt{wavefunction.hadron4d}$.
+    The entries should have counterparts at `wavefunction.hadron4d`.
     Reference to Basak operators: https://arxiv.org/abs/hep-lat/0508018.
     """
     description = models.TextField(

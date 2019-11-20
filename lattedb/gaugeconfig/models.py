@@ -8,7 +8,7 @@ class GaugeConfig(Base):
     r"""
     Base table for application.
     All types of gauge configurations are listed here.
-    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{gaugeconfig.gaugeconfig}$.
+    If applicable, consistency is enforced in check_consistency under each table that references `gaugeconfig.gaugeconfig`.
     """
 
     def same_ensemble(self, config: "GaugeConfig") -> bool:
@@ -32,7 +32,7 @@ class Nf211(GaugeConfig):
     All types of 2+1+1 flavor gauge configurations are listed here.
     For specific valence and sea actions, query through gauge action and quark references.
     In particular, each configuration has its own entry.
-    Ensembles can be found in $\texttt{ensemble.ensemble}$ which references $\texttt{gaugeconfig}$.
+    Ensembles can be found in `ensemble.ensemble` which references `gaugeconfig`.
     """
 
     short_tag = models.TextField(
@@ -48,7 +48,7 @@ class Nf211(GaugeConfig):
         "gaugeaction.GaugeAction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to lattice \(\texttt{gaugeaction}\)",
+        help_text=r"Foreign Key pointing to lattice `gaugeaction`",
     )
     nx = models.PositiveSmallIntegerField(
         null=False, help_text="Spatial length in lattice units"
@@ -66,19 +66,19 @@ class Nf211(GaugeConfig):
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to lattice \(\texttt{fermionaction}\)",
+        help_text=r"Foreign Key pointing to lattice `fermionaction`",
     )
     strange = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to lattice \(\texttt{fermionaction}\)",
+        help_text=r"Foreign Key pointing to lattice `fermionaction`",
     )
     charm = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to lattice \(\texttt{fermionaction}\)",
+        help_text=r"Foreign Key pointing to lattice `fermionaction`",
     )
     mpi = models.PositiveSmallIntegerField(null=True, help_text="Pion mass in MeV")
 

@@ -7,7 +7,7 @@ class GaugeAction(Base):
     r"""
     Base table for application.
     All types of gauge actions are listed here.
-    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{gaugeaction.gaugeaction}$.
+    If applicable, consistency is enforced in check_consistency under each table that references `gaugeaction.gaugeaction`.
     """
 
 
