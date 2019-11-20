@@ -1,59 +1,64 @@
+from typing import Dict, Any
 from django.db import models
 
 from espressodb.base.models import Base
 
 
 class Propagator(Base):
-    """ Base table for application
+    r"""
+    Base table for application.
+    All types of propagators are listed here.
+    Consistency is enforced in check_consistency under each table that references \(\texttt{propagator.propagator}\).
     """
 
 
 class OneToAll(Propagator):
     """
+    All one-to-all propagators are listed here.
     """
 
     gaugeconfig = models.ForeignKey(
         "gaugeconfig.GaugeConfig",
         on_delete=models.CASCADE,
-        help_text="ForeignKey pointing to specific gauge configuration inverted on",
+        help_text=r"Foreign Key pointing to specific \texttt{gaugeconfig} inverted on",
     )
     fermionaction = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
-        help_text="ForeignKey pointing to valence lattice fermion action."
+        help_text=r"Foreign Key pointing to valence lattice \(\texttt{fermionaction}\)."
         " This is the valence action.",
     )
     origin_x = models.PositiveSmallIntegerField(
         null=False,
         blank=False,
-        help_text="PositiveSmallInt: x-coordinate origin location of the propagator",
+        help_text="x-coordinate origin location of the propagator",
     )
     origin_y = models.PositiveSmallIntegerField(
         null=False,
         blank=False,
-        help_text="PositiveSmallInt: y-coordinate origin location of the propagator",
+        help_text="y-coordinate origin location of the propagator",
     )
     origin_z = models.PositiveSmallIntegerField(
         null=False,
         blank=False,
-        help_text="PositiveSmallInt: z-coordinate origin location of the propagator",
+        help_text="z-coordinate origin location of the propagator",
     )
     origin_t = models.PositiveSmallIntegerField(
         null=False,
         blank=False,
-        help_text="PositiveSmallInt: t-coordinate origin location of the propagator",
+        help_text="t-coordinate origin location of the propagator",
     )
     sourcesmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey pointing to source quark smearing",
+        help_text=r"Foreign Key pointing to source \(\texttt{quarksmear}\)",
     )
     sinksmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey pointing to sink quark smearing",
+        help_text=r"Foreign Key pointing to sink \(\texttt{quarksmear}\)",
     )
 
     class Meta:
@@ -76,56 +81,55 @@ class OneToAll(Propagator):
 
 class CoherentSeq(Propagator):
     """
+    All coherence sequential propagators are listed here.
     """
 
     gaugeconfig = models.ForeignKey(
         "gaugeconfig.GaugeConfig",
         on_delete=models.CASCADE,
-        help_text="ForeignKey pointing to specific gauge configuration inverted on",
+        help_text=r"Foreign Key referencing specific \(\texttt{gaugeconfig}\) inverted on",
     )
     fermionaction = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
-        help_text="ForeignKey pointing to valence lattice fermion action",
+        help_text=r"Foreign Key referencing valence lattice \(\texttt{fermionaction}\)",
     )
     propagator0 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey that link to a coherent propagator (spectator 0)",
+        help_text=r"Foreign Key referencing OneToAll \(\texttt{propagator}\) (spectator 0)",
     )
     propagator1 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey that link to a coherent propagator (spectator 1)",
+        help_text=r"Foreign Key referencing OneToAll \(\texttt{propagator}\) (spectator 1)",
     )
     groupsize = models.PositiveSmallIntegerField(
-        help_text="PositiveSmallint: Total number of propagators sharing a coherent sink"
+        help_text="Total number of propagators sharing a coherent sink"
     )
     groupindex = models.PositiveSmallIntegerField(
-        help_text="PositiveSmallInt: A group index indicating which coherent sink group the propagator belongs to"
+        help_text="Group index indicating which coherent sink group the propagator belongs to"
     )
     sinkwave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey: Pointer to sink interpolating operator",
+        help_text=r"Foreign Key referencing sink interpolating operator \(\texttt{wavefunction}\)",
     )
-    sinksep = models.SmallIntegerField(
-        help_text="SmallInt: Source-sink separation time"
-    )
+    sinksep = models.SmallIntegerField(help_text="Source-sink separation time")
     sourcesmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey pointing to source quark smearing",
+        help_text=r"Foreign Key referencing source \(\texttt{quarksmear}\)",
     )
     sinksmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey pointing to sink quark smearing",
+        help_text=r"Foreign Key referencing sink \(\texttt{quarksmear}\)",
     )
 
     class Meta:
@@ -147,44 +151,54 @@ class CoherentSeq(Propagator):
             )
         ]
 
+    @classmethod
+    def check_consistency(cls, data: Dict[str, Any]):
+        if data["propagator0"].type not in ["OneToAll"]:
+            raise TypeError("Requires propagator0 type OneToAll.")
+        if data["propagator1"].type not in ["OneToAll"]:
+            raise TypeError("Requires propagator1 type OneToAll.")
+        if data["propagator0"].id > data["propagator1"].id:
+            raise ValueError("Requires propagator0.id <= propagator1.id.")
+
 
 class FeynmanHellmann(Propagator):
     """
+    All Feynman-Hellmann type propagators, where the inversion is done at the current insertion, are listed here.
     """
 
     gaugeconfig = models.ForeignKey(
         "gaugeconfig.GaugeConfig",
         on_delete=models.CASCADE,
-        help_text="ForeignKey pointing to specific gauge configuration inverted on",
+        help_text=r"Foreign Key pointing to specific \(\texttt{gaugeconfig}\) inverted on",
     )
     fermionaction = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
-        help_text="ForeignKey pointing to valence lattice fermion action",
+        help_text=r"Foreign Key pointing to valence lattice \(\texttt{fermionaction}\)",
     )
     propagator = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey linking RHS propagator",
+        help_text=r"Foreign Key linking RHS OneToAll \(\texttt{propagator}\)",
     )
     current = models.ForeignKey(
         "current.Current",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey linking momentum space current insertion",
+        help_text=r"Foreign Key linking momentum space \(\texttt{current}\) insertion",
     )
     sourcesmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey pointing to source quark smearing",
+        help_text=r"Foreign Key pointing to source \(\texttt{quarksmear}\)",
     )
     sinksmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey pointing to sink quark smearing",
+        help_text=r"Foreign Key pointing to sink \(\texttt{quarksmear}\)",
     )
 
     class Meta:
@@ -201,3 +215,8 @@ class FeynmanHellmann(Propagator):
                 name="unique_propagator_feynmanhellmann",
             )
         ]
+
+    @classmethod
+    def check_consistency(cls, data: Dict[str, Any]):
+        if data["propagator"].type not in ["OneToAll"]:
+            raise TypeError("Requires propagator type OneToAll.")

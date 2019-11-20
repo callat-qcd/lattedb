@@ -25,6 +25,7 @@ from espressodb.management.utilities.settings import ROOT_DIR
 
 urlpatterns = [
     path("", include("espressodb.base.urls", namespace="base")),
+    path(r"api-auth/", include("rest_framework.urls", namespace="api-auth")),
     path("admin/", admin.site.urls),
     path(
         "login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"
@@ -43,9 +44,12 @@ urlpatterns = [
 for app in PROJECT_APPS:
     url_file = os.path.join(ROOT_DIR, app.replace(".", "/"), "urls.py")
     if os.path.exists(url_file):
-        _, app_name = app.split(".")
+        app_name = ".".join(app.split(".")[1:])
         if app_name == "config":
             continue
         urlpatterns.append(
-            path(rf"{app_name}/", include(app + ".urls", namespace=app_name))
+            path(
+                rf"{app_name.replace('.', '-')}/",
+                include(app + ".urls", namespace=app_name),
+            )
         )

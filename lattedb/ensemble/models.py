@@ -11,7 +11,10 @@ from lattedb.gaugeconfig.models import GaugeConfig
 
 
 class Ensemble(Base):
-    """Implementation of ensemble of configurations table
+    """
+    Implementation of ensemble of configurations table.
+    All types of ensembles are listed here.
+    $\texttt{short_tag}$ and $\texttt{long_tag}$ are available to identify which type of ensembles are listed.
     """
 
     configurations = models.ManyToManyField(GaugeConfig)
@@ -20,7 +23,7 @@ class Ensemble(Base):
         null=False,
         blank=False,
         unique=True,
-        help_text="(Optional) Char(20): label to identify ensemble for easy searches",
+        help_text="Label to identify ensemble for easy searches",
     )
 
     @property
@@ -44,7 +47,8 @@ class Ensemble(Base):
         first = self.configurations.first()  # pylint: disable=E1101
         return first.specialization.long_tag if first else None
 
-    def check_consistency(self, data: Dict[str, Any]):
+    @classmethod
+    def check_consistency(cls, data: Dict[str, Any]):
         """Checks if all configurations have the same meta info.
         """
         first = data["configurations"].first()  # pylint: disable=E1101
@@ -52,5 +56,5 @@ class Ensemble(Base):
             for config in data["configurations"].all()[1:]:  # pylint: disable=E1101
                 if not first.same_ensemble(config):
                     raise ValidationError(
-                        f"{config} if different from first config {first}"
+                        f"{config} is from a different ensemble compared to first config {first}"
                     )

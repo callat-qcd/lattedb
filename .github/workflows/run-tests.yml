@@ -1,0 +1,56 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+    test:
+        strategy:
+            max-parallel: 4
+            matrix:
+                python-version: [3.6, 3.7]
+                platform: [ubuntu-latest, macos-latest]
+        runs-on: ${{ matrix.platform }}
+        steps:
+            - uses: actions/checkout@v1
+
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v1
+              with:
+                  python-version: ${{ matrix.python-version }}
+
+            - name: Upgrade pip
+              run: python -m pip install --upgrade pip
+
+            - name: Clone latest espressodb
+              uses: actions/checkout@v1
+              with:
+                  repository: callat-qcd/espressodb
+                  ref: refs/heads/v1.0.0
+                  path: lattedb/.modules/espressodb
+
+            - name: Install latest espressodb requirements
+              working-directory: .modules/espressodb
+              run: |
+                pip install -r requirements.txt
+                pip install -r requirements-dev.txt
+
+            - name: Install latest espressodb
+              working-directory: .modules/espressodb
+              run: pip install .
+
+            - name: Install dependencies
+              run: |
+                  pip install -r requirements.txt
+                  pip install -r requirements-dev.txt
+
+            - name: Creating db-config
+              run: |
+                  touch db-config.yaml
+                  echo "ENGINE: django.db.backends.sqlite3" >> db-config.yaml
+                  echo "NAME: test-db.sqlite" >> db-config.yaml
+
+            - name: Install lattedb
+              run: pip install -e .
+
+            - name: Run test
+              run: pytest

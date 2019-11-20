@@ -16,9 +16,8 @@ Including another URLconf
 """
 from django.urls import path
 
-from lattedb.correlator.views import index
 
-app_name = "Correlators"
+app_name = "correlator"
 urlpatterns = [
     # path("", index, name="correlator-index")
 ]

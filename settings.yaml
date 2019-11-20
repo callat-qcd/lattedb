@@ -11,7 +11,11 @@ PROJECT_APPS:
     - lattedb.current
     - lattedb.correlator
     - lattedb.ensemble
-    - lattedb.project.fhcompare
+    - lattedb.project.ga_q2
+    # - lattedb.project.fhcompare
+    - lattedb.project.formfac
 ALLOWED_HOSTS:
     - 127.0.0.1
+    - localhost
+    - ithems.lbl.gov
 DEBUG: True

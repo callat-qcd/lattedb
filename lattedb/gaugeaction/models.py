@@ -4,31 +4,35 @@ from espressodb.base.models import Base
 
 
 class GaugeAction(Base):
-    """ Base table for application
+    r"""
+    Base table for application.
+    All types of gauge actions are listed here.
+    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{gaugeaction.gaugeaction}$.
     """
 
 
 class LuescherWeisz(GaugeAction):
     """
+    Table for L\"uscher-Weisz action parameters.
     """
 
     beta = models.DecimalField(
         max_digits=10,
         decimal_places=6,
         null=False,
-        help_text="Decimal(10,6): Coupling constant",
+        help_text="Strong coupling constant",
     )
     a_fm = models.DecimalField(
         max_digits=10,
         decimal_places=6,
         null=True,
-        help_text="(Optional) Decimal(10,6): Lattice spacing in fermi",
+        help_text="Lattice spacing in fermi",
     )
     u0 = models.DecimalField(
         max_digits=10,
         decimal_places=6,
         null=False,
-        help_text="Decimal(10,6): Tadpole improvement coefficient",
+        help_text="Tadpole improvement coefficient",
     )
 
     class Meta:

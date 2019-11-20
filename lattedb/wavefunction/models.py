@@ -1,54 +1,56 @@
+from typing import Dict, Any
 from django.db import models
 
 from espressodb.base.models import Base
 
 
 class SCSWaveFunction(Base):
-    """ Base table for application
+    r"""
+    Base table for application.
+    All types of interpolating operators are listed here.
+    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{wavefunction.scswavefunction}$.
     """
-
 
 class Hadron4D(SCSWaveFunction):
-    """
+    r"""
+    Hadronic interpolating operators.
+    No momentum projection is performed here.
+    The entries should have counterparts at $\texttt{wavefunction.hadron}$.
+    Reference to Basak operators: https://arxiv.org/abs/hep-lat/0508018.
     """
 
     description = models.TextField(
-        null=True,
-        blank=True,
-        help_text="(Optional) Text: Description of the interpolating operator",
+        null=True, blank=True, help_text="Description of the interpolating operator"
     )
     strangeness = models.PositiveSmallIntegerField(
-        null=False,
-        help_text="PositiveSmallIntegerField: Strangeness of hadronic operator",
+        null=False, help_text="Strangeness of hadronic operator"
     )
     irrep = models.TextField(
         null=False,
         blank=False,
-        help_text="Text: Irreducible representations of O^D_h (octahedral group)",
+        help_text="Irreducible representations of O^D_h (octahedral group)",
     )
     embedding = models.PositiveSmallIntegerField(
-        null=False,
-        blank=False,
-        help_text="PositiveSmallIntegerField: k-th embedding of O^D_h irrep.",
+        null=False, blank=False, help_text="k-th embedding of O^D_h irrep."
     )
 
     parity = models.SmallIntegerField(
-        null=False, help_text="SmallIntegerField: Parity of hadronic operator"
+        null=False, help_text="Parity of hadronic operator"
     )
     spin_x2 = models.PositiveSmallIntegerField(
-        null=False, help_text="Text: Total spin times two"
+        null=False, help_text="Total spin times 2"
     )
 
     spin_z_x2 = models.SmallIntegerField(
-        null=False, help_text="Text: Spin in z-direction"
+        null=False, help_text="Spin in \(z\)-direction times 2"
     )
 
     isospin_x2 = models.PositiveSmallIntegerField(
-        null=False, help_text="Text: Total isospin times two"
+        null=False, help_text="Total isospin times 2"
     )
 
     isospin_z_x2 = models.SmallIntegerField(
-        null=False, help_text="Text: Isospin in z-direction times two"
+        null=False, help_text="Isospin in \(z\)-direction times 2"
     )
 
     class Meta:
@@ -68,51 +70,58 @@ class Hadron4D(SCSWaveFunction):
             )
         ]
 
+    @classmethod
+    def check_consistency(cls, data: Dict[str, Any]):
+        if data["parity"] not in [-1, 1]:
+            raise ValueError("Parity not in [-1, 1].")
+        if abs(data["spin_z_x2"]) > data["spin_x2"]:
+            raise ValueError("Magnitude of spin_z is greater than spin.")
+        if abs(data["isospin_z_x2"]) > data["isospin_x2"]:
+            raise ValueError("Magnitude of isospin_z is greater than isospin.")
+
 
 class Hadron(SCSWaveFunction):
-
+    r"""
+    Hadronic interpolating operators.
+    Momentum projection is performed here.
+    The entries should have counterparts at $\texttt{wavefunction.hadron4d}$.
+    Reference to Basak operators: https://arxiv.org/abs/hep-lat/0508018.
+    """
     description = models.TextField(
-        null=True,
-        blank=True,
-        help_text="(Optional) Text: Description of the interpolating operator",
+        null=True, blank=True, help_text="Description of the interpolating operator",
     )
     strangeness = models.PositiveSmallIntegerField(
-        null=False,
-        help_text="PositiveSmallIntegerField: Strangeness of hadronic operator",
+        null=False, help_text="Strangeness of hadronic operator",
     )
     irrep = models.TextField(
         null=False,
         blank=False,
-        help_text="Text: Irreducible representations of O^D_h (octahedral group)",
+        help_text="Irreducible representations of O^D_h (octahedral group)",
     )
     embedding = models.PositiveSmallIntegerField(
-        null=False,
-        blank=False,
-        help_text="PositiveSmallIntegerField: k-th embedding of O^D_h irrep.",
+        null=False, blank=False, help_text="k-th embedding of O^D_h irrep.",
     )
 
     parity = models.SmallIntegerField(
-        null=False, help_text="SmallIntegerField: Parity of hadronic operator"
+        null=False, help_text="Parity of hadronic operator"
     )
     spin_x2 = models.PositiveSmallIntegerField(
-        null=False, help_text="Text: Total spin times two"
+        null=False, help_text="Total spin times 2"
     )
 
     spin_z_x2 = models.SmallIntegerField(
-        null=False, help_text="Text: Spin in z-direction"
+        null=False, help_text="Spin in \(z\)-direction"
     )
 
     isospin_x2 = models.PositiveSmallIntegerField(
-        null=False, help_text="Text: Total isospin times two"
+        null=False, help_text="Total isospin times 2"
     )
 
     isospin_z_x2 = models.SmallIntegerField(
-        null=False, help_text="Text: Isospin in z-direction times two"
+        null=False, help_text="Isospin in \(z\)-direction times 2"
     )
 
-    momentum = models.SmallIntegerField(
-        help_text="SmallInt: Momentum in units of 2 pi / L"
-    )
+    momentum = models.SmallIntegerField(help_text="Momentum in units of 2 pi / L")
 
     class Meta:
         constraints = [
@@ -131,3 +140,12 @@ class Hadron(SCSWaveFunction):
                 name="unique_hadron_hadron",
             )
         ]
+
+    @classmethod
+    def check_consistency(cls, data: Dict[str, Any]):
+        if data["parity"] not in [-1, 1]:
+            raise ValueError("Parity not in [-1, 1].")
+        if abs(data["spin_z_x2"]) > data["spin_x2"]:
+            raise ValueError("Magnitude of spin_z is greater than spin.")
+        if abs(data["isospin_z_x2"]) > data["isospin_x2"]:
+            raise ValueError("Magnitude of isospin_z is greater than isospin.")

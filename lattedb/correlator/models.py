@@ -1,3 +1,4 @@
+from typing import Dict, Any
 from django.db import models
 from django.core.exceptions import ValidationError
 
@@ -5,27 +6,31 @@ from espressodb.base.models import Base
 
 
 class Correlator(Base):
-    """ Base table for application
+    r"""
+    Base table for application.
+    All types of correlators are listed here.
+    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{correlator.correlator}$.
     """
 
 
 # Create your models here.
 class DWFTuning(Correlator):
+    """
+    Two point correlation functions used to calculate residual mass for domain-wall action.
+    """
     propagator = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey: Pointer to first propagator",
+        help_text=r"Foreign Key to \(\texttt{propagator}\)",
     )
     wave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey: Pointer to source spin color space wave function",
+        help_text=r"Foreign Key to source spin color space \(\texttt{wavefunction}\)",
     )
-    sink5 = models.BooleanField(
-        null=False, help_text="Boolean: Is the sink on the domain wall?"
-    )
+    sink5 = models.BooleanField(null=False, help_text="Is the sink on the domain wall?")
 
     class Meta:
         constraints = [
@@ -41,31 +46,42 @@ class DWFTuning(Correlator):
         if self.tag is None:
             self.tag = "pseudo_pseudo" if self.sink5 else "midpoint_pseudo"
 
+    @classmethod
+    def check_consistency(cls, data: Dict[str, Any]):
+        if data["propagator"].type not in ["OneToAll"]:
+            raise TypeError("Requires propagator type OneToAll.")
+        if data["propagator"].type.fermionaction.type not in ["MobiusDW"]:
+            raise TypeError("Requires propagator action to be MobiusDW.")
+
 
 class Meson2pt(Correlator):
+    """
+    All types of meson two point correlators are listed here.
+    For specific hadrons and actions, query through foreign key references.
+    """
     propagator0 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey: Pointer to first propagator",
+        help_text=r"Foreign Key to first \(\texttt{propagator}\)",
     )
     propagator1 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey: Pointer to second propagator",
+        help_text=r"Foreign Key to second \(\texttt{propagator}\), and must be \(\leq \texttt{propagator0}\) (also Foreign Key)",
     )
     sourcewave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey: Pointer to source interpolating operator",
+        help_text=r"Foreign Key to source interpolating operator \(\texttt{wavefunction}\)",
     )
     sinkwave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey: Pointer to sink interpolating operator",
+        help_text=r"Foreign Key to sink interpolating operator \(\texttt{wavefunction}\)",
     )
 
     class Meta:
@@ -75,6 +91,15 @@ class Meson2pt(Correlator):
                 name="unique_correlator_meson2pt",
             )
         ]
+
+    @classmethod
+    def check_consistency(cls, data: Dict[str, Any]):
+        if data["propagator0"].type not in ["OneToAll"]:
+            raise TypeError("Requires propagator0 type OneToAll.")
+        if data["propagator1"].type not in ["OneToAll"]:
+            raise TypeError("Requires propagator1 type OneToAll.")
+        if data["propagator0"].id > data["propagator1"].id:
+            raise ValueError("Requires propagator0.id <= propagator1.id.")
 
     def clean(self):
         """Sets tag of the correlator based on propagators, the gaugeconfig and source.
@@ -120,35 +145,39 @@ class Meson2pt(Correlator):
 
 
 class Baryon2pt(Correlator):
+    """
+    All types of baryon two point correlators are listed here.
+    For specific hadrons and actions, query through foreign key references.
+    """
     propagator0 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey: Pointer to first propagator",
+        help_text=r"Foreign Key to first \(\texttt{propagator}\)",
     )
     propagator1 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey: Pointer to second propagator",
+        help_text=r"Foreign Key to second \(\texttt{propagator}\), and must be \(\leq \texttt{propagator0}\) (also Foreign Key)",
     )
     propagator2 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey: Pointer to third propagator",
+        help_text=r"Foreign Key to third \(\texttt{propagator}\), and must be \(\leq \texttt{propagator1}\) (also Foreign Key)",
     )
     sourcewave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey: Pointer to source interpolating operator",
+        help_text=r"Foreign Key to source interpolating operator \(\texttt{wavefunction}\)",
     )
     sinkwave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey: Pointer to sink interpolating operator",
+        help_text=r"Foreign Key to sink interpolating operator \(\texttt{wavefunction}\)",
     )
 
     class Meta:
@@ -164,6 +193,19 @@ class Baryon2pt(Correlator):
                 name="unique_correlator_baryon2pt",
             )
         ]
+
+    @classmethod
+    def check_consistency(cls, data: Dict[str, Any]):
+        if data["propagator0"].type not in ["OneToAll"]:
+            raise TypeError("Requires propagator0 type OneToAll.")
+        if data["propagator1"].type not in ["OneToAll"]:
+            raise TypeError("Requires propagator1 type OneToAll.")
+        if data["propagator2"].type not in ["OneToAll"]:
+            raise TypeError("Requires propagator2 type OneToAll.")
+        if data["propagator0"].id > data["propagator1"].id:
+            raise ValueError("Requires propagator0.id <= propagator1.id.")
+        if data["propagator1"].id > data["propagator2"].id:
+            raise ValueError("Requires propagator1.id <= propagator2.id.")
 
     def origin(self):
         return "(%d, %d, %d, %d)" % (
@@ -226,28 +268,32 @@ class Baryon2pt(Correlator):
 
 
 class BaryonSeq3pt(Correlator):
+    r"""
+    All types of baryon three point correlators created with a $\texttt{CoherentSeq}$ propagator are listed here.
+    For specific hadrons and actions, query through foreign key references.
+    """
     sourcewave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="Foreign Key pointing to source operator",
+        help_text=r"Foreign Key pointing to source operator \(\texttt{wavefunction}\)",
     )
     current = models.ForeignKey(
         "current.Current",
         on_delete=models.CASCADE,
-        help_text="Foreign Key to current interaction operator",
+        help_text=r"Foreign Key to current interaction operator \(\texttt{wavefunction}\)",
     )
     seqpropagator = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="Foreign Key pointing to sequential propagator (2 spectator quarks + 1 daughter)",
+        help_text=r"Foreign Key pointing to sequential \(\texttt{propagator}\) (2 spectator quarks + 1 daughter)",
     )
     propagator = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="Foreign Key pointing to daughter quark",
+        help_text=r"Foreign Key pointing to daughter quark \(\texttt{propagator}\)",
     )
 
     class Meta:
@@ -258,38 +304,49 @@ class BaryonSeq3pt(Correlator):
             )
         ]
 
+    @classmethod
+    def check_consistency(cls, data: Dict[str, Any]):
+        if data["propagator"].type not in ["OneToAll"]:
+            raise TypeError(r"Requires propagator type OneToAll.")
+        if data["seqpropagator"].type not in ["CoherentSeq"]:
+            raise TypeError(r"Requires seqpropagator type CoherentSeq.")
+
 
 class BaryonFH3pt(Correlator):
+    r"""
+    All types of baryon three point correlators created with a $\texttt{FeynmanHellmann}$ propagator are listed here.
+    For specific hadrons and actions, query through foreign key references.
+    """
     sourcewave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="Foreign Key pointing to source operator",
+        help_text=r"Foreign Key pointing to source operator \(\texttt{wavefunction}\)",
     )
     sinkwave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="Foreign Key pointing to sink operator",
+        help_text=r"Foreign Key pointing to sink operator \(\texttt{wavefunction}\)",
     )
 
     fhpropagator = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="Foreign Key pointing to Feynman-Hellmann propagator",
+        help_text=r"Foreign Key pointing to Feynman-Hellmann \(\texttt{propagator}\)",
     )
     propagator0 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="Foreign Key pointing to spectator propagator",
+        help_text=r"Foreign Key pointing to spectator \(\texttt{propagator}\)",
     )
     propagator1 = models.ForeignKey(
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="Foreign Key pointing to spectator propagator",
+        help_text=r"Foreign Key pointing to spectator \(\texttt{propagator}\)",
     )
 
     class Meta:
@@ -305,3 +362,14 @@ class BaryonFH3pt(Correlator):
                 name="unique_correlator_baryonfh3pt",
             )
         ]
+
+    @classmethod
+    def check_consistency(cls, data: Dict[str, Any]):
+        if data["propagator0"].type not in ["OneToAll"]:
+            raise TypeError("Requires propagator0 type OneToAll.")
+        if data["propagator1"].type not in ["OneToAll"]:
+            raise TypeError("Requires propagator1 type OneToAll.")
+        if data["fhpropagator"].type not in ["FeynmanHellmann"]:
+            raise TypeError("Requires fhpropagator type FeynmanHellmann.")
+        if data["propagator0"].id > data["propagator1"].id:
+            raise ValueError("Requires propagator0.id <= propagator1.id.")

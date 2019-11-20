@@ -1,10 +1,14 @@
+from typing import Dict, Any
 from django.db import models
 
 from espressodb.base.models import Base
 
 
 class GaugeConfig(Base):
-    """ Base table for application
+    r"""
+    Base table for application.
+    All types of gauge configurations are listed here.
+    If applicable, consistency is enforced in check_consistency under each table that references $\texttt{gaugeconfig.gaugeconfig}$.
     """
 
     def same_ensemble(self, config: "GaugeConfig") -> bool:
@@ -24,62 +28,59 @@ class GaugeConfig(Base):
 
 
 class Nf211(GaugeConfig):
-    """
+    r"""
+    All types of 2+1+1 flavor gauge configurations are listed here.
+    For specific valence and sea actions, query through gauge action and quark references.
+    In particular, each configuration has its own entry.
+    Ensembles can be found in $\texttt{ensemble.ensemble}$ which references $\texttt{gaugeconfig}$.
     """
 
     short_tag = models.TextField(
-        null=True,
-        blank=True,
-        help_text="(Optional) Text: Short name for gaugeconfig (e.g. 'a15m310')",
+        null=True, blank=True, help_text="Short name for gaugeconfig (e.g. 'a15m310')"
     )
     stream = models.TextField(
-        null=False, blank=False, help_text="Text: Stream tag for Monte Carlo"
+        null=False, blank=False, help_text="Stream tag for Monte Carlo (e.g. 'a')"
     )
     config = models.PositiveSmallIntegerField(
-        help_text="PositiveSmallInt: Configuration number"
+        help_text="Configuration number (usually MC trajectory number)"
     )
     gaugeaction = models.ForeignKey(
         "gaugeaction.GaugeAction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey pointing to lattice gauge action",
+        help_text=r"Foreign Key pointing to lattice \(\texttt{gaugeaction}\)",
     )
     nx = models.PositiveSmallIntegerField(
-        null=False, help_text="PositiveSmallInt: Spatial length in lattice units"
+        null=False, help_text="Spatial length in lattice units"
     )
     ny = models.PositiveSmallIntegerField(
-        null=False, help_text="PositiveSmallInt: Spatial length in lattice units"
+        null=False, help_text="Spatial length in lattice units"
     )
     nz = models.PositiveSmallIntegerField(
-        null=False, help_text="PositiveSmallInt: Spatial length in lattice units"
+        null=False, help_text="Spatial length in lattice units"
     )
     nt = models.PositiveSmallIntegerField(
-        null=False, help_text="PositiveSmallInt: Temporal length in lattice units"
+        null=False, help_text="Temporal length in lattice units"
     )
     light = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey pointing to lattice fermion action",
+        help_text=r"Foreign Key pointing to lattice \(\texttt{fermionaction}\)",
     )
     strange = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey pointing to lattice fermion action",
+        help_text=r"Foreign Key pointing to lattice \(\texttt{fermionaction}\)",
     )
     charm = models.ForeignKey(
         "fermionaction.FermionAction",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text="ForeignKey pointing to lattice fermion action",
+        help_text=r"Foreign Key pointing to lattice \(\texttt{fermionaction}\)",
     )
-    mpi = models.DecimalField(
-        max_digits=10,
-        decimal_places=6,
-        null=True,
-        help_text="(Optional) Decimal(10,6): Pion mass in MeV",
-    )
+    mpi = models.PositiveSmallIntegerField(null=True, help_text="Pion mass in MeV")
 
     class Meta:
         constraints = [
@@ -112,3 +113,14 @@ class Nf211(GaugeConfig):
             f"m{int(self.strange.quark_mass*1000):03d}"
             f"m{int(self.charm.quark_mass*1000):03d}"
         )
+
+    @classmethod
+    def check_consistency(cls, data: Dict[str, Any]):
+        if data["light"].type.quark_type not in ["light"]:
+            raise TypeError("Requires light to be quark_type = light in FermionAction.")
+        if data["strange"].type.quark_type not in ["strange"]:
+            raise TypeError(
+                "Requires strange to be quark_type = strange in FermionAction."
+            )
+        if data["charm"].type.quark_type not in ["charm"]:
+            raise TypeError("Requires charm to be quark_type = charm in FermionAction.")

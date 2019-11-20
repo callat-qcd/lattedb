@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load status_extras %}
+{% load staticfiles %}
+
+{% block head-extra %}
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<link href="{% static 'formfac.css' %}" rel="stylesheet">
+<script type="text/javascript" src="{% static 'formfac.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+<div class="jumbotron">
+    <h1>{{model.verbose_name}}</h1>
+    {% if model %}<p>{{model.get_doc}}</p>{% endif %}
+</div>
+<div class="w-100 px-5">
+    {% if status.total > 0 %}
+    <div class="container">
+        <h5>Current progress</h5>
+        {% render_progress_bar status.pending 0 0 status.done status.total %}
+    </div>
+    {% endif %}
+    <div class="container-fluid my-2">
+        <h5>Data</h5>
+        <table id="table" class="table table-hover table-bordered" style="width:100%" data-server-side="true" data-ajax="{{api_url}}">
+            <thead>
+                <tr>
+                    {% for column, name in columns.items %}
+                    <th data-data="{{column}}">{{name}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tfoot>
+                {% for column in columns %}
+                <th>{{column}}</th>
+                {% endfor %}
+            </tfoot>
+        </table>
+    </div>
+</div>
+{% endblock %}
