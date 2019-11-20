@@ -68,6 +68,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
+            os.path.join(ROOT_DIR, "lattedb", "templates"),
             os.path.join(ESPRESSO_DB_ROOT, "espressodb", "base", "templates"),
             os.path.join(ESPRESSO_DB_ROOT, "espressodb", "documentation", "templates"),
             os.path.join(ESPRESSO_DB_ROOT, "espressodb", "notifications", "templates"),
@@ -88,7 +89,6 @@ for app in PROJECT_APPS[::-1]:
     _template_dir = os.path.join(ROOT_DIR, app.replace(".", os.sep), "templates")
     if os.path.exists(_template_dir):
         TEMPLATES[0]["DIRS"].insert(0, _template_dir)
-
 
 WSGI_APPLICATION = "lattedb.config.wsgi.application"
 
@@ -139,7 +139,6 @@ for app in PROJECT_APPS[::-1]:
     _static_dir = os.path.join(ROOT_DIR, app.replace(".", os.sep), "static")
     if os.path.exists(_static_dir):
         STATICFILES_DIRS.insert(0, _static_dir)
-
 
 STATIC_ROOT = os.path.join(ROOT_DIR, "static")
 MEDIA_ROOT = os.path.join(ROOT_DIR, "media")
