@@ -1,4 +1,4 @@
-SECRET_KEY: s5icy)=l+((ds60p!+)ypf@8!ey))bb^(mf0v(0&kd=ut!xfbu
+SECRET_KEY: ncnjpx=_z^@04=@5frejblus2bxpox%@fzmrr6u8w$x^4+$zv7
 PROJECT_APPS:
     - lattedb.status
     - lattedb.fermionaction

@@ -9,3 +9,4 @@ notes.md
 logo.png
 *.sqlite
 db.json
+settings.yaml
