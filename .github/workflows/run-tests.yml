@@ -30,7 +30,10 @@ jobs:
 
             - name: Install latest espressodb
               working-directory: .modules/espressodb
-              run: pip install .
+              run: |
+                ls
+                pwd
+                pip install .
 
             - name: Install dependencies
               run: |
