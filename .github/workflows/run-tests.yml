@@ -29,9 +29,8 @@ jobs:
                   path: .modules/espressodb
 
             - name: Install latest espressodb
+              working-directory: .modules/espressodb
               run: pip install .
-              with:
-                  path: .modules/espressodb
 
             - name: Install dependencies
               run: |
