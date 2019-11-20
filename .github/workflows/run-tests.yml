@@ -5,10 +5,10 @@ on: [push, pull_request]
 jobs:
     test:
         strategy:
-            max-parallel: 4
+            max-parallel: 1
             matrix:
-                python-version: [3.6, 3.7]
-                platform: [ubuntu-latest, macos-latest]
+                python-version: [3.7]
+                platform: [macos-latest]
         runs-on: ${{ matrix.platform }}
         steps:
             - uses: actions/checkout@v1
@@ -30,10 +30,15 @@ jobs:
 
             - name: Install latest espressodb
               working-directory: .modules/espressodb
-              run: |
-                echo $(ls)
-                echo $(pwd)
-                pip install .
+              run: pwd
+
+            - name: Install latest espressodb
+              run: ls -lah
+
+            - name: Install latest espressodb
+              working-directory: .modules/espressodb
+              run: ls -lah
+
 
             - name: Install dependencies
               run: |
