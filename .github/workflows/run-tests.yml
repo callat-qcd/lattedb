@@ -7,8 +7,8 @@ jobs:
         strategy:
             max-parallel: 1
             matrix:
-                python-version: [3.7]
-                platform: [macos-latest]
+                python-version: [3.6, 3.7]
+                platform: [ubuntu-latest, macos-latest]
         runs-on: ${{ matrix.platform }}
         steps:
             - uses: actions/checkout@v1
@@ -48,9 +48,6 @@ jobs:
                   touch db-config.yaml
                   echo "ENGINE: django.db.backends.sqlite3" >> db-config.yaml
                   echo "NAME: test-db.sqlite" >> db-config.yaml
-
-            - name: Install lattedb
-              run: pip install .
 
             - name: Run test
               run: pytest
