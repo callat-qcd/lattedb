@@ -26,11 +26,11 @@ jobs:
               with:
                   repository: callat-qcd/espressodb
                   ref: refs/heads/v1.0.0
-                  path: .modules/espressodb
+                  path: lattedb/.modules/espressodb
 
             - name: Install latest espressodb
               run: ls -lah
-            
+
             - name: Install latest espressodb
               working-directory: .modules/espressodb
               run: pwd
