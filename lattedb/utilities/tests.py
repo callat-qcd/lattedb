@@ -5,7 +5,11 @@ from typing import Dict, Any, List
 
 from abc import ABC
 
+from logging import getLogger
+
 from espressodb.base.models import Base, ConsistencyError
+
+LOGGER = getLogger("espressodb")
 
 
 class ObjectParser(ABC):
@@ -39,6 +43,13 @@ class ObjectParser(ABC):
     def test_default_creation(self):
         """Tests if creation of model works with default entries.
         """
+        pars = self.parse_args(self.parameters)
+        LOGGER.debug(
+            "Creating class %s with\n\tpars: %s\n\ttree: %s",
+            self.model,
+            pars,
+            self.tree,
+        )
         instance, created = self.model.get_or_create_from_parameters(
             self.parse_args(self.parameters), tree=self.tree
         )
@@ -50,10 +61,16 @@ class ObjectParser(ABC):
     def test_inconsistent_creation(self):
         """Tests if creation of model works with default entries.
         """
-        base_pars = self.parse_args(self.parameters).copy()
         for parameter_updates in self.consistency_check_changes:
+            pars = self.parse_args(self.parameters).copy()
             with self.subTest(**parameter_updates):
-                pars = base_pars.update(parameter_updates)
+                pars.update(parameter_updates)
+                LOGGER.debug(
+                    "Creating class %s with\n\tpars: %s\n\ttree: %s",
+                    self.model,
+                    pars,
+                    self.tree,
+                )
                 with self.assertRaises(ConsistencyError):
                     self.model.get_or_create_from_parameters(pars, tree=self.tree)
                 entries = self.model.objects.all()
