@@ -1,4 +1,4 @@
-espressodb
+espressodb>=1.0.0
 Django
 django-bootstrap4
 django-extensions
