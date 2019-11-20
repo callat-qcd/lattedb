@@ -29,18 +29,8 @@ jobs:
                   path: lattedb/.modules/espressodb
 
             - name: Install latest espressodb
-              run: ls -lah
-
-            - name: Install latest espressodb
               working-directory: .modules/espressodb
-              run: pwd
-
-
-
-            - name: Install latest espressodb
-              working-directory: .modules/espressodb
-              run: ls -lah
-
+              run: pip install .
 
             - name: Install dependencies
               run: |
@@ -54,7 +44,7 @@ jobs:
                   echo "NAME: test-db.sqlite" >> db-config.yaml
 
             - name: Install lattedb
-              run: pip install -e .
+              run: pip install .
 
             - name: Run test
               run: pytest
