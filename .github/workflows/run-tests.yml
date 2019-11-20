@@ -43,6 +43,9 @@ jobs:
                   pip install -r requirements.txt
                   pip install -r requirements-dev.txt
 
+            - name: Update settings.yaml
+              run: sed "1s/.*/SECRET_KEY: test-key/" settings-example.yaml > settings.yaml
+
             - name: Creating db-config
               run: |
                   touch db-config.yaml
