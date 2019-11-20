@@ -1,6 +1,6 @@
 SECRET_KEY: ""
 PROJECT_APPS:
-    - lattedb.status
+    # - lattedb.status
     - lattedb.fermionaction
     - lattedb.gaugeaction
     - lattedb.gaugeconfig
