@@ -26,7 +26,13 @@ jobs:
               with:
                   repository: callat-qcd/espressodb
                   ref: refs/heads/v1.0.0
-                  path: .modules/espressodb
+                  path: lattedb/.modules/espressodb
+
+            - name: Install latest espressodb requirements
+              working-directory: .modules/espressodb
+              run: |
+                pip install -r requirements.txt
+                pip install -r requirements-dev.txt
 
             - name: Install latest espressodb
               working-directory: .modules/espressodb
