@@ -3,7 +3,7 @@
 
 # LatteDB
 
-Lattice QCD database interface using [Django](https://docs.djangoproject.com/en/2.2/intro/tutorial01/) as the content manager.
+Lattice QCD database interface based on [EspressoDB](https://github.com/callat-qcd/espressodb).
 
 ## Description
 
