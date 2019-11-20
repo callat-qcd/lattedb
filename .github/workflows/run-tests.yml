@@ -18,16 +18,23 @@ jobs:
               with:
                   python-version: ${{ matrix.python-version }}
 
+            - name: Upgrade pip
+              run: python -m pip install --upgrade pip
+
+            - name: Clone latest espressodb
+              uses: actions/checkout@v1
+              with:
+                  repository: callat-qcd/espressodb
+                  ref: refs/heads/v1.0.0
+                  path: .modules/espressodb
+
             - name: Install latest espressodb
-              working-directory: ./modules
-              run: |
-                git clone --single-branch --branch v1.0.0 https://github.com/callat-qcd/espressodb.git espressodb
-                ls
-                pip install espressodb
+              run: pip install .
+              with:
+                  path: .modules/espressodb
 
             - name: Install dependencies
               run: |
-                  python -m pip install --upgrade pip
                   pip install -r requirements.txt
                   pip install -r requirements-dev.txt
 
