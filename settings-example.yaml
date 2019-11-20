@@ -1,0 +1,21 @@
+SECRET_KEY: ""
+PROJECT_APPS:
+    - lattedb.status
+    - lattedb.fermionaction
+    - lattedb.gaugeaction
+    - lattedb.gaugeconfig
+    - lattedb.linksmear
+    - lattedb.propagator
+    - lattedb.wavefunction
+    - lattedb.quarksmear
+    - lattedb.current
+    - lattedb.correlator
+    - lattedb.ensemble
+    - lattedb.project.ga_q2
+    # - lattedb.project.fhcompare
+    - lattedb.project.formfac
+ALLOWED_HOSTS:
+    - 127.0.0.1
+    - localhost
+    - ithems.lbl.gov
+DEBUG: True
