@@ -66,6 +66,8 @@ class ObjectParser(ABC):
         self.assertEqual(entries.count(), 1)
         self.assertEqual(entries.first(), instance)
 
+        return instance
+
     def test_inconsistent_creation(self):
         """Tests if creation of model works with default entries.
         """
