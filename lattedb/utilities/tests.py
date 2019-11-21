@@ -1,7 +1,7 @@
 # pylint: disable = E1101
 """Utility objects which help the unittests
 """
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple
 
 from abc import ABC
 
@@ -40,11 +40,38 @@ class ObjectParser(ABC):
                 args[key] = val
         return args
 
+    @classmethod
+    def create_instance(
+        cls,
+        parameters: Optional[Dict[str, Any]] = None,
+        tree: Optional[Dict[str, Any]] = None,
+    ) -> Tuple[Base, bool]:
+        """Creates a instance of the class.
+
+         Arguments:
+            parameters:
+                Parameters used to construct the whole tree. Defaults to
+                `self.parameters`.
+            tree:
+                Tree (nsted dependencies) used to construct the class. Defaults to
+                `self.tree`.
+
+        Returns:
+            The instance and a bool if it was created or not.
+        """
+        pars = cls.parse_args(parameters or cls.parameters)
+        tree = tree or cls.tree
+        LOGGER.debug(
+            "Creating class %s with\n\tpars: %s\n\ttree: %s", cls.model, pars, tree,
+        )
+        instance, created = cls.model.get_or_create_from_parameters(pars, tree=tree)
+        return instance, created
+
     def test_default_creation(
         self,
         parameters: Optional[Dict[str, Any]] = None,
         tree: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> Base:
         """Tests if creation of model works with default entries.
 
         Arguments:
@@ -55,12 +82,7 @@ class ObjectParser(ABC):
                 Tree (nsted dependencies) used to construct the class. Defaults to
                 `self.tree`.
         """
-        pars = self.parse_args(parameters or self.parameters)
-        tree = tree or self.tree
-        LOGGER.debug(
-            "Creating class %s with\n\tpars: %s\n\ttree: %s", self.model, pars, tree,
-        )
-        instance, created = self.model.get_or_create_from_parameters(pars, tree=tree)
+        instance, created = self.create_instance(parameters, tree=tree)
         self.assertTrue(created)
         entries = self.model.objects.all()
         self.assertEqual(entries.count(), 1)
