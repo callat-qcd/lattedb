@@ -58,3 +58,4 @@ class Ensemble(Base):
                     raise ValidationError(
                         f"{config} is from a different ensemble compared to first config {first}"
                     )
+

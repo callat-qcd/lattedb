@@ -99,7 +99,7 @@ class Hadron(SCSWaveFunction):
         help_text="Irreducible representations of O^D_h (octahedral group)",
     )
     embedding = models.PositiveSmallIntegerField(
-        null=False, blank=False, help_text="k-th embedding of O^D_h irrep.",
+        null=False, blank=True, help_text="k-th embedding of O^D_h irrep., can be blank",
     )
 
     parity = models.SmallIntegerField(
