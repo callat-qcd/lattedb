@@ -8,9 +8,10 @@ from lattedb.utilities.tests import ObjectParser
 
 from lattedb.ensemble.models import Ensemble
 from lattedb.gaugeconfig.models import Nf211
+from lattedb.gaugeconfig import tests
 
 
-class EnsembleTestCase(ObjectParser, TestCase):
+class EnsembleTestCase(TestCase):
     """Tests for EnsembleTestCase.
     """
 
@@ -23,9 +24,18 @@ class EnsembleTestCase(ObjectParser, TestCase):
     def test_many_to_many(self):
         """Tests creation of many to many field which should not fail
         """
-        ensemble = self.test_default_creation()
+        ensemble = Ensemble.objects.create(**self.parameters)
 
-        gaugeconfig = Nf211(...)
+        nf211testcase = tests.Nf211TestCase()
+        gaugeconfig = nf211testcase.test_default_creation()
+
+        ensemble.configurations.add(gaugeconfig)
+        ensemble.save()
+
+        gaugeconfig.config = 1005
+        gaugeconfig.id += 1
+        gaugeconfig.save()
+        self.assertEqual(Nf211.objects.all().count(), 2)
 
         ensemble.configurations.add(gaugeconfig)
         ensemble.save()
@@ -35,12 +45,21 @@ class EnsembleTestCase(ObjectParser, TestCase):
     def test_many_to_many_consistency(self):
         """Tests creation of many to many field which should fail
         """
-        ensemble = self.test_default_creation()
+        ensemble = Ensemble.objects.create(**self.parameters)
 
-        gaugeconfig = Nf211(...)
+        nf211testcase = tests.Nf211TestCase()
+        gaugeconfig = nf211testcase.test_default_creation()
+        self.assertEqual(Nf211.objects.all().count(), 1)
+
+        ensemble.configurations.add(gaugeconfig)
+        ensemble.save()
+
+        gaugeconfig.config = 1005
+        gaugeconfig.stream = "b"
+        gaugeconfig.id += 1
+        gaugeconfig.save()
+        self.assertEqual(Nf211.objects.all().count(), 2)
 
         with self.assertRaises(ConsistencyError) as context:
             ensemble.configurations.add(gaugeconfig)
             ensemble.save()
-
-        self.assertEqual(context.exception.message, "That was stupid...")

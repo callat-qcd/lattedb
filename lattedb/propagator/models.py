@@ -78,6 +78,16 @@ class OneToAll(Propagator):
             )
         ]
 
+    @classmethod
+    def check_consistency(cls, data: Dict[str, Any]):
+        if data["origin_x"] >= data["gaugeconfig"].nx:
+            raise ValueError("Origin outside of lattice.")
+        if data["origin_y"] >= data["gaugeconfig"].ny:
+            raise ValueError("Origin outside of lattice.")
+        if data["origin_z"] >= data["gaugeconfig"].nz:
+            raise ValueError("Origin outside of lattice.")
+        if data["origin_t"] >= data["gaugeconfig"].nt:
+            raise ValueError("Origin outside of lattice.")
 
 class CoherentSeq(Propagator):
     """

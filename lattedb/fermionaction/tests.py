@@ -5,56 +5,95 @@ from django.test import TestCase
 from lattedb.utilities.tests import ObjectParser
 
 from lattedb.linksmear.tests import UnsmearedTestCase
+from lattedb.linksmear.tests import WilsonFlowTestCase
 from lattedb.fermionaction.models import Hisq
 
 
-class HisqTestCase(ObjectParser, TestCase):
-    """Tests for Hisq fermion action.
-    """
-    # Default test
+class HisqTestCaseLight(ObjectParser, TestCase):
     model = Hisq
     tree = {"linksmear": "Unsmeared"}
     parameters = {
-        "quark_mass": "0.01",
+        "quark_mass": "0.0102",
         "quark_tag": "light",
-        "naik": "1.23",
+        "naik": "0",
         "linksmear": UnsmearedTestCase.parameters,
     }
-    consistency_check_changes = [{"quark_tag": "supermassive"}]
+    consistency_check_changes = [
+        {"quark_tag": "supermassive"},
+        {"quark_tag": "Light"},
+        {"quark_tag": "   "},
+        {"quark_tag": ""},
+    ]
 
-    # Additional tests
-    def test_quark_tag_up(self):
-        parameters = dict(self.parameters)
-        parameters["quark_tag"] = "up"
-        self.test_default_creation(parameters)
+class HisqTestCaseLightWF(ObjectParser, TestCase):
+    model = Hisq
+    tree = {"linksmear": "Unsmeared"}
+    parameters = {
+        "quark_mass": "0.0102",
+        "quark_tag": "light",
+        "naik": "0",
+        "linksmear": WilsonFlowTestCase.parameters,
+    }
 
-    def test_quark_tag_down(self):
-        parameters = dict(self.parameters)
-        parameters["quark_tag"] = "down"
-        self.test_default_creation(parameters)
+class HisqTestCaseUp(ObjectParser, TestCase):
+    model = Hisq
+    tree = {"linksmear": "Unsmeared"}
+    parameters = {
+        "quark_mass": "0.0102",
+        "quark_tag": "up",
+        "naik": "0",
+        "linksmear": UnsmearedTestCase.parameters,
+    }
 
-    def test_quark_tag_strange(self):
-        parameters = dict(self.parameters)
-        parameters["quark_tag"] = "strange"
-        self.test_default_creation(parameters)
 
-    def test_quark_tag_charm(self):
-        parameters = dict(self.parameters)
-        parameters["quark_tag"] = "charm"
-        self.test_default_creation(parameters)
+class HisqTestCaseDown(ObjectParser, TestCase):
+    model = Hisq
+    tree = {"linksmear": "Unsmeared"}
+    parameters = {
+        "quark_mass": "0.0102",
+        "quark_tag": "down",
+        "naik": "0",
+        "linksmear": UnsmearedTestCase.parameters,
+    }
 
-    def test_quark_tag_bottom(self):
-        parameters = dict(self.parameters)
-        parameters["quark_tag"] = "bottom"
-        self.test_default_creation(parameters)
+
+class HisqTestCaseStrange(ObjectParser, TestCase):
+    model = Hisq
+    tree = {"linksmear": "Unsmeared"}
+    parameters = {
+        "quark_mass": "0.0509",
+        "quark_tag": "strange",
+        "naik": "0",
+        "linksmear": UnsmearedTestCase.parameters,
+    }
+
+
+class HisqTestCaseCharm(ObjectParser, TestCase):
+    model = Hisq
+    tree = {"linksmear": "Unsmeared"}
+    parameters = {
+        "quark_mass": "0.635",
+        "quark_tag": "charm",
+        "naik": "-0.2308",
+        "linksmear": UnsmearedTestCase.parameters,
+    }
+
+
+class HisqTestCaseBottom(ObjectParser, TestCase):
+    model = Hisq
+    tree = {"linksmear": "Unsmeared"}
+    parameters = {
+        "quark_mass": "1.2",
+        "quark_tag": "bottom",
+        "naik": "-0.2308",
+        "linksmear": UnsmearedTestCase.parameters,
+    }
+
 
 from lattedb.fermionaction.models import MobiusDW
 
 
-class MobiusDWTestCase(ObjectParser, TestCase):
-    """Tests for MobiusDW fermion action.
-    """
-
+class MobiusDWTestCaseLight(ObjectParser, TestCase):
     model = MobiusDW
     tree = {"linksmear": "Unsmeared"}
     parameters = {
@@ -66,29 +105,87 @@ class MobiusDWTestCase(ObjectParser, TestCase):
         "c5": "0.25",
         "linksmear": UnsmearedTestCase.parameters,
     }
-    consistency_check_changes = [{"quark_tag": "supermassive"}]
+    consistency_check_changes = [
+        {"quark_tag": "supermassive"},
+        {"quark_tag": "Light"},
+        {"quark_tag": "   "},
+        {"quark_tag": ""},
+    ]
 
-    def test_quark_tag_up(self):
-        parameters = dict(self.parameters)
-        parameters["quark_tag"] = "up"
-        self.test_default_creation(parameters)
+class MobiusDWTestCaseLightWF(ObjectParser, TestCase):
+    model = MobiusDW
+    tree = {"linksmear": "Unsmeared"}
+    parameters = {
+        "quark_mass": "0.01",
+        "quark_tag": "light",
+        "l5": "8",
+        "m5": "1.2",
+        "b5": "1.25",
+        "c5": "0.25",
+        "linksmear": WilsonFlowTestCase.parameters,
+    }
 
-    def test_quark_tag_down(self):
-        parameters = dict(self.parameters)
-        parameters["quark_tag"] = "down"
-        self.test_default_creation(parameters)
+class MobiusDWTestCaseUp(ObjectParser, TestCase):
+    model = MobiusDW
+    tree = {"linksmear": "Unsmeared"}
+    parameters = {
+        "quark_mass": "0.01",
+        "quark_tag": "up",
+        "l5": "8",
+        "m5": "1.2",
+        "b5": "1.25",
+        "c5": "0.25",
+        "linksmear": UnsmearedTestCase.parameters,
+    }
 
-    def test_quark_tag_strange(self):
-        parameters = dict(self.parameters)
-        parameters["quark_tag"] = "strange"
-        self.test_default_creation(parameters)
+class MobiusDWTestCaseDown(ObjectParser, TestCase):
+    model = MobiusDW
+    tree = {"linksmear": "Unsmeared"}
+    parameters = {
+        "quark_mass": "0.01",
+        "quark_tag": "down",
+        "l5": "8",
+        "m5": "1.2",
+        "b5": "1.25",
+        "c5": "0.25",
+        "linksmear": UnsmearedTestCase.parameters,
+    }
 
-    def test_quark_tag_charm(self):
-        parameters = dict(self.parameters)
-        parameters["quark_tag"] = "charm"
-        self.test_default_creation(parameters)
+class MobiusDWTestCaseStrange(ObjectParser, TestCase):
+    model = MobiusDW
+    tree = {"linksmear": "Unsmeared"}
+    parameters = {
+        "quark_mass": "0.0693",
+        "quark_tag": "strange",
+        "l5": "8",
+        "m5": "1.2",
+        "b5": "1.25",
+        "c5": "0.25",
+        "linksmear": UnsmearedTestCase.parameters,
+    }
 
-    def test_quark_tag_bottom(self):
-        parameters = dict(self.parameters)
-        parameters["quark_tag"] = "bottom"
-        self.test_default_creation(parameters)
+class MobiusDWTestCaseCharm(ObjectParser, TestCase):
+    model = MobiusDW
+    tree = {"linksmear": "Unsmeared"}
+    parameters = {
+        "quark_mass": "0.2",
+        "quark_tag": "charm",
+        "l5": "8",
+        "m5": "1.2",
+        "b5": "1.25",
+        "c5": "0.25",
+        "linksmear": UnsmearedTestCase.parameters,
+    }
+
+class MobiusDWTestCaseCharm(ObjectParser, TestCase):
+    model = MobiusDW
+    tree = {"linksmear": "Unsmeared"}
+    parameters = {
+        "quark_mass": "0.4",
+        "quark_tag": "bottom",
+        "l5": "8",
+        "m5": "1.2",
+        "b5": "1.25",
+        "c5": "0.25",
+        "linksmear": UnsmearedTestCase.parameters,
+    }
