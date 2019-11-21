@@ -12,3 +12,9 @@ class LuescherWeiszTestCase(ObjectParser, TestCase):
     """
 
     model = LuescherWeisz
+    tree = None
+    parameters = {
+        "beta": "6.0",
+        "a_fm": "0.12",
+        "u0": "0.86372",
+    }
