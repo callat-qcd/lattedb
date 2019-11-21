@@ -19,7 +19,7 @@ class GaugeConfig(Base):
             equal = all(
                 [
                     getattr(self, column.name) == getattr(config, column.name)
-                    for column in self.get_open_fields()
+                    for column in self.specialization.get_open_fields()
                     if column.name != "config"
                 ]
             )
@@ -116,11 +116,11 @@ class Nf211(GaugeConfig):
 
     @classmethod
     def check_consistency(cls, data: Dict[str, Any]):
-        if data["light"].type.quark_type not in ["light"]:
-            raise TypeError("Requires light to be quark_type = light in FermionAction.")
-        if data["strange"].type.quark_type not in ["strange"]:
+        if data["light"].quark_tag not in ["light"]:
+            raise TypeError("Requires light to be quark_tag = light in FermionAction.")
+        if data["strange"].quark_tag not in ["strange"]:
             raise TypeError(
-                "Requires strange to be quark_type = strange in FermionAction."
+                "Requires strange to be quark_tag = strange in FermionAction."
             )
-        if data["charm"].type.quark_type not in ["charm"]:
-            raise TypeError("Requires charm to be quark_type = charm in FermionAction.")
+        if data["charm"].quark_tag not in ["charm"]:
+            raise TypeError("Requires charm to be quark_tag = charm in FermionAction.")
