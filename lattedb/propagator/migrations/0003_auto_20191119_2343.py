@@ -12,52 +12,52 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='fermionaction',
             field=models.ForeignKey(help_text='Foreign Key referencing valence lattice \\(\\texttt{fermionaction}\\)', on_delete=django.db.models.deletion.CASCADE, to='fermionaction.FermionAction'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='gaugeconfig',
             field=models.ForeignKey(help_text='Foreign Key referencing specific \\(\\texttt{gaugeconfig}\\) inverted on', on_delete=django.db.models.deletion.CASCADE, to='gaugeconfig.GaugeConfig'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='groupindex',
             field=models.PositiveSmallIntegerField(help_text='Group index indicating which coherent sink group the propagator belongs to'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='groupsize',
             field=models.PositiveSmallIntegerField(help_text='Total number of propagators sharing a coherent sink'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='propagator0',
             field=models.ForeignKey(help_text='Foreign Key referencing OneToAll \\(\\texttt{propagator}\\) (spectator 0)', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='propagator.Propagator'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='propagator1',
             field=models.ForeignKey(help_text='Foreign Key referencing OneToAll \\(\\texttt{propagator}\\) (spectator 1)', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='propagator.Propagator'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='sinksep',
             field=models.SmallIntegerField(help_text='Source-sink separation time'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='sinksmear',
             field=models.ForeignKey(help_text='Foreign Key referencing sink \\(\\texttt{quarksmear}\\)', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='quarksmear.QuarkSmear'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='sinkwave',
             field=models.ForeignKey(help_text='Foreign Key referencing sink interpolating operator \\(\\texttt{wavefunction}\\)', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='wavefunction.SCSWaveFunction'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='sourcesmear',
             field=models.ForeignKey(help_text='Foreign Key referencing source \\(\\texttt{quarksmear}\\)', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='quarksmear.QuarkSmear'),
         ),

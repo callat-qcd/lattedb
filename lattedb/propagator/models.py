@@ -1,5 +1,6 @@
 from typing import Dict, Any
 from django.db import models
+from django.core.exceptions import ValidationError
 
 from espressodb.base.models import Base
 
@@ -89,9 +90,12 @@ class OneToAll(Propagator):
         if data["origin_t"] >= data["gaugeconfig"].nt:
             raise ValueError("Origin outside of lattice.")
 
-class CoherentSeq(Propagator):
+
+class BaryonCoherentSeq(Propagator):
     """
     All coherence sequential propagators are listed here.
+    This is for baryons because there are 2 spectator quarks.
+    The hadronic operator smearing is already defined in OneToAll propagator.
     """
 
     gaugeconfig = models.ForeignKey(
@@ -104,23 +108,15 @@ class CoherentSeq(Propagator):
         on_delete=models.CASCADE,
         help_text=r"Foreign Key referencing valence lattice `fermionaction`",
     )
-    propagator0 = models.ForeignKey(
-        "propagator.Propagator",
-        on_delete=models.CASCADE,
+    propagator0 = models.ManyToManyField(
+        to=Propagator,
         related_name="+",
-        help_text=r"Foreign Key referencing OneToAll `propagator` (spectator 0)",
+        help_text=r"A set of Foreign Keys referencing OneToAll `propagator` (spectator 0) in same source group",
     )
-    propagator1 = models.ForeignKey(
-        "propagator.Propagator",
-        on_delete=models.CASCADE,
+    propagator1 = models.ManyToManyField(
+        to=Propagator,
         related_name="+",
-        help_text=r"Foreign Key referencing OneToAll `propagator` (spectator 1)",
-    )
-    groupsize = models.PositiveSmallIntegerField(
-        help_text="Total number of propagators sharing a coherent sink"
-    )
-    groupindex = models.PositiveSmallIntegerField(
-        help_text="Group index indicating which coherent sink group the propagator belongs to"
+        help_text=r"A set of Foreign Keys referencing OneToAll `propagator` (spectator 1) in same source group",
     )
     sinkwave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
@@ -128,19 +124,13 @@ class CoherentSeq(Propagator):
         related_name="+",
         help_text=r"Foreign Key referencing sink interpolating operator `wavefunction`",
     )
-    sinksep = models.SmallIntegerField(help_text="Source-sink separation time")
-    sourcesmear = models.ForeignKey(
-        "quarksmear.QuarkSmear",
-        on_delete=models.CASCADE,
-        related_name="+",
-        help_text=r"Foreign Key referencing source `quarksmear`",
-    )
     sinksmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key referencing sink `quarksmear`",
+        help_text=r"Foreign Key pointing to sink `quarksmear`",
     )
+    sinksep = models.SmallIntegerField(help_text="Source-sink separation time")
 
     class Meta:
         constraints = [
@@ -148,28 +138,65 @@ class CoherentSeq(Propagator):
                 fields=[
                     "gaugeconfig",
                     "fermionaction",
-                    "propagator0",
-                    "propagator1",
-                    "groupsize",
-                    "groupindex",
-                    "sourcesmear",
-                    "sinksmear",
                     "sinkwave",
+                    "sinksmear",
                     "sinksep",
                 ],
-                name="unique_propagator_coherentseq",
+                name="unique_propagator_baryoncoherentseq",
             )
         ]
 
     @classmethod
     def check_consistency(cls, data: Dict[str, Any]):
-        if data["propagator0"].type not in ["OneToAll"]:
-            raise TypeError("Requires propagator0 type OneToAll.")
-        if data["propagator1"].type not in ["OneToAll"]:
-            raise TypeError("Requires propagator1 type OneToAll.")
-        if data["propagator0"].id > data["propagator1"].id:
-            raise ValueError("Requires propagator0.id <= propagator1.id.")
-
+        """Checks if all propagators in a coherent source have:
+        prop0 and prop1 have same length
+        same prop type (OneToAll)
+        same fermion action type (can differ in mass)
+        same gauge configuration id
+        pairwise prop0.id <= prop1.id
+        pairwise same origin
+        all prop0 and prop1 have same source and sink smearing
+        """
+        """Sanity check"""
+        if data["propagator0"].count() != data["propagator1"].count():
+            raise ValidationError(f"Set length for propagator0 not equal propagator1.")
+        """Global consistency checks"""
+        first = data["propagator0"].first()
+        for idx in [0, 1]:
+            for prop in data[f"propagator{idx}"].all():
+                if prop.type not in ["OneToAll"]:
+                    raise TypeError(f"Spectator {idx} is not a OneToAll propagator.")
+                if prop.fermionaction.type != first.fermionaction.type:
+                    raise TypeError(
+                        f"Spectator {idx} fermion action type inconsistent."
+                    )
+                if prop.gaugeconfig.id != gaugeconfig.id:
+                    raise ValueError(
+                        f"Spectator {idx} and daughter have different gauge configs."
+                    )
+                if prop.sourcesmear.id != first.sourcesmear.id:
+                    raise TypeError(f"Spectator {idx} source smearing id inconsistent.")
+                if prop.sinksmear.id != first.sinksmear.id:
+                    raise TypeError(f"Spectator {idx} sink smearing id inconsistent.")
+        """Pairwise consistency checks"""
+        origin_id_0 = {
+            (prop.origin_x, prop.origin_y, prop.origin_z, prop.origin_t): prop.id
+            for prop in data["propagator0"]
+        }
+        origin_id_1 = {
+            (prop.origin_x, prop.origin_y, prop.origin_z, prop.origin_t): prop.id
+            for prop in data["propagator1"]
+        }
+        for origin in origin_id_0:
+            if origin in list(origin_id_1.keys()):
+                if origin_id_0[origin] > origin_id_1[origin]:
+                    raise ValidationError(
+                        "Pairwise prop0.id is not <= prop1.id. This ensures a unique baryon in each row."
+                    )
+            else:
+                raise ValidationError(
+                    "Spectators are not paired at the same origin."
+                )
 
 class FeynmanHellmann(Propagator):
     """

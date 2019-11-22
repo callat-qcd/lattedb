@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
             bases=('propagator.propagator',),
         ),
         migrations.CreateModel(
-            name='CoherentSeq',
+            name='BaryonCoherentSeq',
             fields=[
                 ('propagator_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='propagator.Propagator')),
                 ('groupsize', models.PositiveSmallIntegerField(help_text='PositiveSmallint: Total number of propagators sharing a coherent sink')),
@@ -86,7 +86,7 @@ class Migration(migrations.Migration):
             constraint=models.UniqueConstraint(fields=('gaugeconfig', 'fermionaction', 'propagator', 'current', 'sourcesmear', 'sinksmear'), name='unique_propagator_feynmanhellmann'),
         ),
         migrations.AddConstraint(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             constraint=models.UniqueConstraint(fields=('gaugeconfig', 'fermionaction', 'propagator0', 'propagator1', 'groupsize', 'groupindex', 'sourcesmear', 'sinksmear', 'sinkwave', 'sinksep'), name='unique_propagator_coherentseq'),
         ),
     ]

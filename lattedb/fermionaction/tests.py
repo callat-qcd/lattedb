@@ -27,7 +27,7 @@ class HisqTestCaseLight(ObjectParser, TestCase):
 
 class HisqTestCaseLightWF(ObjectParser, TestCase):
     model = Hisq
-    tree = {"linksmear": "Unsmeared"}
+    tree = {"linksmear": "WilsonFlow"}
     parameters = {
         "quark_mass": "0.0102",
         "quark_tag": "light",
@@ -114,7 +114,7 @@ class MobiusDWTestCaseLight(ObjectParser, TestCase):
 
 class MobiusDWTestCaseLightWF(ObjectParser, TestCase):
     model = MobiusDW
-    tree = {"linksmear": "Unsmeared"}
+    tree = {"linksmear": "WilsonFlow"}
     parameters = {
         "quark_mass": "0.01",
         "quark_tag": "light",

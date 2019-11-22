@@ -12,37 +12,37 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='fermionaction',
             field=models.ForeignKey(help_text='Foreign Key referencing valence lattice `fermionaction`', on_delete=django.db.models.deletion.CASCADE, to='fermionaction.FermionAction'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='gaugeconfig',
             field=models.ForeignKey(help_text='Foreign Key referencing specific `gaugeconfig` inverted on', on_delete=django.db.models.deletion.CASCADE, to='gaugeconfig.GaugeConfig'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='propagator0',
             field=models.ForeignKey(help_text='Foreign Key referencing OneToAll `propagator` (spectator 0)', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='propagator.Propagator'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='propagator1',
             field=models.ForeignKey(help_text='Foreign Key referencing OneToAll `propagator` (spectator 1)', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='propagator.Propagator'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='sinksmear',
             field=models.ForeignKey(help_text='Foreign Key referencing sink `quarksmear`', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='quarksmear.QuarkSmear'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='sinkwave',
             field=models.ForeignKey(help_text='Foreign Key referencing sink interpolating operator `wavefunction`', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='wavefunction.SCSWaveFunction'),
         ),
         migrations.AlterField(
-            model_name='coherentseq',
+            model_name='baryoncoherentseq',
             name='sourcesmear',
             field=models.ForeignKey(help_text='Foreign Key referencing source `quarksmear`', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='quarksmear.QuarkSmear'),
         ),
