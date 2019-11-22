@@ -24,7 +24,7 @@ class EnsembleTestCase(TestCase):
         """
         ensemble = Ensemble.objects.create(**self.parameters)
 
-        nf211testcase = tests.Nf211TestCase()
+        nf211testcase = tests.Nf211TestCaseHisq()
         gaugeconfig = nf211testcase.test_default_creation()
 
         ensemble.configurations.add(gaugeconfig)
@@ -45,7 +45,7 @@ class EnsembleTestCase(TestCase):
         """
         ensemble = Ensemble.objects.create(**self.parameters)
 
-        nf211testcase = tests.Nf211TestCase()
+        nf211testcase = tests.Nf211TestCaseHisq()
         gaugeconfig = nf211testcase.test_default_creation()
         self.assertEqual(Nf211.objects.all().count(), 1)
 

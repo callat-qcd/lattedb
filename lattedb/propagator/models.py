@@ -170,6 +170,7 @@ class BaryonCoherentSeq(Propagator):
                     raise TypeError(
                         f"Spectator {idx} fermion action type inconsistent."
                     )
+                print("in check:", prop.gaugeconfig.id, data['gaugeconfig'].id)
                 if prop.gaugeconfig.id != data['gaugeconfig'].id:
                     raise ValueError(
                         f"Spectator {idx} and daughter have different gauge configs."
