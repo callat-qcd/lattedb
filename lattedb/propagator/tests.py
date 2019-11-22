@@ -75,7 +75,7 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
     }
     consistency_check_changes = []
 
-    def test_default_creation(self, parameters, tree):
+    def test_default_creation(self, parameters=None, tree=None):
         pass
 
     def test_inconsistent_creation(self):
@@ -87,7 +87,7 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         baryoncoherentseq, _ = self.create_instance()
 
         onetoalltestcase = OneToAllTestCase()
-        prop = onetoalltestcase.test_default_creation()
+        prop, _ = onetoalltestcase.create_instance()
         baryoncoherentseq.propagator0.add(prop)
         baryoncoherentseq.propagator1.add(prop)
         baryoncoherentseq.save()
