@@ -110,12 +110,12 @@ class BaryonCoherentSeq(Propagator):
     )
     propagator0 = models.ManyToManyField(
         to=Propagator,
-        related_name="+",
+        related_name="baryoncoherentseq_set0",
         help_text=r"A set of Foreign Keys referencing OneToAll `propagator` (spectator 0) in same source group",
     )
     propagator1 = models.ManyToManyField(
         to=Propagator,
-        related_name="+",
+        related_name="baryoncoherentseq_set1",
         help_text=r"A set of Foreign Keys referencing OneToAll `propagator` (spectator 1) in same source group",
     )
     sinkwave = models.ForeignKey(
@@ -170,7 +170,7 @@ class BaryonCoherentSeq(Propagator):
                     raise TypeError(
                         f"Spectator {idx} fermion action type inconsistent."
                     )
-                if prop.gaugeconfig.id != gaugeconfig.id:
+                if prop.gaugeconfig.id != data['gaugeconfig'].id:
                     raise ValueError(
                         f"Spectator {idx} and daughter have different gauge configs."
                     )
@@ -181,11 +181,11 @@ class BaryonCoherentSeq(Propagator):
         """Pairwise consistency checks"""
         origin_id_0 = {
             (prop.origin_x, prop.origin_y, prop.origin_z, prop.origin_t): prop.id
-            for prop in data["propagator0"]
+            for prop in data["propagator0"].all()
         }
         origin_id_1 = {
             (prop.origin_x, prop.origin_y, prop.origin_z, prop.origin_t): prop.id
-            for prop in data["propagator1"]
+            for prop in data["propagator1"].all()
         }
         for origin in origin_id_0:
             if origin in list(origin_id_1.keys()):
