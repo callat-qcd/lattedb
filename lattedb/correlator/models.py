@@ -272,7 +272,7 @@ class Baryon2pt(Correlator):
 
 class BaryonSeq3pt(Correlator):
     r"""
-    All types of baryon three point correlators created with a `CoherentSeq` propagator are listed here.
+    All types of baryon three point correlators created with a `BaryonCoherentSeq` propagator are listed here.
     For specific hadrons and actions, query through foreign key references.
     """
     sourcewave = models.ForeignKey(
@@ -311,8 +311,8 @@ class BaryonSeq3pt(Correlator):
     def check_consistency(cls, data: Dict[str, Any]):
         if data["propagator"].type not in ["OneToAll"]:
             raise TypeError(r"Requires propagator type OneToAll.")
-        if data["seqpropagator"].type not in ["CoherentSeq"]:
-            raise TypeError(r"Requires seqpropagator type CoherentSeq.")
+        if data["seqpropagator"].type not in ["BaryonCoherentSeq"]:
+            raise TypeError(r"Requires seqpropagator type BaryonCoherentSeq.")
 
 
 class BaryonFH3pt(Correlator):

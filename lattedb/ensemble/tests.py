@@ -4,8 +4,6 @@ from django.test import TestCase
 
 from espressodb.base.models import ConsistencyError
 
-from lattedb.utilities.tests import ObjectParser
-
 from lattedb.ensemble.models import Ensemble
 from lattedb.gaugeconfig.models import Nf211
 from lattedb.gaugeconfig import tests
@@ -18,7 +16,7 @@ class EnsembleTestCase(TestCase):
     # Default test
     model = Ensemble
     tree = None
-    parameters = {"label": "a01m134XXXXL"}
+    parameters = {"label": "a12m310a"}
     consistency_check_changes = []
 
     def test_many_to_many(self):

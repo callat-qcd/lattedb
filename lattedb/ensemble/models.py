@@ -17,7 +17,10 @@ class Ensemble(Base):
     `short_tag` and `long_tag` are available to identify which type of ensembles are listed.
     """
 
-    configurations = models.ManyToManyField(GaugeConfig)
+    configurations = models.ManyToManyField(
+        to=GaugeConfig,
+        help_text="Set of Foreign Keys to gauge configurations which together defines an ensemble",
+    )
     label = models.CharField(
         max_length=40,
         null=False,
@@ -58,4 +61,3 @@ class Ensemble(Base):
                     raise ValidationError(
                         f"{config} is from a different ensemble compared to first config {first}"
                     )
-
