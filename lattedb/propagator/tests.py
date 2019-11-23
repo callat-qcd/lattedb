@@ -9,7 +9,6 @@ from lattedb.utilities.tests import ObjectParser
 
 from lattedb.propagator.models import OneToAll
 from lattedb.gaugeconfig.tests import Nf211TestCaseHisq
-from lattedb.gaugeconfig.tests import Nf211TestCaseHisqAlt
 from lattedb.fermionaction.tests import MobiusDWTestCaseLightWF
 from lattedb.fermionaction.tests import HisqTestCaseLightWF
 from lattedb.quarksmear.tests import PointTestCase
@@ -48,33 +47,6 @@ class OneToAllTestCaseDW(ObjectParser, TestCase):
         {"origin_z": "10000"},
         {"origin_t": "10000"},
     ]
-
-class OneToAllTestCaseDWAlt(ObjectParser, TestCase):
-    model = OneToAll
-    tree = {
-        "gaugeconfig": "Nf211",
-        "gaugeconfig.gaugeaction": "LuescherWeisz",
-        "gaugeconfig.light": "Hisq",
-        "gaugeconfig.strange": "Hisq",
-        "gaugeconfig.charm": "Hisq",
-        "gaugeconfig.light.linksmear": "Unsmeared",
-        "gaugeconfig.strange.linksmear": "Unsmeared",
-        "gaugeconfig.charm.linksmear": "Unsmeared",
-        "fermionaction": "MobiusDW",
-        "fermionaction.linksmear": "WilsonFlow",
-        "sourcesmear": "GaugeCovariantGaussian",
-        "sinksmear": "Point",
-    }
-    parameters = {
-        "gaugeconfig": Nf211TestCaseHisqAlt.parameters,
-        "fermionaction": MobiusDWTestCaseLightWF.parameters,
-        "origin_x": "2",
-        "origin_y": "10",
-        "origin_z": "8",
-        "origin_t": "6",
-        "sourcesmear": GaugeCovariantGaussianTestCase.parameters,
-        "sinksmear": PointTestCase.parameters,
-    }
 
 class OneToAllTestCaseHisq(ObjectParser, TestCase):
     model = OneToAll
@@ -162,10 +134,7 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
 
         onetoalltestcase = OneToAllTestCaseDW()
         onetoallparameters = dict(onetoalltestcase.parameters)
-        onetoallparameters["origin_x"] = int(onetoallparameters["origin_x"]) + 5
-        onetoallparameters["origin_y"] = int(onetoallparameters["origin_y"]) + 3
-        onetoallparameters["origin_z"] = int(onetoallparameters["origin_z"]) + 1
-        onetoallparameters["origin_t"] = int(onetoallparameters["origin_x"]) + 8
+        onetoallparameters["origin_t"] = int(onetoallparameters["origin_t"]) + 8
         prop, _ = onetoalltestcase.create_instance(parameters=onetoallparameters, tree=onetoalltestcase.tree)
 
         self.assertEqual(OneToAll.objects.all().count(), 2)
@@ -177,13 +146,19 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
     def test_prop_length_consistency(self):
         """Tests creation of many to many field which should fail
         """
-        baryoncoherentseq, prop = self.first_pair()
+        baryoncoherentseq = self.first_pair()
 
-        prop.save()
+        onetoalltestcase = OneToAllTestCaseDW()
+        onetoallparameters = dict(onetoalltestcase.parameters)
+        onetoallparameters["origin_t"] = int(onetoallparameters["origin_t"]) + 8
+        prop, _ = onetoalltestcase.create_instance(parameters=onetoallparameters, tree=onetoalltestcase.tree)
+
+        self.assertEqual(OneToAll.objects.all().count(), 2)
 
         baryoncoherentseq.propagator0.add(prop)
         with self.assertRaises(ConsistencyError) as context:
             baryoncoherentseq.save()
+        print(context.exception.error)
 
     def test_prop_type_consistency(self):
         """
@@ -192,7 +167,7 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         """
 
     def test_prop_fermionaction_type_consistency(self):
-        baryoncoherentseq, prop = self.first_pair()
+        baryoncoherentseq = self.first_pair()
 
         onetoalltestcasehisq = OneToAllTestCaseHisq()
         prop , _= onetoalltestcasehisq.create_instance()
@@ -201,23 +176,117 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         baryoncoherentseq.propagator1.add(prop)
         with self.assertRaises(ConsistencyError) as context:
             baryoncoherentseq.save()
+        print(context.exception.error)
 
     def test_prop_config_id_consistency(self):
-        baryoncoherentseq, prop = self.first_pair()
+        baryoncoherentseq = self.first_pair()
 
-        prop.save()
+        onetoalltestcase = OneToAllTestCaseDW()
+        parameters = dict(onetoalltestcase.parameters)
+        parameters["origin_t"] = int(parameters["origin_t"]) + 8
+        parameters["gaugeconfig"]["config"] = int(parameters["gaugeconfig"]["config"]) + 5
+        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=onetoalltestcase.tree)
+
+        self.assertEqual(OneToAll.objects.all().count(), 2)
+
+        baryoncoherentseq.propagator0.add(prop)
+        baryoncoherentseq.propagator1.add(prop)
+
+        with self.assertRaises(ConsistencyError) as context:
+            baryoncoherentseq.save()
+        print(context.exception.error)
+
+    def test_prop_sourcesmear_consistency(self):
+        baryoncoherentseq = self.first_pair()
+
+        onetoalltestcase = OneToAllTestCaseDW()
+        parameters = dict(onetoalltestcase.parameters)
+        parameters["origin_t"] = int(parameters["origin_t"]) + 8
+        parameters["sourcesmear"]["step"] = 1000
+        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=onetoalltestcase.tree)
+
+        self.assertEqual(OneToAll.objects.all().count(), 2)
+
+        baryoncoherentseq.propagator0.add(prop)
+        baryoncoherentseq.propagator1.add(prop)
+
+        with self.assertRaises(ConsistencyError) as context:
+            baryoncoherentseq.save()
+        print(context.exception.error)
+
+    def test_prop_sinksmear_consistency(self):
+        baryoncoherentseq = self.first_pair()
+
+        onetoalltestcase = OneToAllTestCaseDW()
+        parameters = dict(onetoalltestcase.parameters)
+        parameters["origin_t"] = int(parameters["origin_t"]) + 8
+        parameters["sinksmear"]["radius"] = "3.0"
+        parameters["sinksmear"]["step"] = "30"
+        tree = dict(onetoalltestcase.tree)
+        tree["sinksmear"] = "GaugeCovariantGaussian"
+        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=tree)
+
+        self.assertEqual(OneToAll.objects.all().count(), 2)
+
+        baryoncoherentseq.propagator0.add(prop)
+        baryoncoherentseq.propagator1.add(prop)
+
+        with self.assertRaises(ConsistencyError) as context:
+            baryoncoherentseq.save()
+        print(context.exception.error)
+
+    def test_prop_id_sequence_consistency(self):
+        baryoncoherentseq = self.first_pair()
+
+        onetoalltestcase = OneToAllTestCaseDW()
+        parameters = dict(onetoalltestcase.parameters)
+        parameters["origin_t"] = int(parameters["origin_t"]) + 8
+
+        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=onetoalltestcase.tree)
+
+        self.assertEqual(OneToAll.objects.all().count(), 2)
+
+        baryoncoherentseq.propagator1.add(prop)
+
+        onetoalltestcase = OneToAllTestCaseDW()
+        parameters = dict(onetoalltestcase.parameters)
+        parameters["origin_t"] = int(parameters["origin_t"]) + 8
+        parameters["fermionaction"]["quark_mass"] = "0.5"
+        parameters["fermionaction"]["quark_tag"] = "strange"
+
+        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=onetoalltestcase.tree)
+
+        self.assertEqual(OneToAll.objects.all().count(), 3)
+
         baryoncoherentseq.propagator0.add(prop)
 
-        onetoalltestcasedwalt = OneToAllTestCaseDWAlt()
-        prop, _ = onetoalltestcasedwalt.create_instance()
-        prop.origin_x += 5
-        prop.origin_y += 3
-        prop.origin_z += 1
-        prop.origin_t += 8
-        prop.id += 1
-        prop.save()
+        with self.assertRaises(ConsistencyError) as context:
+            baryoncoherentseq.save()
+        print(context.exception.error)
+
+    def test_prop_origin_consistency(self):
+        baryoncoherentseq = self.first_pair()
+
+        onetoalltestcase = OneToAllTestCaseDW()
+        parameters = dict(onetoalltestcase.parameters)
+        parameters["origin_t"] = int(parameters["origin_t"]) + 8
+
+        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=onetoalltestcase.tree)
+
+        self.assertEqual(OneToAll.objects.all().count(), 2)
+
+        baryoncoherentseq.propagator0.add(prop)
+
+        onetoalltestcase = OneToAllTestCaseDW()
+        parameters = dict(onetoalltestcase.parameters)
+        parameters["origin_t"] = int(parameters["origin_t"]) + 9
+
+        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=onetoalltestcase.tree)
+
+        self.assertEqual(OneToAll.objects.all().count(), 3)
 
         baryoncoherentseq.propagator1.add(prop)
 
         with self.assertRaises(ConsistencyError) as context:
             baryoncoherentseq.save()
+        print(context.exception.error)
