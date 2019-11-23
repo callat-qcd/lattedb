@@ -128,7 +128,7 @@ class BaryonCoherentSeq(Propagator):
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to sink `quarksmear`",
+        help_text=r"Foreign Key pointing to sink `quarksmear` which should be Point unless some bizarre calculation",
     )
     sinksep = models.SmallIntegerField(help_text="Source-sink separation time")
 
@@ -225,12 +225,6 @@ class FeynmanHellmann(Propagator):
         related_name="+",
         help_text=r"Foreign Key linking momentum space `current` insertion",
     )
-    sourcesmear = models.ForeignKey(
-        "quarksmear.QuarkSmear",
-        on_delete=models.CASCADE,
-        related_name="+",
-        help_text=r"Foreign Key pointing to source `quarksmear`",
-    )
     sinksmear = models.ForeignKey(
         "quarksmear.QuarkSmear",
         on_delete=models.CASCADE,
@@ -246,7 +240,6 @@ class FeynmanHellmann(Propagator):
                     "fermionaction",
                     "propagator",
                     "current",
-                    "sourcesmear",
                     "sinksmear",
                 ],
                 name="unique_propagator_feynmanhellmann",
@@ -257,3 +250,9 @@ class FeynmanHellmann(Propagator):
     def check_consistency(cls, data: Dict[str, Any]):
         if data["propagator"].type not in ["OneToAll"]:
             raise TypeError("Requires propagator type OneToAll.")
+        if data["propagator"].gaugeconfig.id != data["gaugeconfig"].id:
+            raise TypeError("Parent and daughter are on different gauge configs.")
+        if data["propagator"].fermionaction.type != data["fermionaction"].type:
+            raise TypeError("Parent and daughter use different types of fermion actions.")
+        if data["propagator"].sinksmear.type != "Point":
+            raise TypeError("Parent propagator is not a Point sink.")

@@ -290,3 +290,45 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         with self.assertRaises(ConsistencyError) as context:
             baryoncoherentseq.save()
         print(context.exception.error)
+
+from lattedb.propagator.models import FeynmanHellmann
+from lattedb.current.tests import LocalTestCase
+
+class FeynmanHellmannTestCase(ObjectParser, TestCase):
+    model = FeynmanHellmann
+    tree = {
+        "gaugeconfig": "Nf211",
+        "gaugeconfig.gaugeaction": "LuescherWeisz",
+        "gaugeconfig.light": "Hisq",
+        "gaugeconfig.strange": "Hisq",
+        "gaugeconfig.charm": "Hisq",
+        "gaugeconfig.light.linksmear": "Unsmeared",
+        "gaugeconfig.strange.linksmear": "Unsmeared",
+        "gaugeconfig.charm.linksmear": "Unsmeared",
+        "fermionaction": "MobiusDW",
+        "fermionaction.linksmear": "WilsonFlow",
+        "propagator": "OneToAll",
+        "propagator.gaugeconfig": "Nf211",
+        "propagator.gaugeconfig.gaugeaction": "LuescherWeisz",
+        "propagator.gaugeconfig.light": "Hisq",
+        "propagator.gaugeconfig.strange": "Hisq",
+        "propagator.gaugeconfig.charm": "Hisq",
+        "propagator.gaugeconfig.light.linksmear": "Unsmeared",
+        "propagator.gaugeconfig.strange.linksmear": "Unsmeared",
+        "propagator.gaugeconfig.charm.linksmear": "Unsmeared",
+        "propagator.fermionaction": "MobiusDW",
+        "propagator.fermionaction.linksmear": "WilsonFlow",
+        "propagator.sourcesmear": "GaugeCovariantGaussian",
+        "propagator.sinksmear": "Point",
+        "current": "Local",
+        "sinksmear": "GaugeCovariantGaussian",
+    }
+    parameters = {
+        "gaugeconfig": Nf211TestCaseHisq.parameters,
+        "fermionaction": MobiusDWTestCaseLightWF.parameters,
+        "propagator": OneToAllTestCaseDW.parameters,
+        "current": LocalTestCase.parameters,
+        "sinksmear": GaugeCovariantGaussianTestCase.parameters,
+    }
+    consistency_check_changes = [
+    ]
