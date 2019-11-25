@@ -48,6 +48,7 @@ class OneToAllTestCaseDW(ObjectParser, TestCase):
         {"origin_t": "10000"},
     ]
 
+
 class OneToAllTestCaseDWss(ObjectParser, TestCase):
     model = OneToAll
     tree = {
@@ -74,6 +75,7 @@ class OneToAllTestCaseDWss(ObjectParser, TestCase):
         "sourcesmear": GaugeCovariantGaussianTestCase.parameters,
         "sinksmear": GaugeCovariantGaussianTestCase.parameters,
     }
+
 
 class OneToAllTestCaseHisq(ObjectParser, TestCase):
     model = OneToAll
@@ -108,8 +110,10 @@ class OneToAllTestCaseHisq(ObjectParser, TestCase):
         {"origin_t": "10000"},
     ]
 
+
 from lattedb.propagator.models import BaryonCoherentSeq
 from lattedb.wavefunction.tests import HadronTestCase
+
 
 class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
     model = BaryonCoherentSeq
@@ -162,7 +166,9 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         onetoalltestcase = OneToAllTestCaseDW()
         onetoallparameters = dict(onetoalltestcase.parameters)
         onetoallparameters["origin_t"] = int(onetoallparameters["origin_t"]) + 8
-        prop, _ = onetoalltestcase.create_instance(parameters=onetoallparameters, tree=onetoalltestcase.tree)
+        prop, _ = onetoalltestcase.create_instance(
+            parameters=onetoallparameters, tree=onetoalltestcase.tree
+        )
 
         self.assertEqual(OneToAll.objects.all().count(), 2)
 
@@ -178,7 +184,9 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         onetoalltestcase = OneToAllTestCaseDW()
         onetoallparameters = dict(onetoalltestcase.parameters)
         onetoallparameters["origin_t"] = int(onetoallparameters["origin_t"]) + 8
-        prop, _ = onetoalltestcase.create_instance(parameters=onetoallparameters, tree=onetoalltestcase.tree)
+        prop, _ = onetoalltestcase.create_instance(
+            parameters=onetoallparameters, tree=onetoalltestcase.tree
+        )
 
         self.assertEqual(OneToAll.objects.all().count(), 2)
 
@@ -197,7 +205,7 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         baryoncoherentseq = self.first_pair()
 
         onetoalltestcasehisq = OneToAllTestCaseHisq()
-        prop , _= onetoalltestcasehisq.create_instance()
+        prop, _ = onetoalltestcasehisq.create_instance()
 
         baryoncoherentseq.propagator0.add(prop)
         baryoncoherentseq.propagator1.add(prop)
@@ -211,8 +219,12 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         onetoalltestcase = OneToAllTestCaseDW()
         parameters = dict(onetoalltestcase.parameters)
         parameters["origin_t"] = int(parameters["origin_t"]) + 8
-        parameters["gaugeconfig"]["config"] = int(parameters["gaugeconfig"]["config"]) + 5
-        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=onetoalltestcase.tree)
+        parameters["gaugeconfig"]["config"] = (
+            int(parameters["gaugeconfig"]["config"]) + 5
+        )
+        prop, _ = onetoalltestcase.create_instance(
+            parameters=parameters, tree=onetoalltestcase.tree
+        )
 
         self.assertEqual(OneToAll.objects.all().count(), 2)
 
@@ -230,7 +242,9 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         parameters = dict(onetoalltestcase.parameters)
         parameters["origin_t"] = int(parameters["origin_t"]) + 8
         parameters["sourcesmear"]["step"] = 1000
-        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=onetoalltestcase.tree)
+        prop, _ = onetoalltestcase.create_instance(
+            parameters=parameters, tree=onetoalltestcase.tree
+        )
 
         self.assertEqual(OneToAll.objects.all().count(), 2)
 
@@ -269,7 +283,9 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         parameters = dict(onetoalltestcase.parameters)
         parameters["origin_t"] = int(parameters["origin_t"]) + 8
 
-        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=onetoalltestcase.tree)
+        prop, _ = onetoalltestcase.create_instance(
+            parameters=parameters, tree=onetoalltestcase.tree
+        )
 
         self.assertEqual(OneToAll.objects.all().count(), 2)
 
@@ -281,7 +297,9 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         parameters["fermionaction"]["quark_mass"] = "0.5"
         parameters["fermionaction"]["quark_tag"] = "strange"
 
-        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=onetoalltestcase.tree)
+        prop, _ = onetoalltestcase.create_instance(
+            parameters=parameters, tree=onetoalltestcase.tree
+        )
 
         self.assertEqual(OneToAll.objects.all().count(), 3)
 
@@ -298,7 +316,9 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         parameters = dict(onetoalltestcase.parameters)
         parameters["origin_t"] = int(parameters["origin_t"]) + 8
 
-        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=onetoalltestcase.tree)
+        prop, _ = onetoalltestcase.create_instance(
+            parameters=parameters, tree=onetoalltestcase.tree
+        )
 
         self.assertEqual(OneToAll.objects.all().count(), 2)
 
@@ -308,7 +328,9 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         parameters = dict(onetoalltestcase.parameters)
         parameters["origin_t"] = int(parameters["origin_t"]) + 9
 
-        prop, _ = onetoalltestcase.create_instance(parameters=parameters, tree=onetoalltestcase.tree)
+        prop, _ = onetoalltestcase.create_instance(
+            parameters=parameters, tree=onetoalltestcase.tree
+        )
 
         self.assertEqual(OneToAll.objects.all().count(), 3)
 
@@ -318,8 +340,10 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
             baryoncoherentseq.save()
         print(context.exception.error)
 
+
 from lattedb.propagator.models import FeynmanHellmann
 from lattedb.current.tests import LocalTestCase
+
 
 class FeynmanHellmannTestCase(ObjectParser, TestCase):
     model = FeynmanHellmann
@@ -375,7 +399,9 @@ class FeynmanHellmannTestCase(ObjectParser, TestCase):
         nf211testcasehisq = Nf211TestCaseHisq()
         gaugeconfigparameters = dict(nf211testcasehisq.parameters)
         gaugeconfigparameters["config"] = int(gaugeconfigparameters["config"]) + 5
-        gaugeconfig, _ = nf211testcasehisq.create_instance(parameters=gaugeconfigparameters, tree=nf211testcasehisq.tree)
+        gaugeconfig, _ = nf211testcasehisq.create_instance(
+            parameters=gaugeconfigparameters, tree=nf211testcasehisq.tree
+        )
         fermionaction = self.create_default_object(MobiusDWTestCaseLightWF)
         propagator = self.create_default_object(OneToAllTestCaseDW)
         current = self.create_default_object(LocalTestCase)
@@ -397,7 +423,9 @@ class FeynmanHellmannTestCase(ObjectParser, TestCase):
         fermiontc = HisqTestCaseLightWF
         fermionparameters = dict(fermiontc.parameters)
         fermiontree = fermiontc.tree
-        fermionaction, _ = fermiontc.create_instance(parameters=fermionparameters, tree = fermiontree)
+        fermionaction, _ = fermiontc.create_instance(
+            parameters=fermionparameters, tree=fermiontree
+        )
         propagator = self.create_default_object(OneToAllTestCaseDW)
         current = self.create_default_object(LocalTestCase)
         sinksmear = self.create_default_object(GaugeCovariantGaussianTestCase)
