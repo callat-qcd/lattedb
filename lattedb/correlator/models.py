@@ -389,7 +389,7 @@ class BaryonFH3pt(Correlator):
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to spectator `propagator`",
+        help_text=r"Foreign Key pointing to spectator `propagator` where propagator0.id <= propagator1.id is a constraint",
     )
 
     class Meta:
@@ -416,3 +416,19 @@ class BaryonFH3pt(Correlator):
             raise TypeError("Requires fhpropagator type FeynmanHellmann.")
         if data["propagator0"].id > data["propagator1"].id:
             raise ValueError("Requires propagator0.id <= propagator1.id.")
+        if (
+            data["propagator0"].sourcesmear.id
+            == data["propagator1"].sourcesmear.id
+            == data["fhpropagator"].propagator.sourcesmear.id
+        ):
+            pass
+        else:
+            raise ValidationError("All propagators need to have same source smearing.")
+        if (
+            data["propagator0"].sinksmear.id
+            == data["propagator1"].sinksmear.id
+            == data["fhpropagator"].propagator.sinksmear.id
+        ):
+            pass
+        else:
+            raise ValidationError("All propagators need to have same sink smearing.")

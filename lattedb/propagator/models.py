@@ -161,6 +161,7 @@ class BaryonCoherentSeq(Propagator):
         # need to query for all rows with gaugeconfig.id, fermionaction.id, sinkwave.id, sinksmear.id, sinksep.id
         # set compare prop0 == prop0 and prop1 == prop1
         # if exist violate unique constraint
+
         """Sanity check"""
         if data["propagator0"].count() != data["propagator1"].count():
             raise ValidationError(f"Set length for propagator0 not equal propagator1.")
