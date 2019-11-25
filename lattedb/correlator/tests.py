@@ -149,7 +149,7 @@ class Meson2ptTestCase(ObjectParser, TestCase):
         clsparameters = classobject.parameters
         clstree = classobject.tree
         clsparameters["gaugeconfig"]["config"] = (
-            int(clsparameters["gaugeconfig"]["config"]) + 5
+            int(clsparameters["gaugeconfig"]["config"]) + 10
         )
         prop1, _ = classobject.create_instance(parameters=clsparameters, tree=clstree)
         sourcewave = self.create_default_object(MesonTestCase)
@@ -164,3 +164,59 @@ class Meson2ptTestCase(ObjectParser, TestCase):
         with self.assertRaises(ConsistencyError) as context:
             self.model.objects.create(**parameters)
         print(context.exception.error)
+
+from lattedb.correlator.models import Baryon2pt
+from lattedb.wavefunction.tests import HadronTestCase
+class Baryon2ptTestCase(ObjectParser, TestCase):
+    model = Baryon2pt
+    tree = {
+        "propagator0": "OneToAll",
+        "propagator0.gaugeconfig": "Nf211",
+        "propagator0.gaugeconfig.gaugeaction": "LuescherWeisz",
+        "propagator0.gaugeconfig.light": "Hisq",
+        "propagator0.gaugeconfig.strange": "Hisq",
+        "propagator0.gaugeconfig.charm": "Hisq",
+        "propagator0.gaugeconfig.light.linksmear": "Unsmeared",
+        "propagator0.gaugeconfig.strange.linksmear": "Unsmeared",
+        "propagator0.gaugeconfig.charm.linksmear": "Unsmeared",
+        "propagator0.fermionaction": "MobiusDW",
+        "propagator0.fermionaction.linksmear": "WilsonFlow",
+        "propagator0.sourcesmear": "GaugeCovariantGaussian",
+        "propagator0.sinksmear": "GaugeCovariantGaussian",
+        "propagator1": "OneToAll",
+        "propagator1.gaugeconfig": "Nf211",
+        "propagator1.gaugeconfig.gaugeaction": "LuescherWeisz",
+        "propagator1.gaugeconfig.light": "Hisq",
+        "propagator1.gaugeconfig.strange": "Hisq",
+        "propagator1.gaugeconfig.charm": "Hisq",
+        "propagator1.gaugeconfig.light.linksmear": "Unsmeared",
+        "propagator1.gaugeconfig.strange.linksmear": "Unsmeared",
+        "propagator1.gaugeconfig.charm.linksmear": "Unsmeared",
+        "propagator1.fermionaction": "MobiusDW",
+        "propagator1.fermionaction.linksmear": "WilsonFlow",
+        "propagator1.sourcesmear": "GaugeCovariantGaussian",
+        "propagator1.sinksmear": "GaugeCovariantGaussian",
+        "propagator2": "OneToAll",
+        "propagator2.gaugeconfig": "Nf211",
+        "propagator2.gaugeconfig.gaugeaction": "LuescherWeisz",
+        "propagator2.gaugeconfig.light": "Hisq",
+        "propagator2.gaugeconfig.strange": "Hisq",
+        "propagator2.gaugeconfig.charm": "Hisq",
+        "propagator2.gaugeconfig.light.linksmear": "Unsmeared",
+        "propagator2.gaugeconfig.strange.linksmear": "Unsmeared",
+        "propagator2.gaugeconfig.charm.linksmear": "Unsmeared",
+        "propagator2.fermionaction": "MobiusDW",
+        "propagator2.fermionaction.linksmear": "WilsonFlow",
+        "propagator2.sourcesmear": "GaugeCovariantGaussian",
+        "propagator2.sinksmear": "GaugeCovariantGaussian",
+        "sourcewave": "Hadron",
+        "sinkwave": "Hadron",
+    }
+    parameters = {
+        "propagator0": OneToAllTestCaseDWss.parameters,
+        "propagator1": OneToAllTestCaseDWss.parameters,
+        "propagator2": OneToAllTestCaseDWss.parameters,
+        "sourcewave": HadronTestCase.parameters,
+        "sinkwave": HadronTestCase.parameters,
+    }
+    consistency_check_changes = []

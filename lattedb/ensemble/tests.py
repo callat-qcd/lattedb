@@ -30,9 +30,9 @@ class EnsembleTestCase(TestCase):
         ensemble.configurations.add(gaugeconfig)
         ensemble.save()
 
-        gaugeconfig.config = 1005
-        gaugeconfig.id += 1
-        gaugeconfig.save()
+        params = nf211testcase.parameters
+        params["config"] = 1005
+        nf211testcase.create_instance(parameters = params)
         self.assertEqual(Nf211.objects.all().count(), 2)
 
         ensemble.configurations.add(gaugeconfig)
@@ -52,12 +52,14 @@ class EnsembleTestCase(TestCase):
         ensemble.configurations.add(gaugeconfig)
         ensemble.save()
 
-        gaugeconfig.config = 1005
-        gaugeconfig.stream = "b"
-        gaugeconfig.id += 1
-        gaugeconfig.save()
+        params = nf211testcase.parameters
+        params["config"] = 1005
+        params["stream"] = "b"
+        gaugeconfig, _ = nf211testcase.create_instance(parameters = params)
+
         self.assertEqual(Nf211.objects.all().count(), 2)
 
+        ensemble.configurations.add(gaugeconfig)
         with self.assertRaises(ConsistencyError) as context:
-            ensemble.configurations.add(gaugeconfig)
             ensemble.save()
+        print(context.exception.error)
