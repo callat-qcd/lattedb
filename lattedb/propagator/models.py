@@ -175,7 +175,7 @@ class BaryonCoherentSeq(Propagator):
                     raise TypeError(
                         f"Spectator {idx} fermion action type inconsistent."
                     )
-                if prop.gaugeconfig.id != data['gaugeconfig'].id:
+                if prop.gaugeconfig.id != data["gaugeconfig"].id:
                     raise ValueError(
                         f"Spectator {idx} and daughter have different gauge configs."
                     )
@@ -199,9 +199,8 @@ class BaryonCoherentSeq(Propagator):
                         "Pairwise prop0.id is not <= prop1.id. This ensures a unique baryon in each row."
                     )
             else:
-                raise ValidationError(
-                    "Spectators are not paired at the same origin."
-                )
+                raise ValidationError("Spectators are not paired at the same origin.")
+
 
 class FeynmanHellmann(Propagator):
     """
@@ -258,6 +257,8 @@ class FeynmanHellmann(Propagator):
         if data["propagator"].gaugeconfig.id != data["gaugeconfig"].id:
             raise TypeError("Parent and daughter are on different gauge configs.")
         if data["propagator"].fermionaction.type != data["fermionaction"].type:
-            raise TypeError("Parent and daughter use different types of fermion actions.")
+            raise TypeError(
+                "Parent and daughter use different types of fermion actions."
+            )
         if data["propagator"].sinksmear.type != "Point":
             raise TypeError("Parent propagator is not a Point sink.")
