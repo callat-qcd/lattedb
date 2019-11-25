@@ -91,7 +91,7 @@ class OneToAllTestCaseHisq(ObjectParser, TestCase):
         "fermionaction": "Hisq",
         "fermionaction.linksmear": "Unsmeared",
         "sourcesmear": "GaugeCovariantGaussian",
-        "sinksmear": "Point",
+        "sinksmear": "GaugeCovariantGaussian",
     }
     parameters = {
         "gaugeconfig": Nf211TestCaseHisq.parameters,
@@ -101,7 +101,7 @@ class OneToAllTestCaseHisq(ObjectParser, TestCase):
         "origin_z": "8",
         "origin_t": "6",
         "sourcesmear": GaugeCovariantGaussianTestCase.parameters,
-        "sinksmear": PointTestCase.parameters,
+        "sinksmear": GaugeCovariantGaussianTestCase.parameters,
     }
     consistency_check_changes = [
         {"origin_x": "10000"},
