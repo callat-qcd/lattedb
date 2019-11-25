@@ -48,6 +48,33 @@ class OneToAllTestCaseDW(ObjectParser, TestCase):
         {"origin_t": "10000"},
     ]
 
+class OneToAllTestCaseDWss(ObjectParser, TestCase):
+    model = OneToAll
+    tree = {
+        "gaugeconfig": "Nf211",
+        "gaugeconfig.gaugeaction": "LuescherWeisz",
+        "gaugeconfig.light": "Hisq",
+        "gaugeconfig.strange": "Hisq",
+        "gaugeconfig.charm": "Hisq",
+        "gaugeconfig.light.linksmear": "Unsmeared",
+        "gaugeconfig.strange.linksmear": "Unsmeared",
+        "gaugeconfig.charm.linksmear": "Unsmeared",
+        "fermionaction": "MobiusDW",
+        "fermionaction.linksmear": "WilsonFlow",
+        "sourcesmear": "GaugeCovariantGaussian",
+        "sinksmear": "GaugeCovariantGaussian",
+    }
+    parameters = {
+        "gaugeconfig": Nf211TestCaseHisq.parameters,
+        "fermionaction": MobiusDWTestCaseLightWF.parameters,
+        "origin_x": "2",
+        "origin_y": "10",
+        "origin_z": "8",
+        "origin_t": "6",
+        "sourcesmear": GaugeCovariantGaussianTestCase.parameters,
+        "sinksmear": GaugeCovariantGaussianTestCase.parameters,
+    }
+
 class OneToAllTestCaseHisq(ObjectParser, TestCase):
     model = OneToAll
     tree = {
@@ -330,5 +357,76 @@ class FeynmanHellmannTestCase(ObjectParser, TestCase):
         "current": LocalTestCase.parameters,
         "sinksmear": GaugeCovariantGaussianTestCase.parameters,
     }
-    consistency_check_changes = [
-    ]
+    consistency_check_changes = []
+
+    def create_default_object(self, ClassObject):
+        classobject = ClassObject()
+        parameters = classobject.parameters
+        tree = classobject.tree
+        object, _ = classobject.create_instance(parameters=parameters, tree=tree)
+        return object
+
+    def test_prop_type_consistency(self):
+        """
+        Make unit test when another fundamental prop type exists.
+        """
+
+    def test_gaugeconfig_id_consistency(self):
+        nf211testcasehisq = Nf211TestCaseHisq()
+        gaugeconfigparameters = dict(nf211testcasehisq.parameters)
+        gaugeconfigparameters["config"] = int(gaugeconfigparameters["config"]) + 5
+        gaugeconfig, _ = nf211testcasehisq.create_instance(parameters=gaugeconfigparameters, tree=nf211testcasehisq.tree)
+        fermionaction = self.create_default_object(MobiusDWTestCaseLightWF)
+        propagator = self.create_default_object(OneToAllTestCaseDW)
+        current = self.create_default_object(LocalTestCase)
+        sinksmear = self.create_default_object(GaugeCovariantGaussianTestCase)
+
+        parameters = dict(self.parameters)
+        parameters["gaugeconfig"] = gaugeconfig
+        parameters["fermionaction"] = fermionaction
+        parameters["propagator"] = propagator
+        parameters["current"] = current
+        parameters["sinksmear"] = sinksmear
+
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
+
+    def test_fermionaction_type_consistency(self):
+        gaugeconfig = self.create_default_object(Nf211TestCaseHisq)
+        fermiontc = HisqTestCaseLightWF
+        fermionparameters = dict(fermiontc.parameters)
+        fermiontree = fermiontc.tree
+        fermionaction, _ = fermiontc.create_instance(parameters=fermionparameters, tree = fermiontree)
+        propagator = self.create_default_object(OneToAllTestCaseDW)
+        current = self.create_default_object(LocalTestCase)
+        sinksmear = self.create_default_object(GaugeCovariantGaussianTestCase)
+
+        parameters = dict(self.parameters)
+        parameters["gaugeconfig"] = gaugeconfig
+        parameters["fermionaction"] = fermionaction
+        parameters["propagator"] = propagator
+        parameters["current"] = current
+        parameters["sinksmear"] = sinksmear
+
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
+
+    def test_prop_sinksmear_consistency(self):
+        gaugeconfig = self.create_default_object(Nf211TestCaseHisq)
+        fermionaction = self.create_default_object(MobiusDWTestCaseLightWF)
+        propagator = self.create_default_object(OneToAllTestCaseDWss)
+        current = self.create_default_object(LocalTestCase)
+        sinksmear = self.create_default_object(GaugeCovariantGaussianTestCase)
+
+        parameters = dict(self.parameters)
+        parameters["gaugeconfig"] = gaugeconfig
+        parameters["fermionaction"] = fermionaction
+        parameters["propagator"] = propagator
+        parameters["current"] = current
+        parameters["sinksmear"] = sinksmear
+
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
