@@ -351,3 +351,18 @@ class Baryon2ptTestCase(ObjectParser, TestCase):
         with self.assertRaises(ConsistencyError) as context:
             self.model.objects.create(**parameters)
         print(context.exception.error)
+
+from lattedb.correlator.models import BaryonFH3pt
+
+#class BaryonFH3ptTestCase(ObjectParser, TestCase):
+#    model = BaryonFH3pt
+#    tree = {
+#        "sourcewave": "Hadron",
+#        "sinkwave": "Hadron",
+#        "fhpropagator": "FeynmanHellmann",
+#        "propagator0": "OneToAll",
+#        "propagator1": "OneToAll",
+#    }
+#    parameters = {
+#
+#    }
