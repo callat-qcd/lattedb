@@ -51,7 +51,7 @@ class DWFTuning(Correlator):
     def check_consistency(cls, data: Dict[str, Any]):
         if data["propagator"].type not in ["OneToAll"]:
             raise TypeError("Requires propagator type OneToAll.")
-        if data["propagator"].type.fermionaction.type not in ["MobiusDW"]:
+        if data["propagator"].fermionaction.type not in ["MobiusDW"]:
             raise TypeError("Requires propagator action to be MobiusDW.")
 
 

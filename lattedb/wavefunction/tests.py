@@ -42,7 +42,7 @@ class HadronTestCase(ObjectParser, TestCase):
     model = Hadron
     tree = None
     parameters = {
-        "description": "iddqd",
+        "description": "nucleon positive parity spin up upper spin components",
         "strangeness": "0",
         "irrep": "G1",
         "embedding": "1",
@@ -59,3 +59,22 @@ class HadronTestCase(ObjectParser, TestCase):
         {"spin_z_x2": "-2"},
         {"isospin_z_x2": "-2"},
     ]
+
+class MesonTestCase(ObjectParser, TestCase):
+    """Tests creation of the Unsmeared link smear.
+    """
+
+    model = Hadron
+    tree = None
+    parameters = {
+        "description": "pion ",
+        "strangeness": "0",
+        "irrep": "A1",
+        "embedding": "1",
+        "parity": "-1",
+        "spin_x2": "0",
+        "spin_z_x2": "0",
+        "isospin_x2": "1",
+        "isospin_z_x2": "1",
+        "momentum": "0",
+    }
