@@ -96,12 +96,13 @@ class Meson2pt(Correlator):
 
     @classmethod
     def check_consistency(cls, data: Dict[str, Any]):
-        if data["propagator0"].type not in ["OneToAll"]:
-            raise TypeError("Requires propagator0 type OneToAll.")
-        if data["propagator1"].type not in ["OneToAll"]:
-            raise TypeError("Requires propagator1 type OneToAll.")
+        for idx in [0, 1]:
+            if data[f"propagator{idx}"].type not in ["OneToAll"]:
+                raise TypeError(f"Requires propagator{idx} type OneToAll.")
         if data["propagator0"].id > data["propagator1"].id:
             raise ValueError("Requires propagator0.id <= propagator1.id.")
+        if data["propagator0"].gaugeconfig.id != data["propagator1"].gaugeconfig.id:
+            raise ValidationError("Requires prop0 and prop1 be on same gauge configuration (id constraint).")
 
     def clean(self):
         """Sets tag of the correlator based on propagators, the gaugeconfig and source.
@@ -199,16 +200,17 @@ class Baryon2pt(Correlator):
 
     @classmethod
     def check_consistency(cls, data: Dict[str, Any]):
-        if data["propagator0"].type not in ["OneToAll"]:
-            raise TypeError("Requires propagator0 type OneToAll.")
-        if data["propagator1"].type not in ["OneToAll"]:
-            raise TypeError("Requires propagator1 type OneToAll.")
-        if data["propagator2"].type not in ["OneToAll"]:
-            raise TypeError("Requires propagator2 type OneToAll.")
+        for idx in [0, 1, 2]:
+            if data[f"propagator{idx}"].type not in ["OneToAll"]:
+                raise TypeError(f"Requires propagator{idx} type OneToAll.")
         if data["propagator0"].id > data["propagator1"].id:
             raise ValueError("Requires propagator0.id <= propagator1.id.")
         if data["propagator1"].id > data["propagator2"].id:
             raise ValueError("Requires propagator1.id <= propagator2.id.")
+        if data["propagator0"].gaugeconfig.id != data["propagator1"].gaugeconfig.id:
+            raise ValidationError("Requires prop0 and prop1 be on same gauge configuration (id constraint).")
+        if data["propagator0"].gaugeconfig.id != data["propagator2"].gaugeconfig.id:
+            raise ValidationError("Requires prop0 and prop2 be on same gauge configuration (id constraint).")
 
     def origin(self):
         return "(%d, %d, %d, %d)" % (
