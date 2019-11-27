@@ -286,6 +286,41 @@ class Baryon2ptTestCase(ObjectParser, TestCase):
             self.model.objects.create(**parameters)
         print(context.exception.error)
 
+from lattedb.correlator.models import BaryonSeq3pt
+from lattedb.current.tests import LocalTestCase
+from lattedb.propagator.tests import BaryonCoherentSeqTestCase
+
+class BaryonSeq3ptTestCase(ObjectParser, TestCase):
+    model = BaryonSeq3pt
+    tree = {
+        "sourcewave": "Hadron",
+        "current": "Local",
+        "seqpropagator": "BaryonCoherentSeq",
+        **{f"seqpropagator.{key}": BaryonCoherentSeqTestCase.tree[key] for key in BaryonCoherentSeqTestCase.tree},
+        "propagator": "OneToAll",
+        **{f"propagator.{key}": OneToAllTestCaseDW.tree[key] for key in OneToAllTestCaseDW.tree}
+    }
+    parameters = {
+        "sourcewave": HadronTestCase.parameters,
+        "current": LocalTestCase.parameters,
+        "seqpropagator": BaryonCoherentSeqTestCase.parameters,
+        "propagator": OneToAllTestCaseDW.parameters
+    }
+
+    consistency_check_changes = []
+
+    def test_default_creation(self, parameters=None, tree=None):
+        pass
+
+    def test_inconsistent_creation(self):
+        pass
+
+    def test_baryonseq3pt(self):
+        baryonseq3pt, _ = self.create_instance()
+
+
+        baryoncoherentseq = BaryonCoherentSeqTestCase.create_populated_instance()
+
 
 from lattedb.correlator.models import BaryonFH3pt
 
