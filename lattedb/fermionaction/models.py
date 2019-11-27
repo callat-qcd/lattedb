@@ -41,9 +41,8 @@ class Hisq(FermionAction):
             )
         ]
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["quark_tag"] not in [
+    def check_consistency(self):
+        if self.quark_tag not in [
             "light",
             "up",
             "down",
@@ -101,9 +100,8 @@ class MobiusDW(FermionAction):
         """
         return self.c5 + self.b5
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["quark_tag"] not in [
+    def check_consistency(self):
+        if self.quark_tag not in [
             "light",
             "up",
             "down",

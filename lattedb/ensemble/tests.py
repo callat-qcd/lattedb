@@ -2,7 +2,7 @@
 """
 from django.test import TestCase
 
-from espressodb.base.models import ConsistencyError
+from espressodb.base.exceptions import ConsistencyError
 
 from lattedb.ensemble.models import Ensemble
 from lattedb.gaugeconfig.models import Nf211
@@ -32,11 +32,10 @@ class EnsembleTestCase(TestCase):
 
         params = nf211testcase.parameters
         params["config"] = 1005
-        nf211testcase.create_instance(parameters = params)
+        nf211testcase.create_instance(parameters=params)
         self.assertEqual(Nf211.objects.all().count(), 2)
 
         ensemble.configurations.add(gaugeconfig)
-        ensemble.save()
 
         self.assertIn(gaugeconfig, Nf211.objects.filter(ensemble=ensemble))
 
@@ -50,16 +49,14 @@ class EnsembleTestCase(TestCase):
         self.assertEqual(Nf211.objects.all().count(), 1)
 
         ensemble.configurations.add(gaugeconfig)
-        ensemble.save()
 
         params = nf211testcase.parameters
         params["config"] = 1005
         params["stream"] = "b"
-        gaugeconfig, _ = nf211testcase.create_instance(parameters = params)
+        gaugeconfig, _ = nf211testcase.create_instance(parameters=params)
 
         self.assertEqual(Nf211.objects.all().count(), 2)
 
-        ensemble.configurations.add(gaugeconfig)
         with self.assertRaises(ConsistencyError) as context:
-            ensemble.save()
+            ensemble.configurations.add(gaugeconfig)
         print(context.exception.error)

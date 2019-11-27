@@ -114,13 +114,12 @@ class Nf211(GaugeConfig):
             f"m{int(self.charm.quark_mass*1000):03d}"
         )
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["light"].quark_tag not in ["light"]:
+    def check_consistency(self):
+        if self.light.quark_tag not in ["light"]:
             raise TypeError("Requires light to be quark_tag = light in FermionAction.")
-        if data["strange"].quark_tag not in ["strange"]:
+        if self.strange.quark_tag not in ["strange"]:
             raise TypeError(
                 "Requires strange to be quark_tag = strange in FermionAction."
             )
-        if data["charm"].quark_tag not in ["charm"]:
+        if self.charm.quark_tag not in ["charm"]:
             raise TypeError("Requires charm to be quark_tag = charm in FermionAction.")

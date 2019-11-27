@@ -79,15 +79,14 @@ class OneToAll(Propagator):
             )
         ]
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["origin_x"] >= data["gaugeconfig"].nx:
+    def check_consistency(self):
+        if self.origin_x >= self.gaugeconfig.nx:
             raise ValueError("Origin outside of lattice.")
-        if data["origin_y"] >= data["gaugeconfig"].ny:
+        if self.origin_y >= self.gaugeconfig.ny:
             raise ValueError("Origin outside of lattice.")
-        if data["origin_z"] >= data["gaugeconfig"].nz:
+        if self.origin_z >= self.gaugeconfig.nz:
             raise ValueError("Origin outside of lattice.")
-        if data["origin_t"] >= data["gaugeconfig"].nt:
+        if self.origin_t >= self.gaugeconfig.nt:
             raise ValueError("Origin outside of lattice.")
 
 
@@ -146,8 +145,7 @@ class BaryonCoherentSeq(Propagator):
             )
         ]
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
+    def check_consistency(self):
         """Checks if all propagators in a coherent source have:
         prop0 and prop1 have same length
         same prop type (OneToAll)
@@ -163,10 +161,10 @@ class BaryonCoherentSeq(Propagator):
         # if exist violate unique constraint
 
         """Sanity check"""
-        if data["propagator0"].count() != data["propagator1"].count():
+        if self.propagator0.count() != self.propagator1.count():
             raise ValidationError(f"Set length for propagator0 not equal propagator1.")
         """Global consistency checks"""
-        first = data["propagator0"].first()
+        first = self.propagator0.first()
         for idx in [0, 1]:
             for prop in data[f"propagator{idx}"].all():
                 if prop.type not in ["OneToAll"]:
@@ -175,7 +173,7 @@ class BaryonCoherentSeq(Propagator):
                     raise TypeError(
                         f"Spectator {idx} fermion action type inconsistent."
                     )
-                if prop.gaugeconfig.id != data["gaugeconfig"].id:
+                if prop.gaugeconfig.id != self.gaugeconfig.id:
                     raise ValueError(
                         f"Spectator {idx} and daughter have different gauge configs."
                     )
@@ -186,11 +184,11 @@ class BaryonCoherentSeq(Propagator):
         """Pairwise consistency checks"""
         origin_id_0 = {
             (prop.origin_x, prop.origin_y, prop.origin_z, prop.origin_t): prop.id
-            for prop in data["propagator0"].all()
+            for prop in self.propagator0.all()
         }
         origin_id_1 = {
             (prop.origin_x, prop.origin_y, prop.origin_z, prop.origin_t): prop.id
-            for prop in data["propagator1"].all()
+            for prop in self.propagator1.all()
         }
         for origin in origin_id_0:
             if origin in list(origin_id_1.keys()):
@@ -250,15 +248,14 @@ class FeynmanHellmann(Propagator):
             )
         ]
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["propagator"].type not in ["OneToAll"]:
+    def check_consistency(self):
+        if self.propagator.type not in ["OneToAll"]:
             raise TypeError("Requires propagator type OneToAll.")
-        if data["propagator"].gaugeconfig.id != data["gaugeconfig"].id:
+        if self.propagator.gaugeconfig.id != self.gaugeconfig.id:
             raise TypeError("Parent and daughter are on different gauge configs.")
-        if data["propagator"].fermionaction.type != data["fermionaction"].type:
+        if self.propagator.fermionaction.type != self.fermionaction.type:
             raise TypeError(
                 "Parent and daughter use different types of fermion actions."
             )
-        if data["propagator"].sinksmear.type != "Point":
+        if self.propagator.sinksmear.type != "Point":
             raise TypeError("Parent propagator is not a Point sink.")

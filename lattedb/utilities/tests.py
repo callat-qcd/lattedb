@@ -7,7 +7,8 @@ from abc import ABC
 
 from logging import getLogger
 
-from espressodb.base.models import Base, ConsistencyError
+from espressodb.base.models import Base
+from espressodb.base.exceptions import ConsistencyError
 
 LOGGER = getLogger("espressodb")
 

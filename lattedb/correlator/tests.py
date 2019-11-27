@@ -1,7 +1,7 @@
 """Unittests for the correlator module
 """
 from django.test import TestCase
-from espressodb.base.models import ConsistencyError
+from espressodb.base.exceptions import ConsistencyError
 
 from lattedb.utilities.tests import ObjectParser
 
@@ -352,9 +352,10 @@ class Baryon2ptTestCase(ObjectParser, TestCase):
             self.model.objects.create(**parameters)
         print(context.exception.error)
 
+
 from lattedb.correlator.models import BaryonFH3pt
 
-#class BaryonFH3ptTestCase(ObjectParser, TestCase):
+# class BaryonFH3ptTestCase(ObjectParser, TestCase):
 #    model = BaryonFH3pt
 #    tree = {
 #        "sourcewave": "Hadron",
