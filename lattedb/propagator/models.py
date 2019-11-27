@@ -3,6 +3,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 from espressodb.base.models import Base
+from espressodb.base.exceptions import ConsistencyError
 
 
 class Propagator(Base):
@@ -145,7 +146,7 @@ class BaryonCoherentSeq(Propagator):
             )
         ]
 
-    def check_consistency(self):
+    def check_m2m_consistency(self, propagators, column=None):
         """Checks if all propagators in a coherent source have:
         prop0 and prop1 have same length
         same prop type (OneToAll)
@@ -155,49 +156,78 @@ class BaryonCoherentSeq(Propagator):
         pairwise same origin
         all prop0 and prop1 have same source and sink smearing
         """
-        """Unique constraint"""
-        # need to query for all rows with gaugeconfig.id, fermionaction.id, sinkwave.id, sinksmear.id, sinksep.id
+        ### Unique constraint
+        # need to query for all rows with gaugeconfig.id, fermionaction.id,
+        #  sinkwave.id, sinksmear.id, sinksep.id
         # set compare prop0 == prop0 and prop1 == prop1
         # if exist violate unique constraint
 
-        """Sanity check"""
-        if self.propagator0.count() != self.propagator1.count():
-            raise ValidationError(f"Set length for propagator0 not equal propagator1.")
-        """Global consistency checks"""
-        first = self.propagator0.first()
-        for idx in [0, 1]:
-            for prop in data[f"propagator{idx}"].all():
-                if prop.type not in ["OneToAll"]:
-                    raise TypeError(f"Spectator {idx} is not a OneToAll propagator.")
-                if prop.fermionaction.type != first.fermionaction.type:
-                    raise TypeError(
-                        f"Spectator {idx} fermion action type inconsistent."
-                    )
-                if prop.gaugeconfig.id != self.gaugeconfig.id:
-                    raise ValueError(
-                        f"Spectator {idx} and daughter have different gauge configs."
-                    )
-                if prop.sourcesmear.id != first.sourcesmear.id:
-                    raise TypeError(f"Spectator {idx} source smearing id inconsistent.")
-                if prop.sinksmear.id != first.sinksmear.id:
-                    raise TypeError(f"Spectator {idx} sink smearing id inconsistent.")
-        """Pairwise consistency checks"""
-        origin_id_0 = {
-            (prop.origin_x, prop.origin_y, prop.origin_z, prop.origin_t): prop.id
-            for prop in self.propagator0.all()
-        }
-        origin_id_1 = {
-            (prop.origin_x, prop.origin_y, prop.origin_z, prop.origin_t): prop.id
-            for prop in self.propagator1.all()
-        }
-        for origin in origin_id_0:
-            if origin in list(origin_id_1.keys()):
-                if origin_id_0[origin] > origin_id_1[origin]:
+        ### Global consistency checks
+        first = (
+            self.propagator0.first()
+            if column == "propagator0"
+            else self.propagator1.first()
+        )
+        first = first or propagators.first()
+        for prop in propagators.all():
+            if prop.type not in ["OneToAll"]:
+                raise TypeError(f"Spectator {column} is not a OneToAll propagator.")
+            if prop.fermionaction.type != first.fermionaction.type:
+                raise TypeError(f"Spectator {column} fermion action type inconsistent.")
+            if prop.gaugeconfig.id != self.gaugeconfig.id:
+                raise ValueError(
+                    f"Spectator {column} and daughter have different gauge configs."
+                )
+            if prop.sourcesmear.id != first.sourcesmear.id:
+                raise TypeError(f"Spectator {column}  source smearing id inconsistent.")
+            if prop.sinksmear.id != first.sinksmear.id:
+                raise TypeError(f"Spectator {column}  sink smearing id inconsistent.")
+
+    def check_all_consistencies(self, props0, props1):
+        """Checks if all propagators in a coherent source have:
+        prop0 and prop1 have same length
+        same prop type (OneToAll)
+        same fermion action type (can differ in mass)
+        same gauge configuration id
+        pairwise prop0.id <= prop1.id
+        pairwise same origin
+        all prop0 and prop1 have same source and sink smearing
+        """
+        try:
+            self.check_consistency()
+            self.check_m2m_consistency(props0, "propagator0")
+            self.check_m2m_consistency(props1, "propagator1")
+
+            ### Sanity check
+            if props0.count() != props1.count():
+                raise ValidationError(
+                    f"Set length for propagator0 not equal propagator1."
+                )
+
+            ### Pairwise consistency checks
+            origin_id_0 = {
+                (prop.origin_x, prop.origin_y, prop.origin_z, prop.origin_t): prop.id
+                for prop in props0.all()
+            }
+            origin_id_1 = {
+                (prop.origin_x, prop.origin_y, prop.origin_z, prop.origin_t): prop.id
+                for prop in props1.all()
+            }
+            for origin in origin_id_0:
+                if origin in list(origin_id_1.keys()):
+                    if origin_id_0[origin] > origin_id_1[origin]:
+                        raise ValidationError(
+                            "Pairwise prop0.id is not <= prop1.id."
+                            " This ensures a unique baryon in each row."
+                        )
+                else:
                     raise ValidationError(
-                        "Pairwise prop0.id is not <= prop1.id. This ensures a unique baryon in each row."
+                        "Spectators are not paired at the same origin."
                     )
-            else:
-                raise ValidationError("Spectators are not paired at the same origin.")
+        except Exception as error:
+            raise ConsistencyError(
+                error, self, data={"propagators0": props0, "propagators1": props1}
+            )
 
 
 class FeynmanHellmann(Propagator):

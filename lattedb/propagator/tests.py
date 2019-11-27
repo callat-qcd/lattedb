@@ -152,7 +152,6 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         prop, _ = onetoalltestcase.create_instance()
         baryoncoherentseq.propagator0.add(prop)
         baryoncoherentseq.propagator1.add(prop)
-        baryoncoherentseq.save()
 
         # prep next prop
         return baryoncoherentseq
@@ -171,9 +170,9 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
 
         self.assertEqual(OneToAll.objects.all().count(), 2)
 
-        baryoncoherentseq.propagator0.add(prop)
-        baryoncoherentseq.propagator1.add(prop)
-        baryoncoherentseq.save()
+        props1 = OneToAll.objects.filter(pk=prop.pk)
+        props0 = props1.all()
+        baryoncoherentseq.check_all_consistencies(props0, props1)
 
     def test_prop_length_consistency(self):
         """Tests creation of many to many field which should fail
@@ -189,9 +188,10 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
 
         self.assertEqual(OneToAll.objects.all().count(), 2)
 
-        baryoncoherentseq.propagator0.add(prop)
+        props1 = OneToAll.objects.filter(pk=prop.pk)
+        props0 = OneToAll.objects.none()
         with self.assertRaises(ConsistencyError) as context:
-            baryoncoherentseq.save()
+            baryoncoherentseq.check_all_consistencies(props0, props1)
         print(context.exception.error)
 
     def test_prop_type_consistency(self):
@@ -206,10 +206,10 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         onetoalltestcasehisq = OneToAllTestCaseHisq()
         prop, _ = onetoalltestcasehisq.create_instance()
 
-        baryoncoherentseq.propagator0.add(prop)
-        baryoncoherentseq.propagator1.add(prop)
+        props1 = OneToAll.objects.filter(pk=prop.pk)
+        props0 = props1.all()
         with self.assertRaises(ConsistencyError) as context:
-            baryoncoherentseq.save()
+            baryoncoherentseq.check_all_consistencies(props0, props1)
         print(context.exception.error)
 
     def test_prop_config_id_consistency(self):
@@ -227,11 +227,10 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
 
         self.assertEqual(OneToAll.objects.all().count(), 2)
 
-        baryoncoherentseq.propagator0.add(prop)
-        baryoncoherentseq.propagator1.add(prop)
-
+        props1 = OneToAll.objects.filter(pk=prop.pk)
+        props0 = props1.all()
         with self.assertRaises(ConsistencyError) as context:
-            baryoncoherentseq.save()
+            baryoncoherentseq.check_all_consistencies(props0, props1)
         print(context.exception.error)
 
     def test_prop_sourcesmear_consistency(self):
@@ -247,11 +246,10 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
 
         self.assertEqual(OneToAll.objects.all().count(), 2)
 
-        baryoncoherentseq.propagator0.add(prop)
-        baryoncoherentseq.propagator1.add(prop)
-
+        props1 = OneToAll.objects.filter(pk=prop.pk)
+        props0 = props1.all()
         with self.assertRaises(ConsistencyError) as context:
-            baryoncoherentseq.save()
+            baryoncoherentseq.check_all_consistencies(props0, props1)
         print(context.exception.error)
 
     def test_prop_sinksmear_consistency(self):
@@ -268,11 +266,10 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
 
         self.assertEqual(OneToAll.objects.all().count(), 2)
 
-        baryoncoherentseq.propagator0.add(prop)
-        baryoncoherentseq.propagator1.add(prop)
-
+        props1 = OneToAll.objects.filter(pk=prop.pk)
+        props0 = props1.all()
         with self.assertRaises(ConsistencyError) as context:
-            baryoncoherentseq.save()
+            baryoncoherentseq.check_all_consistencies(props0, props1)
         print(context.exception.error)
 
     def test_prop_id_sequence_consistency(self):
@@ -302,10 +299,10 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
 
         self.assertEqual(OneToAll.objects.all().count(), 3)
 
-        baryoncoherentseq.propagator0.add(prop)
-
+        props1 = OneToAll.objects.none()
+        props0 = OneToAll.objects.filter(pk=prop.pk)
         with self.assertRaises(ConsistencyError) as context:
-            baryoncoherentseq.save()
+            baryoncoherentseq.check_all_consistencies(props0, props1)
         print(context.exception.error)
 
     def test_prop_origin_consistency(self):
@@ -333,10 +330,10 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
 
         self.assertEqual(OneToAll.objects.all().count(), 3)
 
-        baryoncoherentseq.propagator1.add(prop)
-
+        props1 = OneToAll.objects.filter(pk=prop.pk)
+        props0 = OneToAll.objects.none()
         with self.assertRaises(ConsistencyError) as context:
-            baryoncoherentseq.save()
+            baryoncoherentseq.check_all_consistencies(props0, props1)
         print(context.exception.error)
 
 
