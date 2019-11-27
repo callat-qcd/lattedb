@@ -60,15 +60,15 @@ class OneToAllStatus(Base):
 
             stats = os.stat(file_location)
 
-            data["file_size"] = int(stats.st_size)
-            data["mtime"] = (
+            self.file_size = int(stats.st_size)
+            self.mtime = (
                 datetime.datetime.fromtimestamp(stats.st_mtime)
                 .replace(tzinfo=local)
                 .astimezone(utc)
             )
         else:
-            data["file_size"] = None
-            data["mtime"] = None
+            self.file_size = None
+            self.mtime = None
 
         return data
 

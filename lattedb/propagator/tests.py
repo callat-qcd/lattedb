@@ -3,7 +3,7 @@ Unittests for the propagator module
 """
 
 from django.test import TestCase
-from espressodb.base.models import ConsistencyError
+from espressodb.base.exceptions import ConsistencyError
 
 from lattedb.utilities.tests import ObjectParser
 
@@ -119,18 +119,17 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
     model = BaryonCoherentSeq
     tree = {
         "gaugeconfig": "Nf211",
-        "gaugeconfig.gaugeaction": "LuescherWeisz",
-        "gaugeconfig.light": "Hisq",
-        "gaugeconfig.strange": "Hisq",
-        "gaugeconfig.charm": "Hisq",
-        "gaugeconfig.light.linksmear": "Unsmeared",
-        "gaugeconfig.strange.linksmear": "Unsmeared",
-        "gaugeconfig.charm.linksmear": "Unsmeared",
+        **{f"gaugeconfig.{key}": val for key, val in Nf211TestCaseHisq.tree.items()},
         "fermionaction": "MobiusDW",
         "fermionaction.linksmear": "WilsonFlow",
         "sinkwave": "Hadron",
         "sinksmear": "Point",
+        "propagator0": "OneToAll",
+        "propagator0.gaugeconfig": "Hisq",
     }
+    # m2m_tree = {
+    # "propagator0": [{"OneToAll":
+    # {"gaugeconfig": "Hisq", "fermionaction":"Domainwall", "ÖneToAll"}}]    }
     parameters = {
         "gaugeconfig": Nf211TestCaseHisq.parameters,
         "fermionaction": MobiusDWTestCaseLightWF.parameters,

@@ -47,11 +47,10 @@ class DWFTuning(Correlator):
         if self.tag is None:
             self.tag = "pseudo_pseudo" if self.sink5 else "midpoint_pseudo"
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["propagator"].type not in ["OneToAll"]:
+    def check_consistency(self):
+        if self.propagator.type not in ["OneToAll"]:
             raise TypeError("Requires propagator type OneToAll.")
-        if data["propagator"].fermionaction.type not in ["MobiusDW"]:
+        if self.propagator.fermionaction.type not in ["MobiusDW"]:
             raise TypeError("Requires propagator action to be MobiusDW.")
 
 
@@ -94,22 +93,21 @@ class Meson2pt(Correlator):
             )
         ]
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
+    def check_consistency(self):
         for idx in [0, 1]:
-            if data[f"propagator{idx}"].type not in ["OneToAll"]:
+            if getattr(self, f"propagator{idx}").type not in ["OneToAll"]:
                 raise TypeError(f"Requires propagator{idx} type OneToAll.")
-        if data["propagator0"].id > data["propagator1"].id:
+        if self.propagator0.id > self.propagator1.id:
             raise ValueError("Requires propagator0.id <= propagator1.id.")
-        if data["propagator0"].gaugeconfig.id != data["propagator1"].gaugeconfig.id:
+        if self.propagator0.gaugeconfig.id != self.propagator1.gaugeconfig.id:
             raise ValidationError(
                 "Requires prop0 and prop1 be on same gauge configuration (id constraint)."
             )
-        if data["propagator0"].sourcesmear.id != data["propagator1"].sourcesmear.id:
+        if self.propagator0.sourcesmear.id != self.propagator1.sourcesmear.id:
             raise ValidationError(
                 "All propagators required to have same source smearing."
             )
-        if data["propagator0"].sinksmear.id != data["propagator1"].sinksmear.id:
+        if self.propagator0.sinksmear.id != self.propagator1.sinksmear.id:
             raise ValidationError(
                 "All propagators required to have same sink smearing."
             )
@@ -208,21 +206,20 @@ class Baryon2pt(Correlator):
             )
         ]
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
+    def check_consistency(self):
         for idx in [0, 1, 2]:
-            if data[f"propagator{idx}"].type not in ["OneToAll"]:
+            if getattr(self, f"propagator{idx}").type not in ["OneToAll"]:
                 raise TypeError(f"Requires propagator{idx} type OneToAll.")
-        if data["propagator0"].id <= data["propagator1"].id <= data["propagator2"].id:
+        if self.propagator0.id <= self.propagator1.id <= self.propagator2.id:
             pass
         else:
             raise ValueError(
                 "Requires propagator0.id <= propagator1.id <= propagator2.id."
             )
         if (
-            data["propagator0"].gaugeconfig.id
-            == data["propagator1"].gaugeconfig.id
-            == data["propagator2"].gaugeconfig.id
+            self.propagator0.gaugeconfig.id
+            == self.propagator1.gaugeconfig.id
+            == self.propagator2.gaugeconfig.id
         ):
             pass
         else:
@@ -230,9 +227,9 @@ class Baryon2pt(Correlator):
                 "Requires prop0, prop1, and prop2 be on same gauge configuration (id constraint)."
             )
         if (
-            data["propagator0"].sourcesmear.id
-            == data["propagator1"].sourcesmear.id
-            == data["propagator2"].sourcesmear.id
+            self.propagator0.sourcesmear.id
+            == self.propagator1.sourcesmear.id
+            == self.propagator2.sourcesmear.id
         ):
             pass
         else:
@@ -240,9 +237,9 @@ class Baryon2pt(Correlator):
                 "All propagators required to have same source smearing."
             )
         if (
-            data["propagator0"].sinksmear.id
-            == data["propagator1"].sinksmear.id
-            == data["propagator2"].sinksmear.id
+            self.propagator0.sinksmear.id
+            == self.propagator1.sinksmear.id
+            == self.propagator2.sinksmear.id
         ):
             pass
         else:
@@ -347,11 +344,10 @@ class BaryonSeq3pt(Correlator):
             )
         ]
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["propagator"].type not in ["OneToAll"]:
+    def check_consistency(self):
+        if self.propagator.type not in ["OneToAll"]:
             raise TypeError(r"Requires propagator type OneToAll.")
-        if data["seqpropagator"].type not in ["BaryonCoherentSeq"]:
+        if self.seqpropagator.type not in ["BaryonCoherentSeq"]:
             raise TypeError(r"Requires seqpropagator type BaryonCoherentSeq.")
 
 
@@ -406,28 +402,27 @@ class BaryonFH3pt(Correlator):
             )
         ]
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["propagator0"].type not in ["OneToAll"]:
+    def check_consistency(self):
+        if self.propagator0.type not in ["OneToAll"]:
             raise TypeError("Requires propagator0 type OneToAll.")
-        if data["propagator1"].type not in ["OneToAll"]:
+        if self.propagator1.type not in ["OneToAll"]:
             raise TypeError("Requires propagator1 type OneToAll.")
-        if data["fhpropagator"].type not in ["FeynmanHellmann"]:
+        if self.fhpropagator.type not in ["FeynmanHellmann"]:
             raise TypeError("Requires fhpropagator type FeynmanHellmann.")
-        if data["propagator0"].id > data["propagator1"].id:
+        if self.propagator0.id > self.propagator1.id:
             raise ValueError("Requires propagator0.id <= propagator1.id.")
         if (
-            data["propagator0"].sourcesmear.id
-            == data["propagator1"].sourcesmear.id
-            == data["fhpropagator"].propagator.sourcesmear.id
+            self.propagator0.sourcesmear.id
+            == self.propagator1.sourcesmear.id
+            == self.fhpropagator.propagator.sourcesmear.id
         ):
             pass
         else:
             raise ValidationError("All propagators need to have same source smearing.")
         if (
-            data["propagator0"].sinksmear.id
-            == data["propagator1"].sinksmear.id
-            == data["fhpropagator"].propagator.sinksmear.id
+            self.propagator0.sinksmear.id
+            == self.propagator1.sinksmear.id
+            == self.fhpropagator.propagator.sinksmear.id
         ):
             pass
         else:

@@ -27,7 +27,7 @@ class SourceAvg2pt(Data):
     #    first = self.configurations.first()  # pylint: disable=E1101
     #    return first.specialization.long_tag if first else None
 
-    def check_consistency(self, data: Dict[str, Any]):
+    def check_consistency(self):
         """Checks if all correlators in same set have the same meta info. except spin, parity
         """
 
@@ -75,7 +75,7 @@ class SourceAvgSeq3pt(Data):
     #    first = self.configurations.first()  # pylint: disable=E1101
     #    return first.specialization.long_tag if first else None
 
-    def check_consistency(self, data: Dict[str, Any]):
+    def check_consistency(self):
         """Checks if all correlators in same set have the same meta info. except spin, parity
         """
 
@@ -125,7 +125,7 @@ class SourceAvgFH3pt(Data):
     #    first = self.configurations.first()  # pylint: disable=E1101
     #    return first.specialization.long_tag if first else None
 
-    def check_consistency(self, data: Dict[str, Any]):
+    def check_consistency(self):
         """Checks if all correlators in same set have the same meta info. except spin, parity
         """
 
