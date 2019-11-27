@@ -148,13 +148,10 @@ class BaryonCoherentSeq(Propagator):
 
     def check_m2m_consistency(self, propagators, column=None):
         """Checks if all propagators in a coherent source have:
-        prop0 and prop1 have same length
         same prop type (OneToAll)
-        same fermion action type (can differ in mass)
+        same fermion action type in group (can differ in mass)
         same gauge configuration id
-        pairwise prop0.id <= prop1.id
-        pairwise same origin
-        all prop0 and prop1 have same source and sink smearing
+        all prop have same source and sink smearing
         """
         ### Unique constraint
         # need to query for all rows with gaugeconfig.id, fermionaction.id,
@@ -163,12 +160,8 @@ class BaryonCoherentSeq(Propagator):
         # if exist violate unique constraint
 
         ### Global consistency checks
-        first = (
-            self.propagator0.first()
-            if column == "propagator0"
-            else self.propagator1.first()
-        )
-        first = first or propagators.first()
+        first = self.propagator0.first()
+
         for prop in propagators.all():
             if prop.type not in ["OneToAll"]:
                 raise TypeError(f"Spectator {column} is not a OneToAll propagator.")
@@ -224,6 +217,21 @@ class BaryonCoherentSeq(Propagator):
                     raise ValidationError(
                         "Spectators are not paired at the same origin."
                     )
+
+            ### Unique constraint
+            entries = BaryonCoherentSeq.objects.filter(
+                gaugeconfig=self.gaugeconfig,
+                fermionaction=self.fermionaction,
+                sinkwave=self.sinkwave,
+                sinksmear=self.sinksmear,
+                sinksep=self.sinksep,
+            )
+            for entry in entries:
+                if entry["propagator0"] == self.propagator0 and entry["propagtor1"] == self.propagator1:
+                    raise ValidationError(
+                        "Unique Constraint Violation. Entry already exists in BaryonCoherentSeq."
+                    )
+
         except Exception as error:
             raise ConsistencyError(
                 error, self, data={"propagators0": props0, "propagators1": props1}
@@ -285,7 +293,11 @@ class FeynmanHellmann(Propagator):
             raise TypeError("Parent and daughter are on different gauge configs.")
         if self.propagator.fermionaction.type != self.fermionaction.type:
             raise TypeError(
-                "Parent and daughter use different types of fermion actions."
+                """
+                Parent and daughter use different types of fermion actions.
+                Remove constraint in propagator.models.FeynmanHellmann
+                and unittest in propagator.tests if mixed action is needed.
+                """
             )
         if self.propagator.sinksmear.type != "Point":
             raise TypeError("Parent propagator is not a Point sink.")
