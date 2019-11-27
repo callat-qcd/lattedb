@@ -1,7 +1,9 @@
-from typing import Dict, Any
 from django.db import models
 
 from espressodb.base.models import Base
+
+from lattedb.gaugeaction.models import GaugeAction
+from lattedb.fermionaction.models import FermionAction
 
 
 class GaugeConfig(Base):
@@ -45,7 +47,7 @@ class Nf211(GaugeConfig):
         help_text="Configuration number (usually MC trajectory number)"
     )
     gaugeaction = models.ForeignKey(
-        "gaugeaction.GaugeAction",
+        GaugeAction,
         on_delete=models.CASCADE,
         related_name="+",
         help_text=r"Foreign Key pointing to lattice `gaugeaction`",
@@ -63,19 +65,19 @@ class Nf211(GaugeConfig):
         null=False, help_text="Temporal length in lattice units"
     )
     light = models.ForeignKey(
-        "fermionaction.FermionAction",
+        FermionAction,
         on_delete=models.CASCADE,
         related_name="+",
         help_text=r"Foreign Key pointing to lattice `fermionaction`",
     )
     strange = models.ForeignKey(
-        "fermionaction.FermionAction",
+        FermionAction,
         on_delete=models.CASCADE,
         related_name="+",
         help_text=r"Foreign Key pointing to lattice `fermionaction`",
     )
     charm = models.ForeignKey(
-        "fermionaction.FermionAction",
+        FermionAction,
         on_delete=models.CASCADE,
         related_name="+",
         help_text=r"Foreign Key pointing to lattice `fermionaction`",
