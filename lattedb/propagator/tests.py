@@ -146,34 +146,37 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
     def test_inconsistent_creation(self):
         pass
 
-    def first_pair(self):
+    @classmethod
+    def first_pair(cls):
         onetoalltestcase = OneToAllTestCaseDW()
         prop, _ = onetoalltestcase.create_instance()
         return prop
-
-    def test_many_to_many(self):
-        """Tests creation of many to many field and unique constraint
+    @classmethod
+    def create_populated_instance(cls):
         """
-        baryoncoherentseq, _ = self.create_instance()
-
-        prop0 = self.first_pair()
-
+        """
+        baryoncoherentseq, _ = cls.create_instance()
+        prop0 = cls.first_pair()
         onetoalltestcase = OneToAllTestCaseDW()
         onetoallparameters = dict(onetoalltestcase.parameters)
         onetoallparameters["origin_t"] = int(onetoallparameters["origin_t"]) + 8
         prop1, _ = onetoalltestcase.create_instance(
             parameters=onetoallparameters, tree=onetoalltestcase.tree
         )
-
-        self.assertEqual(OneToAll.objects.all().count(), 2)
-
         props1 = OneToAll.objects.filter(Q(pk=prop0.pk) | Q(pk=prop1.pk))
         props0 = props1.all()
-
         baryoncoherentseq.check_all_consistencies(props0, props1)
         baryoncoherentseq.propagator0.add(*props0)
         baryoncoherentseq.propagator1.add(*props1)
-        print("TEST CONSTRAINT")
+        return baryoncoherentseq
+
+    def test_many_to_many(self):
+        """Tests creation of many to many field and unique constraint
+        """
+        baryoncoherentseq = self.create_populated_instance()
+        props0 = baryoncoherentseq.propagator0.all()
+        props1 = baryoncoherentseq.propagator1.all()
+
         # check unique constraint
         with self.assertRaises(ConsistencyError) as context:
             baryoncoherentseq.check_all_consistencies(props0, props1)
@@ -350,7 +353,6 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         with self.assertRaises(ConsistencyError) as context:
             baryoncoherentseq.check_all_consistencies(props0, props1)
         print(context.exception.error)
-
 
 from lattedb.propagator.models import FeynmanHellmann
 from lattedb.current.tests import LocalTestCase

@@ -349,6 +349,21 @@ class BaryonSeq3pt(Correlator):
             raise TypeError(r"Requires propagator type OneToAll.")
         if self.seqpropagator.type not in ["BaryonCoherentSeq"]:
             raise TypeError(r"Requires seqpropagator type BaryonCoherentSeq.")
+        # Check same origin between propagator and seqpropagator.
+        # seqprop already has prop0 & prop1 origin checks.
+        # So checking only prop0 in seqprop is sufficient.
+        origin_list = self.seqpropagator.propagator0.values_list(
+            *[f"onetoall__origin_{oi}" for oi in ["x", "y", "z", "t"]]
+        )
+        prop_origin = tuple(getattr(f"origin_{oi}", propagator) for oi in ["x", "y", "z", "t"])
+        print("ORIGIN_LIST:", origin_list)
+        print(prop_origin)
+        if prop_origin in origin_list:
+            pass
+        else:
+            raise ValidationError(
+                "Parent does not have same origin as spectators."
+            )
 
 
 class BaryonFH3pt(Correlator):
