@@ -132,20 +132,6 @@ class BaryonCoherentSeq(Propagator):
     )
     sinksep = models.SmallIntegerField(help_text="Source-sink separation time")
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=[
-                    "gaugeconfig",
-                    "fermionaction",
-                    "sinkwave",
-                    "sinksmear",
-                    "sinksep",
-                ],
-                name="unique_propagator_baryoncoherentseq",
-            )
-        ]
-
     def check_m2m_consistency(self, propagators, column=None):
         """Checks if all propagators in a coherent source have:
         same prop type (OneToAll)
