@@ -380,16 +380,98 @@ class BaryonSeq3ptTestCase(ObjectParser, TestCase):
         print(context.exception.error)
 
 from lattedb.correlator.models import BaryonFH3pt
+from lattedb.propagator.tests import FeynmanHellmannTestCase
 
-# class BaryonFH3ptTestCase(ObjectParser, TestCase):
-#    model = BaryonFH3pt
-#    tree = {
-#        "sourcewave": "Hadron",
-#        "sinkwave": "Hadron",
-#        "fhpropagator": "FeynmanHellmann",
-#        "propagator0": "OneToAll",
-#        "propagator1": "OneToAll",
-#    }
-#    parameters = {
-#
-#    }
+class BaryonFH3ptTestCase(ObjectParser, TestCase):
+    model = BaryonFH3pt
+    tree = {
+        "sourcewave": "Hadron",
+        "sinkwave": "Hadron",
+        "fhpropagator": "FeynmanHellmann",
+        **{f"fhpropagator.{key}": FeynmanHellmannTestCase.tree[key] for key in FeynmanHellmannTestCase.tree},
+        "propagator0": "OneToAll",
+        **{f"propagator0.{key}": OneToAllTestCaseDW.tree[key] for key in OneToAllTestCaseDW.tree},
+        "propagator1": "OneToAll",
+        **{f"propagator1.{key}": OneToAllTestCaseDW.tree[key] for key in OneToAllTestCaseDW.tree},
+    }
+    parameters = {
+        "sourcewave": HadronTestCase.parameters,
+        "sinkwave": HadronTestCase.parameters,
+        "fhpropagator": FeynmanHellmannTestCase.parameters,
+        "propagator0": OneToAllTestCaseDW.parameters,
+        "propagator1": OneToAllTestCaseDW.parameters
+    }
+    consistency_check_changes = []
+
+    def create_default_object(self, ClassObject):
+        classobject = ClassObject()
+        parameters = classobject.parameters
+        tree = classobject.tree
+        object, _ = classobject.create_instance(parameters=parameters, tree=tree)
+        return object
+
+    def check_propagator_id_order_consistency(self):
+        sourcewave = self.create_default_object(HadronTestCase)
+        sinkwave = self.create_default_object(HadronTestCase)
+        fhpropagator = self.create_default_object(FeynmanHellmannTestCase)
+        propagator1 = self.create_default_object(OneToAllTestCaseDW)
+        onetoalltestcase = OneToAllTestCaseDW()
+        onetoallparameters = dict(onetoalltestcase.parameters)
+        onetoallparameters["fermionaction"]["quark_mass"] = 0.2
+        onetoallparameters["fermionaction"]["quark_tag"] = "strange"
+        propagator0, _ = onetoalltestcase.create_instance(
+            parameters=onetoallparameters, tree=onetoalltestcase.tree
+        )
+        parameters = dict()
+        parameters["sourcewave"] = sourcewave
+        parameters["sinkwave"] = sinkwave
+        parameters["fhpropagator"] = fhpropagator
+        parameters["propagator0"] = propagator0
+        parameters["propagator1"] = propagator1
+
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
+
+    def check_sourcesmear_id_consistency(self):
+        sourcewave = self.create_default_object(HadronTestCase)
+        sinkwave = self.create_default_object(HadronTestCase)
+        fhpropagator = self.create_default_object(FeynmanHellmannTestCase)
+        propagator0 = self.create_default_object(OneToAllTestCaseDW)
+        onetoalltestcase = OneToAllTestCaseDW()
+        onetoallparameters = dict(onetoalltestcase.parameters)
+        onetoallparameters["sourcesmear"] = self.create_default_object(PointTestCase)
+        tree = onetoalltestcase.tree
+        tree["sourcesmear"] = "Point"
+        propagator1, _ = onetoalltestcase.create_instance(
+            parameters=onetoallparameters, tree=onetoalltestcase.tree
+        )
+
+        parameters = dict()
+        parameters["sourcewave"] = sourcewave
+        parameters["sinkwave"] = sinkwave
+        parameters["fhpropagator"] = fhpropagator
+        parameters["propagator0"] = propagator0
+        parameters["propagator1"] = propagator1
+
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
+
+    def check_sinksmear_id_consistency(self):
+        sourcewave = self.create_default_object(HadronTestCase)
+        sinkwave = self.create_default_object(HadronTestCase)
+        fhpropagator = self.create_default_object(FeynmanHellmannTestCase)
+        propagator0 = self.create_default_object(OneToAllTestCaseDW)
+        propagator1 = self.create_default_object(OneToAllTestCaseDWss)
+
+        parameters = dict()
+        parameters["sourcewave"] = sourcewave
+        parameters["sinkwave"] = sinkwave
+        parameters["fhpropagator"] = fhpropagator
+        parameters["propagator0"] = propagator0
+        parameters["propagator1"] = propagator1
+
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
