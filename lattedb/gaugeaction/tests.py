@@ -2,19 +2,21 @@
 """
 from django.test import TestCase
 
-from lattedb.utilities.tests import ObjectParser
+from lattedb.utilities.tests import ObjectParser, BaseTest
 
 from lattedb.gaugeaction.models import LuescherWeisz
 
 
-class LuescherWeiszTestCase(ObjectParser, TestCase):
-    """Tests creation of the Luescher-Weisz action.
-    """
-
+class LuescherWeiszParser(ObjectParser):
     model = LuescherWeisz
-    tree = None
-    parameters = {
+    _tree = None
+    _parameters = {
         "beta": "6.0",
         "a_fm": "0.12",
         "u0": "0.86372",
     }
+
+
+class LuescherWeiszTestCase(LuescherWeiszParser, BaseTest, TestCase):
+    """Tests creation of the Luescher-Weisz action.
+    """
