@@ -349,21 +349,30 @@ class BaryonSeq3pt(Correlator):
             raise TypeError(r"Requires propagator type OneToAll.")
         if self.seqpropagator.type not in ["BaryonCoherentSeq"]:
             raise TypeError(r"Requires seqpropagator type BaryonCoherentSeq.")
+        if self.propagator.sinksmear.type not in ["Point"]:
+            raise TypeError(
+                f"Propagator sink smear constrained to be Point. Propagator is {self.propagator.sinksmear}. Remove this constraint if you want to do something edgy. Get it? I wrote this after some drinks."
+            )
+        # check source smearing
+        if self.seqpropagator.propagator0.values("onetoall__sourcesmear").filter(id = self.propagator.sourcesmear.id).exists():
+            pass
+        else:
+            raise TypeError(
+                f"Seqprop and Prop constrained to have same source smearing."
+            )
         # Check same origin between propagator and seqpropagator.
         # seqprop already has prop0 & prop1 origin checks.
         # So checking only prop0 in seqprop is sufficient.
         origin_list = self.seqpropagator.propagator0.values_list(
             *[f"onetoall__origin_{oi}" for oi in ["x", "y", "z", "t"]]
         )
-        prop_origin = tuple(getattr(f"origin_{oi}", propagator) for oi in ["x", "y", "z", "t"])
-        print("ORIGIN_LIST:", origin_list)
-        print(prop_origin)
+        prop_origin = tuple(
+            getattr(self.propagator, f"origin_{oi}") for oi in ["x", "y", "z", "t"]
+        )
         if prop_origin in origin_list:
             pass
         else:
-            raise ValidationError(
-                "Parent does not have same origin as spectators."
-            )
+            raise ValidationError("Parent does not have same origin as spectators.")
 
 
 class BaryonFH3pt(Correlator):

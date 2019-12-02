@@ -289,6 +289,7 @@ class Baryon2ptTestCase(ObjectParser, TestCase):
 from lattedb.correlator.models import BaryonSeq3pt
 from lattedb.current.tests import LocalTestCase
 from lattedb.propagator.tests import BaryonCoherentSeqTestCase
+from lattedb.quarksmear.tests import PointTestCase
 
 class BaryonSeq3ptTestCase(ObjectParser, TestCase):
     model = BaryonSeq3pt
@@ -309,18 +310,74 @@ class BaryonSeq3ptTestCase(ObjectParser, TestCase):
 
     consistency_check_changes = []
 
-    def test_default_creation(self, parameters=None, tree=None):
-        pass
+    def setUp(self):
+        # black magic makes this run first (class inheritance)
+        self.baryoncoherentseq = BaryonCoherentSeqTestCase.create_populated_instance()
 
-    def test_inconsistent_creation(self):
-        pass
+    def create_default_object(self, ClassObject):
+        classobject = ClassObject()
+        parameters = classobject.parameters
+        tree = classobject.tree
+        object, _ = classobject.create_instance(parameters=parameters, tree=tree)
+        return object
 
-    def test_baryonseq3pt(self):
-        baryonseq3pt, _ = self.create_instance()
+    def test_sinksmear_id_consistency(self):
+        sourcewave = self.create_default_object(HadronTestCase)
+        current = self.create_default_object(LocalTestCase)
+        seqpropagator = self.baryoncoherentseq
+        propagator = self.create_default_object(OneToAllTestCaseDWss)
 
+        parameters = dict()
+        parameters["sourcewave"] = sourcewave
+        parameters["current"] = current
+        parameters["seqpropagator"] = seqpropagator
+        parameters["propagator"] = propagator
 
-        baryoncoherentseq = BaryonCoherentSeqTestCase.create_populated_instance()
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
 
+    def test_sourcesmear_id_consistency(self):
+        sourcewave = self.create_default_object(HadronTestCase)
+        current = self.create_default_object(LocalTestCase)
+        seqpropagator = self.baryoncoherentseq
+        onetoalltestcase = OneToAllTestCaseDW()
+        onetoallparameters = dict(onetoalltestcase.parameters)
+        onetoallparameters["sourcesmear"] = self.create_default_object(PointTestCase)
+        tree = onetoalltestcase.tree
+        tree["sourcesmear"] = "Point"
+        propagator, _ = onetoalltestcase.create_instance(
+            parameters=onetoallparameters, tree=onetoalltestcase.tree
+        )
+        parameters = dict()
+        parameters["sourcewave"] = sourcewave
+        parameters["current"] = current
+        parameters["seqpropagator"] = seqpropagator
+        parameters["propagator"] = propagator
+
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
+
+    def check_origin_consistency(self):
+        sourcewave = self.create_default_object(HadronTestCase)
+        current = self.create_default_object(LocalTestCase)
+        seqpropagator = self.baryoncoherentseq
+        onetoalltestcase = OneToAllTestCaseDW()
+        onetoallparameters = dict(onetoalltestcase.parameters)
+        onetoallparameters["origin_x"] = int(onetoallparameters["origin_x"]) + 5
+        propagator, _ = onetoalltestcase.create_instance(
+            parameters=onetoallparameters, tree=onetoalltestcase.tree
+        )
+        parameters = dict()
+        parameters["sourcewave"] = sourcewave
+        parameters["current"] = current
+        parameters["seqpropagator"] = seqpropagator
+        parameters["propagator"] = propagator
+
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
 
 from lattedb.correlator.models import BaryonFH3pt
 
