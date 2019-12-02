@@ -1,24 +1,24 @@
 """
 Unittests for the gaugeconfig module
 """
-
 from django.test import TestCase
 
-from lattedb.utilities.tests import ObjectParser
+from lattedb.utilities.tests import ObjectParser, BaseTest
 
 from lattedb.gaugeconfig.models import Nf211
-from lattedb.gaugeaction.tests import LuescherWeiszTestCase
-from lattedb.fermionaction.tests import HisqTestCaseLight
-from lattedb.fermionaction.tests import HisqTestCaseStrange
-from lattedb.fermionaction.tests import HisqTestCaseCharm
+
+from lattedb.gaugeaction.tests import LuescherWeiszParser
+from lattedb.fermionaction.tests import HisqLightParser
+from lattedb.fermionaction.tests import HisqStrangeParser
+from lattedb.fermionaction.tests import HisqCharmParser
 
 
-class Nf211TestCaseHisq(ObjectParser, TestCase):
-    """Tests creation of the Luescher-Weisz action.
+class Nf211TParser(ObjectParser):
+    """Interface for quickly defining gaugeconfigs
     """
 
     model = Nf211
-    tree = {
+    _tree = {
         "gaugeaction": "LuescherWeisz",
         "light": "Hisq",
         "strange": "Hisq",
@@ -27,23 +27,28 @@ class Nf211TestCaseHisq(ObjectParser, TestCase):
         "strange.linksmear": "Unsmeared",
         "charm.linksmear": "Unsmeared",
     }
-    parameters = {
+    _parameters = {
         "short_tag": "a12m310",
         "stream": "a",
         "config": "1000",
-        "gaugeaction": LuescherWeiszTestCase.parameters,
+        "gaugeaction": LuescherWeiszParser.get_parameters(),
         "nx": "24",
         "ny": "24",
         "nz": "24",
         "nt": "64",
-        "light": HisqTestCaseLight.parameters,
-        "strange": HisqTestCaseStrange.parameters,
-        "charm": HisqTestCaseCharm.parameters,
+        "light": HisqLightParser.get_parameters(),
+        "strange": HisqStrangeParser.get_parameters(),
+        "charm": HisqCharmParser.get_parameters(),
         "mpi": "310",
     }
-    consistency_check_changes = [
+    _consistency_check_changes = [
         {"light.quark_tag": "strange"},
         {"light.quark_tag": "up"},
         {"strange.quark_tag": "charm"},
         {"charm.quark_tag": "light"},
     ]
+
+
+class Nf211TestCaseHisq(Nf211TParser, BaseTest, TestCase):
+    """Tests creation of the Luescher-Weisz action.
+    """
