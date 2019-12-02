@@ -141,34 +141,11 @@ class BaryonCoherentSeq(Propagator):
         same gauge configuration id
         all prop have same source and sink smearing
         """
-        ### Unique constraint
-        # need to query for all rows with gaugeconfig.id, fermionaction.id,
-        #  sinkwave.id, sinksmear.id, sinksep.id
-        # set compare prop0 == prop0 and prop1 == prop1
-        # if exist violate unique constraint
-
-        ### Global consistency checks
-        #first = (
-        #    self.propagator0.first()
-        #    if column == "propagator0"
-        #    else self.propagator1.first()
-        #)
-        #first = first or propagators.first()
         first = propagators.first()
 
         for prop in propagators.all():
             if prop.type not in ["OneToAll"]:
                 raise TypeError(f"Spectator {column} is not a OneToAll propagator.")
-            #if prop.fermionaction.type != first.fermionaction.type:
-            #    raise TypeError(f"Spectator {column} fermion action type inconsistent.")
-            #if prop.gaugeconfig.id != self.gaugeconfig.id:
-            #    raise ValueError(
-            #        f"Spectator {column} and daughter have different gauge configs."
-            #    )
-            #if prop.sourcesmear.id != first.sourcesmear.id:
-            #    raise TypeError(f"Spectator {column}  source smearing id inconsistent.")
-            #if prop.sinksmear.id != first.sinksmear.id:
-            #    raise TypeError(f"Spectator {column}  sink smearing id inconsistent.")
 
     def check_all_consistencies(self, props0, props1):
         """Checks if all propagators in a coherent source have:
