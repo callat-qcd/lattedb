@@ -4,11 +4,11 @@ from django.test import TestCase
 
 from espressodb.base.exceptions import ConsistencyError
 
-from lattedb.utilities.tests import ObjectParser, BaseTest
+from lattedb.utilities.tests import ObjectParser
 
 from lattedb.ensemble.models import Ensemble
 from lattedb.gaugeconfig.models import Nf211
-from lattedb.gaugeconfig.tests import Nf211TParser
+from lattedb.gaugeconfig.tests import Nf211HisqParser
 
 
 class EnsembleParser(ObjectParser):
@@ -31,14 +31,14 @@ class EnsembleTestCase(EnsembleParser, TestCase):
         """
         ensemble = Ensemble.objects.create(**self.parameters)
 
-        gaugeconfig = Nf211TParser.create_instance()
+        gaugeconfig = Nf211HisqParser.create_instance()
 
         ensemble.configurations.add(gaugeconfig)
         ensemble.save()
 
-        params = Nf211TParser.get_parameters()
+        params = Nf211HisqParser.get_parameters()
         params["config"] = 1005
-        gaugeconfig = Nf211TParser.create_instance(parameters=params)
+        gaugeconfig = Nf211HisqParser.create_instance(parameters=params)
         self.assertEqual(Nf211.objects.all().count(), 2)
 
         ensemble.configurations.add(gaugeconfig)
@@ -50,15 +50,15 @@ class EnsembleTestCase(EnsembleParser, TestCase):
         """
         ensemble = Ensemble.objects.create(**self.parameters)
 
-        gaugeconfig = Nf211TParser.create_instance()
+        gaugeconfig = Nf211HisqParser.create_instance()
         self.assertEqual(Nf211.objects.all().count(), 1)
 
         ensemble.configurations.add(gaugeconfig)
 
-        params = Nf211TParser.get_parameters()
+        params = Nf211HisqParser.get_parameters()
         params["config"] = 1005
         params["stream"] = "b"
-        gaugeconfig = Nf211TParser.create_instance(parameters=params)
+        gaugeconfig = Nf211HisqParser.create_instance(parameters=params)
 
         self.assertEqual(Nf211.objects.all().count(), 2)
 

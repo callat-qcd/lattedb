@@ -2,25 +2,32 @@
 """
 from django.test import TestCase
 
-from lattedb.utilities.tests import ObjectParser
+from lattedb.utilities.tests import ObjectParser, BaseTest
 
 from lattedb.quarksmear.models import Point
 
-class PointTestCase(ObjectParser, TestCase):
+
+class PointParser(ObjectParser):
+    model = Point
+    _tree = None
+    _parameters = {}
+
+
+class PointTestCase(PointParser, BaseTest, TestCase):
     """Tests creation of the Unsmeared link smear.
     """
 
-    model = Point
-    tree = None
-    parameters = {}
 
 from lattedb.quarksmear.models import GaugeCovariantGaussian
 
-class GaugeCovariantGaussianTestCase(ObjectParser, TestCase):
-    """Tests creation of Wilson Flow link smear
-    """
+
+class GaugeCovariantGaussianParser(ObjectParser):
 
     model = GaugeCovariantGaussian
-    tree = None
-    parameters = {"radius": "3.0", "step": "30"}
+    _tree = None
+    _parameters = {"radius": "3.0", "step": "30"}
 
+
+class GaugeCovariantGaussianTestCase(GaugeCovariantGaussianParser, BaseTest, TestCase):
+    """Tests creation of Wilson Flow link smear
+    """
