@@ -148,7 +148,7 @@ class MobiusDWTestCaseLight(ObjectParser, BaseTest, TestCase):
     ]
 
 
-class MobiusDWTestCaseLightWF(ObjectParser, BaseTest, TestCase):
+class MobiusDWLightWFParser(ObjectParser):
     model = MobiusDW
     _tree = {"linksmear": "WilsonFlow"}
     _parameters = {
@@ -160,6 +160,10 @@ class MobiusDWTestCaseLightWF(ObjectParser, BaseTest, TestCase):
         "c5": "0.25",
         "linksmear": WilsonFlowParser.get_parameters(),
     }
+
+
+class MobiusDWLightWFTestCase(MobiusDWLightWFParser, BaseTest, TestCase):
+    ""
 
 
 class MobiusDWTestCaseUp(ObjectParser, BaseTest, TestCase):

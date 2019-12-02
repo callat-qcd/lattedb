@@ -2,18 +2,15 @@
 """
 from django.test import TestCase
 
-from lattedb.utilities.tests import ObjectParser
+from lattedb.utilities.tests import ObjectParser, BaseTest
 
 from lattedb.wavefunction.models import Hadron4D
 
 
-class Hadron4DTestCase(ObjectParser, TestCase):
-    """Tests creation of the Unsmeared link smear.
-    """
-
+class Hadron4DParser(ObjectParser):
     model = Hadron4D
-    tree = None
-    parameters = {
+    _tree = None
+    _parameters = {
         "description": "iddqd",
         "strangeness": "0",
         "irrep": "G1",
@@ -24,24 +21,26 @@ class Hadron4DTestCase(ObjectParser, TestCase):
         "isospin_x2": "1",
         "isospin_z_x2": "1",
     }
-
-    consistency_check_changes = [
+    _consistency_check_changes = [
         {"parity": "2"},
         {"spin_z_x2": "-2"},
         {"isospin_z_x2": "-2"},
     ]
 
 
-from lattedb.wavefunction.models import Hadron
-
-
-class HadronTestCase(ObjectParser, TestCase):
+class Hadron4DTestCase(Hadron4DParser, BaseTest, TestCase):
     """Tests creation of the Unsmeared link smear.
     """
 
+
+from lattedb.wavefunction.models import Hadron
+
+
+class HadronTestParser(ObjectParser):
+
     model = Hadron
-    tree = None
-    parameters = {
+    _tree = None
+    _parameters = {
         "description": "nucleon positive parity spin up upper spin components",
         "strangeness": "0",
         "irrep": "G1",
@@ -54,19 +53,23 @@ class HadronTestCase(ObjectParser, TestCase):
         "momentum": "0",
     }
 
-    consistency_check_changes = [
+    _consistency_check_changes = [
         {"parity": "2"},
         {"spin_z_x2": "-2"},
         {"isospin_z_x2": "-2"},
     ]
 
-class MesonTestCase(ObjectParser, TestCase):
+
+class HadronTestCase(HadronTestParser, BaseTest, TestCase):
     """Tests creation of the Unsmeared link smear.
     """
 
+
+class MesonTestParser(ObjectParser):
+
     model = Hadron
-    tree = None
-    parameters = {
+    _tree = None
+    _parameters = {
         "description": "pion ",
         "strangeness": "0",
         "irrep": "A1",
@@ -78,3 +81,8 @@ class MesonTestCase(ObjectParser, TestCase):
         "isospin_z_x2": "1",
         "momentum": "0",
     }
+
+
+class MesonTestCase(MesonTestParser, BaseTest, TestCase):
+    """Tests creation of the Unsmeared link smear.
+    """

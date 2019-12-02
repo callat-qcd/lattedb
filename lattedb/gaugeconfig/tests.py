@@ -13,7 +13,7 @@ from lattedb.fermionaction.tests import HisqStrangeParser
 from lattedb.fermionaction.tests import HisqCharmParser
 
 
-class Nf211TParser(ObjectParser):
+class Nf211HisqParser(ObjectParser):
     """Interface for quickly defining gaugeconfigs
     """
 
@@ -49,6 +49,6 @@ class Nf211TParser(ObjectParser):
     ]
 
 
-class Nf211TestCaseHisq(Nf211TParser, BaseTest, TestCase):
+class Nf211HisqTestCase(Nf211HisqParser, BaseTest, TestCase):
     """Tests creation of the Luescher-Weisz action.
     """
