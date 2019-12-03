@@ -120,11 +120,12 @@ class Meson2ptTestCase(Meson2ptParser, TestCase):
     def test_gaugeconfig_id_consistency(self):
         prop0 = OneToAllDWParser.create_instance()
         clsparameters = OneToAllDWParser.get_parameters()
-        clstree = OneToAllDWParser.get_tree()
         clsparameters["gaugeconfig"]["config"] = (
             int(clsparameters["gaugeconfig"]["config"]) + 10
         )
-        prop1 = OneToAllDWParser.create_instance(parameters=clsparameters, tree=clstree)
+        prop1 = OneToAllDWParser.create_instance(
+            parameters=clsparameters, tree=OneToAllDWParser.get_tree()
+        )
         sourcewave = MesonParser.create_instance()
         sinkwave = MesonParser.create_instance(fail_if_exists=False)
 
@@ -333,11 +334,10 @@ class BaryonSeq3ptParser(ObjectParser):
     def create_populated_instance(cls):
         """
         """
-        # black magic makes this run first (class inheritance)
         baryoncoherentseq = BaryonCoherentSeqParser.create_populated_instance()
         sourcewave = HadronParser.create_instance(fail_if_exists=False)
         current = LocalParser.create_instance()
-        propagator = OneToAllDWssParser.create_instance()
+        propagator = OneToAllDWParser.create_instance(fail_if_exists=False)
 
         parameters = dict()
         parameters["sourcewave"] = sourcewave
@@ -355,7 +355,7 @@ class BaryonSeq3ptTestCase(BaryonSeq3ptParser, TestCase):
     def test_sinksmear_id_consistency(self):
         sourcewave = HadronParser.create_instance()
         current = LocalParser.create_instance()
-        seqpropagator = self.baryoncoherentseq
+        seqpropagator = BaryonCoherentSeqParser.create_populated_instance()
         propagator = OneToAllDWssParser.create_instance()
 
         parameters = dict()
@@ -371,14 +371,34 @@ class BaryonSeq3ptTestCase(BaryonSeq3ptParser, TestCase):
     def test_sourcesmear_id_consistency(self):
         sourcewave = HadronParser.create_instance()
         current = LocalParser.create_instance()
-        seqpropagator = self.baryoncoherentseq
-        onetoalltestcase = OneToAllDWParser()
-        onetoallparameters = dict(onetoalltestcase.get_parameters())
-        onetoallparameters["sourcesmear"] = PointParser.create_instance()
-        tree = onetoalltestcase.get_tree()
+        seqpropagator = BaryonCoherentSeqParser.create_populated_instance()
+        onetoallparameters = OneToAllDWParser.get_parameters()
+        onetoallparameters["sourcesmear"] = PointParser.create_instance(
+            fail_if_exists=False
+        )
+        tree = OneToAllDWParser.get_tree()
         tree["sourcesmear"] = "Point"
-        propagator = onetoalltestcase.create_instance(
-            parameters=onetoallparameters, tree=onetoalltestcase.get_tree()
+        propagator = OneToAllDWParser.create_instance(
+            parameters=onetoallparameters, tree=tree
+        )
+        parameters = dict()
+        parameters["sourcewave"] = sourcewave
+        parameters["current"] = current
+        parameters["seqpropagator"] = seqpropagator
+        parameters["propagator"] = propagator
+
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
+
+    def check_gaugeconfig_id_consistency(self):
+        sourcewave = HadronParser.create_instance()
+        current = LocalParser.create_instance()
+        seqpropagator = BaryonCoherentSeqParser.create_populated_instance()
+        onetoallparameters = OneToAllDWParser.get_parameters()
+        onetoallparameters["gaugeconfig"]["config"] = 2019
+        propagator = OneToAllDWParser.create_instance(
+            parameters=onetoallparameters, tree=OneToAllDWParser.get_tree()
         )
         parameters = dict()
         parameters["sourcewave"] = sourcewave
@@ -393,12 +413,11 @@ class BaryonSeq3ptTestCase(BaryonSeq3ptParser, TestCase):
     def check_origin_consistency(self):
         sourcewave = HadronParser.create_instance()
         current = LocalParser.create_instance()
-        seqpropagator = self.baryoncoherentseq
-        onetoalltestcase = OneToAllDWParser()
-        onetoallparameters = dict(onetoalltestcase.get_parameters())
+        seqpropagator = BaryonCoherentSeqParser.create_populated_instance()
+        onetoallparameters = OneToAllDWParser.get_parameters()
         onetoallparameters["origin_x"] = int(onetoallparameters["origin_x"]) + 5
-        propagator = onetoalltestcase.create_instance(
-            parameters=onetoallparameters, tree=onetoalltestcase.get_tree()
+        propagator = OneToAllDWParser.create_instance(
+            parameters=onetoallparameters, tree=OneToAllDWParser.get_tree()
         )
         parameters = dict()
         parameters["sourcewave"] = sourcewave
@@ -455,13 +474,12 @@ class BaryonFH3ptTestCase(BaryonFH3ptParser, TestCase):
         sourcewave = HadronParser.create_instance()
         sinkwave = HadronParser.create_instance(fail_if_exists=False)
         fhpropagator = FeynmanHellmannParser.create_instance()
-        propagator1 = OneToAllDWParser.create_instance()
-        onetoalltestcase = OneToAllDWParser()
-        onetoallparameters = dict(onetoalltestcase.get_parameters())
+        propagator1 = OneToAllDWParser.create_instance(fail_if_exists=False)
+        onetoallparameters = OneToAllDWParser.get_parameters()
         onetoallparameters["fermionaction"]["quark_mass"] = 0.2
         onetoallparameters["fermionaction"]["quark_tag"] = "strange"
-        propagator0 = onetoalltestcase.create_instance(
-            parameters=onetoallparameters, tree=onetoalltestcase.get_tree()
+        propagator0 = OneToAllDWParser.create_instance(
+            parameters=onetoallparameters, tree=OneToAllDWParser.get_tree()
         )
         parameters = dict()
         parameters["sourcewave"] = sourcewave
@@ -479,13 +497,12 @@ class BaryonFH3ptTestCase(BaryonFH3ptParser, TestCase):
         sinkwave = HadronParser.create_instance(fail_if_exists=False)
         fhpropagator = FeynmanHellmannParser.create_instance()
         propagator0 = OneToAllDWParser.create_instance()
-        onetoalltestcase = OneToAllDWParser()
-        onetoallparameters = dict(onetoalltestcase.get_parameters())
+        onetoallparameters = OneToAllDWParser.get_parameters()
         onetoallparameters["sourcesmear"] = PointParser.create_instance()
-        tree = onetoalltestcase.get_tree()
+        tree = OneToAllDWParser.get_tree()
         tree["sourcesmear"] = "Point"
-        propagator1 = onetoalltestcase.create_instance(
-            parameters=onetoallparameters, tree=onetoalltestcase.get_tree()
+        propagator1 = OneToAllDWParser.create_instance(
+            parameters=onetoallparameters, tree=tree
         )
 
         parameters = dict()
@@ -505,6 +522,28 @@ class BaryonFH3ptTestCase(BaryonFH3ptParser, TestCase):
         fhpropagator = FeynmanHellmannParser.create_instance()
         propagator0 = OneToAllDWParser.create_instance()
         propagator1 = OneToAllDWssParser.create_instance()
+
+        parameters = dict()
+        parameters["sourcewave"] = sourcewave
+        parameters["sinkwave"] = sinkwave
+        parameters["fhpropagator"] = fhpropagator
+        parameters["propagator0"] = propagator0
+        parameters["propagator1"] = propagator1
+
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
+
+    def check_gaugeconfig_id_consistency(self):
+        sourcewave = HadronParser.create_instance()
+        sinkwave = HadronParser.create_instance(fail_if_exists=False)
+        fhpropagator = FeynmanHellmannParser.create_instance()
+        propagator0 = OneToAllDWParser.create_instance(fail_if_exists=False)
+        onetoallparameters = OneToAllDWParser.get_parameters()
+        onetoallparameters["gaugeconfig"]["config"] = 2019
+        propagator1 = onetoalltestcase.create_instance(
+            parameters=onetoallparameters, tree=OneToAllDWParser.get_tree()
+        )
 
         parameters = dict()
         parameters["sourcewave"] = sourcewave

@@ -354,11 +354,25 @@ class BaryonSeq3pt(Correlator):
                 f"Propagator sink smear constrained to be Point. Propagator is {self.propagator.sinksmear}. Remove this constraint if you want to do something edgy. Get it? I wrote this after some drinks."
             )
         # check source smearing
-        if self.seqpropagator.propagator0.values("onetoall__sourcesmear").filter(id = self.propagator.sourcesmear.id).exists():
+        if (
+            self.seqpropagator.propagator0.values("onetoall__sourcesmear")
+            .filter(id=self.propagator.sourcesmear.id)
+            .exists()
+        ):
             pass
         else:
             raise TypeError(
                 f"Seqprop and Prop constrained to have same source smearing."
+            )
+        # check gauge config id
+        if (
+            self.seqpropagator.propagator0.values("onetoall__gaugeconfig_id").first()[
+                "onetoall__gaugeconfig_id"
+            ]
+            != self.propagator.gaugeconfig.id
+        ):
+            raise ValidationError(
+                f"Seqprop and prop constrained to use same gauge configuration (id constraint)."
             )
         # Check same origin between propagator and seqpropagator.
         # seqprop already has prop0 & prop1 origin checks.
@@ -451,3 +465,13 @@ class BaryonFH3pt(Correlator):
             pass
         else:
             raise ValidationError("All propagators need to have same sink smearing.")
+        if (
+            self.propagator0.gaugeconfig.id
+            == self.propagator1.gaugeconfig.id
+            == self.fhpropagator.gaugeconfig.id
+        ):
+            pass
+        else:
+            raise ValidationError(
+                "Prop0, prop1, and fhprop constrained to be on same gauge configuration (id constraint)."
+            )
