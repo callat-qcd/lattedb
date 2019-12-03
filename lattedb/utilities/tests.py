@@ -5,6 +5,8 @@ from typing import Dict, Any, List, Optional
 
 from abc import ABC
 
+from copy import deepcopy
+
 from logging import getLogger
 
 
@@ -33,20 +35,20 @@ class ObjectParser(ABC):
     def get_tree(cls):
         """Returns a copy of the class tree
         """
-        return cls._tree.copy() if cls._tree else {}
+        return deepcopy(cls._tree) if cls._tree else {}
 
     @classmethod
     def get_parameters(cls):
         """Returns a copy of the class parameters
         """
-        return cls._parameters.copy() if cls._parameters else {}
+        return deepcopy(cls._parameters) if cls._parameters else {}
 
     @classmethod
     def get_consistency_check_changes(cls):
         """Returns a copy of the class consistency check changes
         """
         return (
-            cls._consistency_check_changes.copy()
+            deepcopy(cls._consistency_check_changes)
             if cls._consistency_check_changes
             else []
         )
