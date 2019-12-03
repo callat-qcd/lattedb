@@ -32,8 +32,10 @@ class DWFTuningParser(ObjectParser):
 
     _consistency_check_changes = []
 
+
 class DWFTuningBaseTest(DWFTuningParser, BaseTest, TestCase):
     ""
+
 
 class DWFTuningTestCase(DWFTuningParser, TestCase):
     def test_propagator_type_consistency(self):
@@ -88,8 +90,10 @@ class Meson2ptParser(ObjectParser):
     }
     _consistency_check_changes = []
 
+
 class Meson2ptBaseTest(Meson2ptParser, BaseTest, TestCase):
     ""
+
 
 class Meson2ptTestCase(Meson2ptParser, TestCase):
     def test_propagator_type_consistency(self):
@@ -115,13 +119,12 @@ class Meson2ptTestCase(Meson2ptParser, TestCase):
 
     def test_gaugeconfig_id_consistency(self):
         prop0 = OneToAllDWParser.create_instance()
-        classobject = OneToAllDWParser()
-        clsparameters = classobject.get_parameters()
-        clstree = classobject.get_tree()
+        clsparameters = OneToAllDWParser.get_parameters()
+        clstree = OneToAllDWParser.get_tree()
         clsparameters["gaugeconfig"]["config"] = (
             int(clsparameters["gaugeconfig"]["config"]) + 10
         )
-        prop1 = classobject.create_instance(parameters=clsparameters, tree=clstree)
+        prop1 = OneToAllDWParser.create_instance(parameters=clsparameters, tree=clstree)
         sourcewave = MesonParser.create_instance()
         sinkwave = MesonParser.create_instance(fail_if_exists=False)
 
@@ -136,10 +139,9 @@ class Meson2ptTestCase(Meson2ptParser, TestCase):
         print(context.exception.error)
 
     def test_sourcesmear_id_consistency(self):
-        classobject = OneToAllDWssParser()
-        tree = dict(classobject.get_tree())
+        tree = dict(OneToAllDWssParser.get_tree())
         tree["sourcesmear"] = "Point"
-        prop0 = classobject.create_instance(tree=tree)
+        prop0 = OneToAllDWssParser.create_instance(tree=tree)
         prop1 = OneToAllDWssParser.create_instance()
         sourcewave = MesonParser.create_instance()
         sinkwave = MesonParser.create_instance(fail_if_exists=False)
@@ -205,8 +207,10 @@ class Baryon2ptParser(ObjectParser):
     }
     _consistency_check_changes = []
 
+
 class Baryon2ptBaseTest(Baryon2ptParser, BaseTest, TestCase):
     ""
+
 
 class Baryon2ptTestCase(Baryon2ptParser, TestCase):
     def test_propagator_type_consistency(self):
@@ -234,14 +238,13 @@ class Baryon2ptTestCase(Baryon2ptParser, TestCase):
 
     def test_gaugeconfig_id_consistency(self):
         prop0 = OneToAllDWParser.create_instance()
-        classobject = OneToAllDWParser()
-        clsparameters = classobject.get_parameters()
-        clstree = classobject.get_tree()
+        clsparameters = OneToAllDWParser.get_parameters()
+        clstree = OneToAllDWParser.get_tree()
         clsparameters["gaugeconfig"]["config"] = (
             int(clsparameters["gaugeconfig"]["config"]) + 10
         )
-        prop1 = classobject.create_instance(parameters=clsparameters, tree=clstree)
-        prop2 = OneToAllDWParser.create_instance()
+        prop1 = OneToAllDWParser.create_instance(parameters=clsparameters, tree=clstree)
+        prop2 = OneToAllDWParser.create_instance(fail_if_exists=False)
         sourcewave = MesonParser.create_instance()
         sinkwave = MesonParser.create_instance(fail_if_exists=False)
 
@@ -257,10 +260,9 @@ class Baryon2ptTestCase(Baryon2ptParser, TestCase):
         print(context.exception.error)
 
     def test_sourcesmear_id_consistency(self):
-        classobject = OneToAllDWssParser()
-        tree = dict(classobject.get_tree())
+        tree = dict(OneToAllDWssParser.get_tree())
         tree["sourcesmear"] = "Point"
-        prop0 = classobject.create_instance(tree=tree)
+        prop0 = OneToAllDWssParser.create_instance(tree=tree)
         prop1 = OneToAllDWssParser.create_instance()
         prop2 = OneToAllDWssParser.create_instance(fail_if_exists=False)
         sourcewave = MesonParser.create_instance()
@@ -327,13 +329,28 @@ class BaryonSeq3ptParser(ObjectParser):
 
     _consistency_check_changes = []
 
-class BaryonSeq3ptBaseTest(BaryonSeq3ptParser, BaseTest, TestCase):
-    ""
+    @classmethod
+    def create_populated_instance(cls):
+        """
+        """
+        # black magic makes this run first (class inheritance)
+        baryoncoherentseq = BaryonCoherentSeqParser.create_populated_instance()
+        sourcewave = HadronParser.create_instance(fail_if_exists=False)
+        current = LocalParser.create_instance()
+        propagator = OneToAllDWssParser.create_instance()
+
+        parameters = dict()
+        parameters["sourcewave"] = sourcewave
+        parameters["current"] = current
+        parameters["seqpropagator"] = baryoncoherentseq
+        parameters["propagator"] = propagator
+
+        return cls.model.objects.create(**parameters)
+
 
 class BaryonSeq3ptTestCase(BaryonSeq3ptParser, TestCase):
-    def setUp(self):
-        # black magic makes this run first (class inheritance)
-        self.baryoncoherentseq = BaryonCoherentSeqParser.create_populated_instance()
+    def test_default_creation(self):
+        self.create_populated_instance()
 
     def test_sinksmear_id_consistency(self):
         sourcewave = HadronParser.create_instance()
@@ -428,8 +445,10 @@ class BaryonFH3ptParser(ObjectParser):
     }
     _consistency_check_changes = []
 
+
 class BaryonFH3ptBaseTest(BaryonFH3ptParser, BaseTest, TestCase):
     ""
+
 
 class BaryonFH3ptTestCase(BaryonFH3ptParser, TestCase):
     def check_propagator_id_order_consistency(self):
