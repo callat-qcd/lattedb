@@ -126,7 +126,7 @@ class OneToAllHisqTestCase(OneToAllHisqParser, BaseTest, TestCase):
 
 
 from lattedb.propagator.models import BaryonCoherentSeq
-from lattedb.wavefunction.tests import HadronTestCase
+from lattedb.wavefunction.tests import HadronParser
 
 
 class BaryonCoherentSeqParser(ObjectParser):
@@ -146,7 +146,7 @@ class BaryonCoherentSeqParser(ObjectParser):
     _parameters = {
         "gaugeconfig": Nf211HisqParser.get_parameters(),
         "fermionaction": MobiusDWLightWFParser.get_parameters(),
-        "sinkwave": HadronTestCase.get_parameters(),
+        "sinkwave": HadronParser.get_parameters(),
         "sinksmear": PointParser.get_parameters(),
         "sinksep": "10",
     }
