@@ -129,7 +129,7 @@ from lattedb.propagator.models import BaryonCoherentSeq
 from lattedb.wavefunction.tests import HadronTestCase
 
 
-class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
+class BaryonCoherentSeqParser(ObjectParser):
     model = BaryonCoherentSeq
     _tree = {
         "gaugeconfig": "Nf211",
@@ -173,6 +173,7 @@ class BaryonCoherentSeqTestCase(ObjectParser, TestCase):
         baryoncoherentseq.propagator1.add(*props1)
         return baryoncoherentseq
 
+class BaryonCoherentSeqTestCase(BaryonCoherentSeqParser, TestCase):
     def test_many_to_many(self):
         """Tests creation of many to many field and unique constraint
         """

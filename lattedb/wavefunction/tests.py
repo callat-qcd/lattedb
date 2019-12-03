@@ -36,7 +36,7 @@ class Hadron4DTestCase(Hadron4DParser, BaseTest, TestCase):
 from lattedb.wavefunction.models import Hadron
 
 
-class HadronTestParser(ObjectParser):
+class HadronParser(ObjectParser):
 
     model = Hadron
     _tree = None
@@ -60,12 +60,12 @@ class HadronTestParser(ObjectParser):
     ]
 
 
-class HadronTestCase(HadronTestParser, BaseTest, TestCase):
+class HadronTestCase(HadronParser, BaseTest, TestCase):
     """Tests creation of the Unsmeared link smear.
     """
 
 
-class MesonTestParser(ObjectParser):
+class MesonParser(ObjectParser):
 
     model = Hadron
     _tree = None
@@ -83,6 +83,6 @@ class MesonTestParser(ObjectParser):
     }
 
 
-class MesonTestCase(MesonTestParser, BaseTest, TestCase):
+class MesonTestCase(MesonParser, BaseTest, TestCase):
     """Tests creation of the Unsmeared link smear.
     """
