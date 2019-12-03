@@ -17,7 +17,10 @@ class Ensemble(Base):
     `short_tag` and `long_tag` are available to identify which type of ensembles are listed.
     """
 
-    configurations = models.ManyToManyField(GaugeConfig)
+    configurations = models.ManyToManyField(
+        to=GaugeConfig,
+        help_text="Set of Foreign Keys to gauge configurations which together defines an ensemble",
+    )
     label = models.CharField(
         max_length=40,
         null=False,
@@ -47,13 +50,16 @@ class Ensemble(Base):
         first = self.configurations.first()  # pylint: disable=E1101
         return first.specialization.long_tag if first else None
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
+    def check_m2m_consistency(self, configurations, column=None):
         """Checks if all configurations have the same meta info.
         """
-        first = data["configurations"].first()  # pylint: disable=E1101
+        first = (
+            self.configurations.first()  # pylint: disable=E1101
+            or configurations.first()
+        )
+
         if first:
-            for config in data["configurations"].all()[1:]:  # pylint: disable=E1101
+            for config in configurations.all():  # pylint: disable=E1101
                 if not first.same_ensemble(config):
                     raise ValidationError(
                         f"{config} is from a different ensemble compared to first config {first}"

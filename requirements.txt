@@ -1,5 +1,5 @@
 espressodb>=1.0.0
-Django
+Django==2.2.*
 django-bootstrap4
 django-extensions
 django-widget-tweaks

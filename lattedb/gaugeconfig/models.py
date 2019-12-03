@@ -1,7 +1,9 @@
-from typing import Dict, Any
 from django.db import models
 
 from espressodb.base.models import Base
+
+from lattedb.gaugeaction.models import GaugeAction
+from lattedb.fermionaction.models import FermionAction
 
 
 class GaugeConfig(Base):
@@ -19,7 +21,7 @@ class GaugeConfig(Base):
             equal = all(
                 [
                     getattr(self, column.name) == getattr(config, column.name)
-                    for column in self.get_open_fields()
+                    for column in self.specialization.get_open_fields()
                     if column.name != "config"
                 ]
             )
@@ -45,7 +47,7 @@ class Nf211(GaugeConfig):
         help_text="Configuration number (usually MC trajectory number)"
     )
     gaugeaction = models.ForeignKey(
-        "gaugeaction.GaugeAction",
+        GaugeAction,
         on_delete=models.CASCADE,
         related_name="+",
         help_text=r"Foreign Key pointing to lattice `gaugeaction`",
@@ -63,19 +65,19 @@ class Nf211(GaugeConfig):
         null=False, help_text="Temporal length in lattice units"
     )
     light = models.ForeignKey(
-        "fermionaction.FermionAction",
+        FermionAction,
         on_delete=models.CASCADE,
         related_name="+",
         help_text=r"Foreign Key pointing to lattice `fermionaction`",
     )
     strange = models.ForeignKey(
-        "fermionaction.FermionAction",
+        FermionAction,
         on_delete=models.CASCADE,
         related_name="+",
         help_text=r"Foreign Key pointing to lattice `fermionaction`",
     )
     charm = models.ForeignKey(
-        "fermionaction.FermionAction",
+        FermionAction,
         on_delete=models.CASCADE,
         related_name="+",
         help_text=r"Foreign Key pointing to lattice `fermionaction`",
@@ -114,13 +116,12 @@ class Nf211(GaugeConfig):
             f"m{int(self.charm.quark_mass*1000):03d}"
         )
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["light"].type.quark_type not in ["light"]:
-            raise TypeError("Requires light to be quark_type = light in FermionAction.")
-        if data["strange"].type.quark_type not in ["strange"]:
+    def check_consistency(self):
+        if self.light.quark_tag not in ["light"]:
+            raise TypeError("Requires light to be quark_tag = light in FermionAction.")
+        if self.strange.quark_tag not in ["strange"]:
             raise TypeError(
-                "Requires strange to be quark_type = strange in FermionAction."
+                "Requires strange to be quark_tag = strange in FermionAction."
             )
-        if data["charm"].type.quark_type not in ["charm"]:
-            raise TypeError("Requires charm to be quark_type = charm in FermionAction.")
+        if self.charm.quark_tag not in ["charm"]:
+            raise TypeError("Requires charm to be quark_tag = charm in FermionAction.")

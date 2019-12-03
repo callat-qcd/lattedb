@@ -47,11 +47,10 @@ class DWFTuning(Correlator):
         if self.tag is None:
             self.tag = "pseudo_pseudo" if self.sink5 else "midpoint_pseudo"
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["propagator"].type not in ["OneToAll"]:
+    def check_consistency(self):
+        if self.propagator.type not in ["OneToAll"]:
             raise TypeError("Requires propagator type OneToAll.")
-        if data["propagator"].type.fermionaction.type not in ["MobiusDW"]:
+        if self.propagator.fermionaction.type not in ["MobiusDW"]:
             raise TypeError("Requires propagator action to be MobiusDW.")
 
 
@@ -94,14 +93,24 @@ class Meson2pt(Correlator):
             )
         ]
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["propagator0"].type not in ["OneToAll"]:
-            raise TypeError("Requires propagator0 type OneToAll.")
-        if data["propagator1"].type not in ["OneToAll"]:
-            raise TypeError("Requires propagator1 type OneToAll.")
-        if data["propagator0"].id > data["propagator1"].id:
+    def check_consistency(self):
+        for idx in [0, 1]:
+            if getattr(self, f"propagator{idx}").type not in ["OneToAll"]:
+                raise TypeError(f"Requires propagator{idx} type OneToAll.")
+        if self.propagator0.id > self.propagator1.id:
             raise ValueError("Requires propagator0.id <= propagator1.id.")
+        if self.propagator0.gaugeconfig.id != self.propagator1.gaugeconfig.id:
+            raise ValidationError(
+                "Requires prop0 and prop1 be on same gauge configuration (id constraint)."
+            )
+        if self.propagator0.sourcesmear.id != self.propagator1.sourcesmear.id:
+            raise ValidationError(
+                "All propagators required to have same source smearing."
+            )
+        if self.propagator0.sinksmear.id != self.propagator1.sinksmear.id:
+            raise ValidationError(
+                "All propagators required to have same sink smearing."
+            )
 
     def clean(self):
         """Sets tag of the correlator based on propagators, the gaugeconfig and source.
@@ -197,18 +206,46 @@ class Baryon2pt(Correlator):
             )
         ]
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["propagator0"].type not in ["OneToAll"]:
-            raise TypeError("Requires propagator0 type OneToAll.")
-        if data["propagator1"].type not in ["OneToAll"]:
-            raise TypeError("Requires propagator1 type OneToAll.")
-        if data["propagator2"].type not in ["OneToAll"]:
-            raise TypeError("Requires propagator2 type OneToAll.")
-        if data["propagator0"].id > data["propagator1"].id:
-            raise ValueError("Requires propagator0.id <= propagator1.id.")
-        if data["propagator1"].id > data["propagator2"].id:
-            raise ValueError("Requires propagator1.id <= propagator2.id.")
+    def check_consistency(self):
+        for idx in [0, 1, 2]:
+            if getattr(self, f"propagator{idx}").type not in ["OneToAll"]:
+                raise TypeError(f"Requires propagator{idx} type OneToAll.")
+        if self.propagator0.id <= self.propagator1.id <= self.propagator2.id:
+            pass
+        else:
+            raise ValueError(
+                "Requires propagator0.id <= propagator1.id <= propagator2.id."
+            )
+        if (
+            self.propagator0.gaugeconfig.id
+            == self.propagator1.gaugeconfig.id
+            == self.propagator2.gaugeconfig.id
+        ):
+            pass
+        else:
+            raise ValidationError(
+                "Requires prop0, prop1, and prop2 be on same gauge configuration (id constraint)."
+            )
+        if (
+            self.propagator0.sourcesmear.id
+            == self.propagator1.sourcesmear.id
+            == self.propagator2.sourcesmear.id
+        ):
+            pass
+        else:
+            raise ValidationError(
+                "All propagators required to have same source smearing."
+            )
+        if (
+            self.propagator0.sinksmear.id
+            == self.propagator1.sinksmear.id
+            == self.propagator2.sinksmear.id
+        ):
+            pass
+        else:
+            raise ValidationError(
+                "All propagators required to have same sink smearing."
+            )
 
     def origin(self):
         return "(%d, %d, %d, %d)" % (
@@ -272,7 +309,7 @@ class Baryon2pt(Correlator):
 
 class BaryonSeq3pt(Correlator):
     r"""
-    All types of baryon three point correlators created with a `CoherentSeq` propagator are listed here.
+    All types of baryon three point correlators created with a `BaryonCoherentSeq` propagator are listed here.
     For specific hadrons and actions, query through foreign key references.
     """
     sourcewave = models.ForeignKey(
@@ -307,12 +344,49 @@ class BaryonSeq3pt(Correlator):
             )
         ]
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["propagator"].type not in ["OneToAll"]:
+    def check_consistency(self):
+        if self.propagator.type not in ["OneToAll"]:
             raise TypeError(r"Requires propagator type OneToAll.")
-        if data["seqpropagator"].type not in ["CoherentSeq"]:
-            raise TypeError(r"Requires seqpropagator type CoherentSeq.")
+        if self.seqpropagator.type not in ["BaryonCoherentSeq"]:
+            raise TypeError(r"Requires seqpropagator type BaryonCoherentSeq.")
+        if self.propagator.sinksmear.type not in ["Point"]:
+            raise TypeError(
+                f"Propagator sink smear constrained to be Point. Propagator is {self.propagator.sinksmear}. Remove this constraint if you want to do something edgy. Get it? I wrote this after some drinks."
+            )
+        # check source smearing
+        if (
+            self.seqpropagator.propagator0.values("onetoall__sourcesmear")
+            .filter(id=self.propagator.sourcesmear.id)
+            .exists()
+        ):
+            pass
+        else:
+            raise TypeError(
+                f"Seqprop and Prop constrained to have same source smearing."
+            )
+        # check gauge config id
+        if (
+            self.seqpropagator.propagator0.values("onetoall__gaugeconfig_id").first()[
+                "onetoall__gaugeconfig_id"
+            ]
+            != self.propagator.gaugeconfig.id
+        ):
+            raise ValidationError(
+                f"Seqprop and prop constrained to use same gauge configuration (id constraint)."
+            )
+        # Check same origin between propagator and seqpropagator.
+        # seqprop already has prop0 & prop1 origin checks.
+        # So checking only prop0 in seqprop is sufficient.
+        origin_list = self.seqpropagator.propagator0.values_list(
+            *[f"onetoall__origin_{oi}" for oi in ["x", "y", "z", "t"]]
+        )
+        prop_origin = tuple(
+            getattr(self.propagator, f"origin_{oi}") for oi in ["x", "y", "z", "t"]
+        )
+        if prop_origin in origin_list:
+            pass
+        else:
+            raise ValidationError("Parent does not have same origin as spectators.")
 
 
 class BaryonFH3pt(Correlator):
@@ -349,7 +423,7 @@ class BaryonFH3pt(Correlator):
         "propagator.Propagator",
         on_delete=models.CASCADE,
         related_name="+",
-        help_text=r"Foreign Key pointing to spectator `propagator`",
+        help_text=r"Foreign Key pointing to spectator `propagator` where propagator0.id <= propagator1.id is a constraint",
     )
 
     class Meta:
@@ -366,13 +440,38 @@ class BaryonFH3pt(Correlator):
             )
         ]
 
-    @classmethod
-    def check_consistency(cls, data: Dict[str, Any]):
-        if data["propagator0"].type not in ["OneToAll"]:
+    def check_consistency(self):
+        if self.propagator0.type not in ["OneToAll"]:
             raise TypeError("Requires propagator0 type OneToAll.")
-        if data["propagator1"].type not in ["OneToAll"]:
+        if self.propagator1.type not in ["OneToAll"]:
             raise TypeError("Requires propagator1 type OneToAll.")
-        if data["fhpropagator"].type not in ["FeynmanHellmann"]:
+        if self.fhpropagator.type not in ["FeynmanHellmann"]:
             raise TypeError("Requires fhpropagator type FeynmanHellmann.")
-        if data["propagator0"].id > data["propagator1"].id:
+        if self.propagator0.id > self.propagator1.id:
             raise ValueError("Requires propagator0.id <= propagator1.id.")
+        if (
+            self.propagator0.sourcesmear.id
+            == self.propagator1.sourcesmear.id
+            == self.fhpropagator.propagator.sourcesmear.id
+        ):
+            pass
+        else:
+            raise ValidationError("All propagators need to have same source smearing.")
+        if (
+            self.propagator0.sinksmear.id
+            == self.propagator1.sinksmear.id
+            == self.fhpropagator.propagator.sinksmear.id
+        ):
+            pass
+        else:
+            raise ValidationError("All propagators need to have same sink smearing.")
+        if (
+            self.propagator0.gaugeconfig.id
+            == self.propagator1.gaugeconfig.id
+            == self.fhpropagator.gaugeconfig.id
+        ):
+            pass
+        else:
+            raise ValidationError(
+                "Prop0, prop1, and fhprop constrained to be on same gauge configuration (id constraint)."
+            )

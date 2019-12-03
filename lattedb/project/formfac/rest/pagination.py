@@ -23,5 +23,5 @@ class Paginator(DatatablesPageNumberPagination):
         """Renders respons and adds `recordsExist` to response data.
         """
         response = super().get_paginated_response(data)
-        response.data["recordsExist"] = self.recordsExist if self.recordsExist else 0
+        response.self.recordsExist = self.recordsExist if self.recordsExist else 0
         return response
