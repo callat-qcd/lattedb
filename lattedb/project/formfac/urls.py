@@ -31,12 +31,12 @@ urlpatterns = [
     path(
         "disk-concat-status",
         DiskConcatenatedFormFactor4DStatusView.as_view(),
-        name="Contaneted Form Factor Disk Status",
+        name="Concatenated Form Factor Disk Status",
     ),
     path(
         "tape-concat-status",
         TapeConcatenatedFormFactor4DStatusView.as_view(),
-        name="Contaneted Form Factor Tape Status",
+        name="Concatenated Form Factor Tape Status",
     ),
     path(
         "disk-sliced-averaged-status",
