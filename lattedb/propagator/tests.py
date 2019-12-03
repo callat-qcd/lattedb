@@ -55,7 +55,7 @@ class OneToAllDWTestCase(OneToAllDWParser, BaseTest, TestCase):
     ""
 
 
-class OneToAllTestCaseDWss(ObjectParser, BaseTest, TestCase):
+class OneToAllDWssParser(ObjectParser, BaseTest, TestCase):
     model = OneToAll
     _tree = {
         "gaugeconfig": "Nf211",
@@ -81,6 +81,10 @@ class OneToAllTestCaseDWss(ObjectParser, BaseTest, TestCase):
         "sourcesmear": GaugeCovariantGaussianParser.get_parameters(),
         "sinksmear": GaugeCovariantGaussianParser.get_parameters(),
     }
+
+
+class OneToAllDWssTestCase(OneToAllDWssParser, BaseTest, TestCase):
+    ""
 
 
 class OneToAllHisqParser(ObjectParser):
@@ -416,43 +420,38 @@ class FeynmanHellmannTestCase(FeynmanHellmannParser, BaseTest, TestCase):
             self.model.objects.create(**parameters)
         print(context.exception.error)
 
-    # def test_fermionaction_type_consistency(self):
-    #     gaugeconfig = self.create_default_object(Nf211HisqParser)
-    #     fermiontc = HisqLightWFParser
-    #     fermion_parameters = dict(fermiontc.get_parameters())
-    #     fermion_tree = fermiontc.get_tree()
-    #     fermionaction, _ = fermiontc.create_instance(
-    #         parameters=fermion_parameters, _tree=fermion_tree
-    #     )
-    #     propagator = self.create_default_object(OneToAllTestCaseDW)
-    #     current = self.create_default_object(LocalTestCase)
-    #     sinksmear = self.create_default_object(GaugeCovariantGaussianParser)
-    #
-    #     parameters = dict(self.get_parameters())
-    #     parameters["gaugeconfig"] = gaugeconfig
-    #     parameters["fermionaction"] = fermionaction
-    #     parameters["propagator"] = propagator
-    #     parameters["current"] = current
-    #     parameters["sinksmear"] = sinksmear
-    #
-    #     with self.assertRaises(ConsistencyError) as context:
-    #         self.model.objects.create(**parameters)
-    #     print(context.exception.error)
-    #
-    # def test_prop_sinksmear_consistency(self):
-    #     gaugeconfig = self.create_default_object(Nf211HisqParser)
-    #     fermionaction = self.create_default_object(MobiusDWLightWFParser)
-    #     propagator = self.create_default_object(OneToAllTestCaseDWss)
-    #     current = self.create_default_object(LocalTestCase)
-    #     sinksmear = self.create_default_object(GaugeCovariantGaussianParser)
-    #
-    #     parameters = dict(self.get_parameters())
-    #     parameters["gaugeconfig"] = gaugeconfig
-    #     parameters["fermionaction"] = fermionaction
-    #     parameters["propagator"] = propagator
-    #     parameters["current"] = current
-    #     parameters["sinksmear"] = sinksmear
-    #
-    #     with self.assertRaises(ConsistencyError) as context:
-    #         self.model.objects.create(**parameters)
-    #     print(context.exception.error)
+    def test_fermionaction_type_consistency(self):
+        gaugeconfig = Nf211HisqParser.create_instance()
+        fermionaction = HisqLightWFParser.create_instance()
+        propagator = OneToAllDWParser.create_instance()
+        current = LocalParser.create_instance()
+        sinksmear = GaugeCovariantGaussianParser.create_instance(fail_if_exists=False)
+
+        parameters = self.get_parameters()
+        parameters["gaugeconfig"] = gaugeconfig
+        parameters["fermionaction"] = fermionaction
+        parameters["propagator"] = propagator
+        parameters["current"] = current
+        parameters["sinksmear"] = sinksmear
+
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
+
+    def test_prop_sinksmear_consistency(self):
+        gaugeconfig = Nf211HisqParser.create_instance()
+        fermionaction = MobiusDWLightWFParser.create_instance()
+        propagator = OneToAllDWssParser.create_instance()
+        current = LocalParser.create_instance()
+        sinksmear = GaugeCovariantGaussianParser.create_instance(fail_if_exists=False)
+
+        parameters = self.get_parameters()
+        parameters["gaugeconfig"] = gaugeconfig
+        parameters["fermionaction"] = fermionaction
+        parameters["propagator"] = propagator
+        parameters["current"] = current
+        parameters["sinksmear"] = sinksmear
+
+        with self.assertRaises(ConsistencyError) as context:
+            self.model.objects.create(**parameters)
+        print(context.exception.error)
