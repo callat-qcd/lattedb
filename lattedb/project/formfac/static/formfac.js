@@ -30,10 +30,12 @@ $(document).ready(function() {
             }
         });
     });
+    console.log("Setup");
     // Update progress bar
     table.on('xhr.dt', function() {
         var json = table.ajax.json();
-        if (json.recordsTotal > 0) {
+        console.log(json.recordsTotal + " " + json.recordsFiltered + " "+ json.recordsExist);
+        if (json.recordsFiltered > 0) {
             var exists = json.recordsExist / json.recordsFiltered * 100;
             var pending = 100 - exists;
             $("#progress-success").attr("aria-valuenow", exists).css("width", exists.toString() + "%");
