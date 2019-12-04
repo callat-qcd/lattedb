@@ -15,7 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
+from lattedb.ensemble.views import EnsembleView
 
 
 app_name = "ensemble"
-urlpatterns = []
+urlpatterns = [
+    path("summary", EnsembleView.as_view(), name="Ensemble summary",),
+]
