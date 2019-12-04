@@ -31,21 +31,24 @@ class EnsembleTestCase(EnsembleParser, TestCase):
         """
         ensemble = Ensemble.objects.create(**self.parameters)
 
-        gaugeconfig = Nf211HisqParser.create_instance()
-
-        ensemble.configurations.add(gaugeconfig)
-        ensemble.save()
+        gaugeconfig0 = Nf211HisqParser.create_instance()
 
         params = Nf211HisqParser.get_parameters()
         params["config"] = 1005
-        gaugeconfig = Nf211HisqParser.create_instance(parameters=params)
-        self.assertEqual(Nf211.objects.all().count(), 2)
+        gaugeconfig1 = Nf211HisqParser.create_instance(parameters=params)
 
-        ensemble.configurations.add(gaugeconfig)
+        gaugeconfigs = [gaugeconfig0, gaugeconfig1]
 
-        self.assertIn(gaugeconfig, Nf211.objects.filter(ensemble=ensemble))
+        ensemble.configurations.add(*gaugeconfigs)
 
-    def test_many_to_many_consistency(self):
+        parameters = {"label": "test"}
+        ensemble = Ensemble.objects.create(**parameters)
+
+        with self.assertRaises(ConsistencyError) as context:
+            ensemble.configurations.add(*gaugeconfigs)
+        print(context.exception.error)
+
+    def test_gaugeconfig_id_consistency(self):
         """Tests creation of many to many field which should fail
         """
         ensemble = Ensemble.objects.create(**self.parameters)

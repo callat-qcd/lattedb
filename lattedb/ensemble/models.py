@@ -3,6 +3,7 @@ from typing import Any
 from typing import Optional
 
 from django.db import models
+from django.db.models import Count
 from django.core.exceptions import ValidationError
 
 from espressodb.base.models import Base
@@ -64,3 +65,14 @@ class Ensemble(Base):
                     raise ValidationError(
                         f"{config} is from a different ensemble compared to first config {first}"
                     )
+        # Define unique constraint
+        entries = Ensemble.objects.all().annotate(c=Count("configurations")).filter(c=len(configurations.all()))
+        for configuration in configurations:
+            entries = entries.filter(configurations=configuration)
+
+        if entries.exists():
+            raise ValidationError(
+                "Unique constraint violation. Ensemble already exists."
+            )
+
+
