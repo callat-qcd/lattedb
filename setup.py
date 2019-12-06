@@ -29,4 +29,12 @@ setup(
     packages=find_packages(exclude=["docs", "tests"]),
     install_requires=REQUIREMENTS,
     entry_points={"console_scripts": ["lattedb=lattedb.manage:main"]},
+    classifiers=[
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: OS Independent",
+        "Framework :: Django :: 2.2",
+        "Intended Audience :: Science/Research",
+    ],
 )
