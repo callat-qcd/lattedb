@@ -2,7 +2,7 @@
 """Setup file for LatteDB
 """
 __author__ = "@cchang5, @ckoerber"
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 from os import path
 
