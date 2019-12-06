@@ -3,12 +3,12 @@
 
 # LatteDB
 
-Lattice QCD database interface based on [EspressoDB](https://github.com/callat-qcd/espressodb).
+LatteDB, an application (Python) of [EspressoDB](https://github.com/callat-qcd/espressodb) that is specialized to contain table definitions for lattice quantum chromodynamics (LQCD) calculations and analysis.
 
-## Description
+The main page of ``LatteDB`` is hosted on [https://ithems.lbl.gov/lattedb](https://ithems.lbl.gov/lattedb).
 
 ## Install
-Install via pip
+Clone the repo and install via pip
 ```bash
 pip install [--user] [-e] .
 ```
@@ -20,11 +20,25 @@ For a general setup, take a look at the [EspressoDB documentation](https://espre
 
 If you want to connect to a specific database, contact the admin of this instance.
 
-## Run
+## Test the install
+Run
+```pash
+pip install -r requirements-dev.txt
+pytest
+```
+in the repo root to run the tests.
+
+## Usage
+
+### Host a local webpage
 After configuration you can launch a local server with
 ```bash
 lattedb runserver
 ```
+and visit [http://127.0.0.1:8000](http://127.0.0.1:8000) (once the server is running.)
+Note that the address might change (look at the output of `lattedb runserver`).
+
+### Import in Python
 Or connect your scripts with LatteDB
 ```python
 from lattedb.project.formfac.models import DiskConcatenatedFormFactor4DFile as DCFF4DF
@@ -33,27 +47,6 @@ files = DCFF4DF.objects.filter(exists=False)
 print(files.count())
 ```
 
-### Notes on testing
-Run
-```bash
-pip install -r requirements-dev.txt
-pytest
-```
-in the repo root to run the tests.
-
-
-## Management interface
-Go to the admin page [http://127.0.0.1:8000](http://127.0.0.1:8000) (once the server is running.)
-Note that the address might change (look at the output of `lattedb runserver`).
-
 ## Authors
 * [@cchang5](https://github.com/cchang5)
-* [@ckoerber](https://github.com/ckoerber)
-
-## Contribute
-To be discussed...
-
-### git workflow
-* New features should be added to `devel-{feature}`, and will be merged into `master` once they work
-* Developers should add tests for new features and make sure **all tests** don't fail before running `migrate` and `push`
-* All `migrated` changes must be pushed to master
+* [@ckoerber](https://www.ckoerber.com)
