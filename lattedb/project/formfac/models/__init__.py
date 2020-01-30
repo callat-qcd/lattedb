@@ -19,3 +19,16 @@ from lattedb.project.formfac.models.data.concatenated_ff4d import (
     DiskConcatenatedFormFactor4DFile,
     TapeConcatenatedFormFactor4DFile,
 )
+from lattedb.project.formfac.models.data.spec4d import (
+    Spectrum4DFile,
+    DiskSpectrum4DFile,
+)
+from lattedb.project.formfac.models.data.tsliced_spec4d import (
+    TSlicedSpectrum4DFile,
+    DiskTSlicedSpectrum4DFile,
+)
+from lattedb.project.formfac.models.data.tsliced_savged_spec4d import (
+    TSlicedSAveragedSpectrum4DFile,
+    DiskTSlicedSAveragedSpectrum4DFile,
+    TapeTSlicedSAveragedSpectrum4DFile,
+)
