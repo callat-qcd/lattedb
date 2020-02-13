@@ -312,12 +312,6 @@ class BaryonSeq3pt(Correlator):
     All types of baryon three point correlators created with a `BaryonCoherentSeq` propagator are listed here.
     For specific hadrons and actions, query through foreign key references.
     """
-    sourcewave = models.ForeignKey(
-        "wavefunction.SCSWaveFunction",
-        on_delete=models.CASCADE,
-        related_name="+",
-        help_text=r"Foreign Key pointing to source operator `wavefunction`",
-    )
     current = models.ForeignKey(
         "current.Current",
         on_delete=models.CASCADE,
@@ -339,7 +333,7 @@ class BaryonSeq3pt(Correlator):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["sourcewave", "current", "seqpropagator", "propagator"],
+                fields=["current", "seqpropagator", "propagator"],
                 name="unique_correlator_baryonseq3pt",
             )
         ]
