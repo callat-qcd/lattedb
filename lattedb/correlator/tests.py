@@ -308,7 +308,6 @@ from lattedb.quarksmear.tests import PointParser
 class BaryonSeq3ptParser(ObjectParser):
     model = BaryonSeq3pt
     _tree = {
-        "sourcewave": "Hadron",
         "current": "Local",
         "seqpropagator": "BaryonCoherentSeq",
         **{
@@ -322,7 +321,6 @@ class BaryonSeq3ptParser(ObjectParser):
         },
     }
     _parameters = {
-        "sourcewave": HadronParser.get_parameters(),
         "current": LocalParser.get_parameters(),
         "seqpropagator": BaryonCoherentSeqParser.get_parameters(),
         "propagator": OneToAllDWParser.get_parameters(),
@@ -335,12 +333,10 @@ class BaryonSeq3ptParser(ObjectParser):
         """
         """
         baryoncoherentseq = BaryonCoherentSeqParser.create_populated_instance()
-        sourcewave = HadronParser.create_instance(fail_if_exists=False)
         current = LocalParser.create_instance()
         propagator = OneToAllDWParser.create_instance(fail_if_exists=False)
 
         parameters = dict()
-        parameters["sourcewave"] = sourcewave
         parameters["current"] = current
         parameters["seqpropagator"] = baryoncoherentseq
         parameters["propagator"] = propagator
@@ -359,7 +355,6 @@ class BaryonSeq3ptTestCase(BaryonSeq3ptParser, TestCase):
         propagator = OneToAllDWssParser.create_instance()
 
         parameters = dict()
-        parameters["sourcewave"] = sourcewave
         parameters["current"] = current
         parameters["seqpropagator"] = seqpropagator
         parameters["propagator"] = propagator
@@ -369,7 +364,6 @@ class BaryonSeq3ptTestCase(BaryonSeq3ptParser, TestCase):
         print(context.exception.error)
 
     def test_sourcesmear_id_consistency(self):
-        sourcewave = HadronParser.create_instance()
         current = LocalParser.create_instance()
         seqpropagator = BaryonCoherentSeqParser.create_populated_instance()
         onetoallparameters = OneToAllDWParser.get_parameters()
@@ -382,7 +376,6 @@ class BaryonSeq3ptTestCase(BaryonSeq3ptParser, TestCase):
             parameters=onetoallparameters, tree=tree
         )
         parameters = dict()
-        parameters["sourcewave"] = sourcewave
         parameters["current"] = current
         parameters["seqpropagator"] = seqpropagator
         parameters["propagator"] = propagator
@@ -392,7 +385,6 @@ class BaryonSeq3ptTestCase(BaryonSeq3ptParser, TestCase):
         print(context.exception.error)
 
     def check_gaugeconfig_id_consistency(self):
-        sourcewave = HadronParser.create_instance()
         current = LocalParser.create_instance()
         seqpropagator = BaryonCoherentSeqParser.create_populated_instance()
         onetoallparameters = OneToAllDWParser.get_parameters()
@@ -401,7 +393,6 @@ class BaryonSeq3ptTestCase(BaryonSeq3ptParser, TestCase):
             parameters=onetoallparameters, tree=OneToAllDWParser.get_tree()
         )
         parameters = dict()
-        parameters["sourcewave"] = sourcewave
         parameters["current"] = current
         parameters["seqpropagator"] = seqpropagator
         parameters["propagator"] = propagator
@@ -411,7 +402,6 @@ class BaryonSeq3ptTestCase(BaryonSeq3ptParser, TestCase):
         print(context.exception.error)
 
     def check_origin_consistency(self):
-        sourcewave = HadronParser.create_instance()
         current = LocalParser.create_instance()
         seqpropagator = BaryonCoherentSeqParser.create_populated_instance()
         onetoallparameters = OneToAllDWParser.get_parameters()
@@ -420,7 +410,6 @@ class BaryonSeq3ptTestCase(BaryonSeq3ptParser, TestCase):
             parameters=onetoallparameters, tree=OneToAllDWParser.get_tree()
         )
         parameters = dict()
-        parameters["sourcewave"] = sourcewave
         parameters["current"] = current
         parameters["seqpropagator"] = seqpropagator
         parameters["propagator"] = propagator
