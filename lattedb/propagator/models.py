@@ -120,6 +120,12 @@ class BaryonCoherentSeq(Propagator):
         related_name="baryoncoherentseq_set1",
         help_text=r"A set of Foreign Keys referencing OneToAll `propagator` (spectator 1) in same source group",
     )
+    sourcewave = models.ForeignKey(
+        "wavefunction.SCSWaveFunction",
+        on_delete=models.CASCADE,
+        related_name="+",
+        help_text=r"Foreign Key pointing to source operator `wavefunction`",
+    )
     sinkwave = models.ForeignKey(
         "wavefunction.SCSWaveFunction",
         on_delete=models.CASCADE,
@@ -206,6 +212,7 @@ class BaryonCoherentSeq(Propagator):
             entries0 = BaryonCoherentSeq.objects.filter(
                 gaugeconfig=self.gaugeconfig,
                 fermionaction=self.fermionaction,
+                sourcewave=self.sourcewave,
                 sinkwave=self.sinkwave,
                 sinksmear=self.sinksmear,
                 sinksep=self.sinksep,
@@ -216,6 +223,7 @@ class BaryonCoherentSeq(Propagator):
             entries1 = BaryonCoherentSeq.objects.filter(
                 gaugeconfig=self.gaugeconfig,
                 fermionaction=self.fermionaction,
+                sourcewave=self.sourcewave,
                 sinkwave=self.sinkwave,
                 sinksmear=self.sinksmear,
                 sinksep=self.sinksep,

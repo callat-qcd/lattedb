@@ -138,6 +138,7 @@ class BaryonCoherentSeqParser(ObjectParser):
         },
         "fermionaction": "MobiusDW",
         "fermionaction.linksmear": "WilsonFlow",
+        "sourcewave": "Hadron",
         "sinkwave": "Hadron",
         "sinksmear": "Point",
         "propagator0": "OneToAll",
@@ -146,6 +147,7 @@ class BaryonCoherentSeqParser(ObjectParser):
     _parameters = {
         "gaugeconfig": Nf211HisqParser.get_parameters(),
         "fermionaction": MobiusDWLightWFParser.get_parameters(),
+        "sourcewave": HadronParser.get_parameters(),
         "sinkwave": HadronParser.get_parameters(),
         "sinksmear": PointParser.get_parameters(),
         "sinksep": "10",
