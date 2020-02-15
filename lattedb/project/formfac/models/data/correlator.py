@@ -12,13 +12,12 @@ from django.db import models
 from espressodb.base.models import Base
 
 
-class H5Dset(Base):
+class AbstractH5File(Base):
     """Table for physical file information summarizing disk or tape h5 file status.
     """
 
-    file_name = models.TextField(help_text="The file name.")
-    file_path = models.TextField(help_text="The directory path of the file.")
-    dset_path = models.TextField(help_text="The path to the dset.")
+    path = models.TextField(help_text="The directory path of the file.")
+    dset = models.TextField(help_text="The path to the dset.")
     exists = models.BooleanField(
         null=False,
         help_text="Can the file be found at"
@@ -35,20 +34,6 @@ class H5Dset(Base):
     class Meta:  # pylint: disable=C0111, R0903
         abstract = True
 
-    @property
-    def file_address(self) -> str:
-        """The address to the file.
-        """
-        return join(self.file_path, self.file_name)
-
-    @property
-    def data(self) -> "array":
-        """Accesses dset in read mode from stored location
-        """
-        with File(self.file_address, "r") as inp:
-            data = inp[self.dset_path][:]
-        return data
-
     @classmethod
     def get_doc(cls) -> str:
         """Returns the doc string
@@ -56,28 +41,34 @@ class H5Dset(Base):
         return cls.__doc__
 
 
-class CorrelatorMeta(Base):
+class CorrelatorFile(Base):
     """Correlator file meta information table.
 
-    All specialized tables like FormFactor4D with tslice, src_avg, ... should inherit
-    from this table.
+    Options for type are `["spec",  "ff",  "mres_l",  "mres_s", "h_spec"]`.
     """
 
-    TYPE_CHOICES = [("spec", "Spectrum"), ("ff", "Form Factor"), ...]
+    TYPE_CHOICES = [
+        ("spec", "Spectrum"),
+        ("ff", "Form Factor"),
+        ("mres_l", "Residual Mass Light"),
+        ("mres_s", "Residual Mass Strange"),
+        ("h_spec", "Hyperon? Spectrum"),
+    ]
 
+    name = models.TextField(help_text="The file name.")
     type = models.CharField(
         max_length=20, choices=TYPE_CHOICES, help_text="Type of the correlator."
     )
-    cfg = models.IntegerField(help_text="Configuration number.")
-    src = models.CharField(
+    configuration = models.IntegerField(help_text="Configuration number.")
+    source = models.CharField(
         max_length=20, help_text="Source location (e.g., `xXyYzZtT`)."
     )
 
     class Meta:  # pylint: disable=C0111, R0903
         unique_together = [
             "type",
-            "cfg",
-            "src",
+            "configuration",
+            "source",
         ]
 
     @classmethod
@@ -87,29 +78,49 @@ class CorrelatorMeta(Base):
         return cls.__doc__
 
 
-class CorrelatorDiskH5Dset(H5Dset):
+class DiskCorrelatorH5Dset(AbstractH5File):
     """Correlator h5dset on Disk information
     """
 
     verbose_name = "Correlator h5dset on Disk"
 
-    meta = models.OneToOneField(
-        CorrelatorMeta,
+    file = models.OneToOneField(
+        CorrelatorFile,
         on_delete=models.CASCADE,
         related_name="disk",
         help_text="The file meta information.",
     )
 
+    @property
+    def file_address(self) -> str:
+        """The address to the file.
+        """
+        return join(self.path, self.file.name)
 
-class CorrelatorTapeH5Dset(H5Dset):
+    @property
+    def data(self) -> "array":
+        """Accesses dset in read mode from stored location
+        """
+        with File(self.file_address, "r") as inp:
+            data = inp[self.dset][:]
+        return data
+
+
+class TapeCorrelatorH5Dset(AbstractH5File):
     """Correlator h5dset on tape information
     """
 
     verbose_name = "Correlator h5dset on Tape"
 
-    meta = models.OneToOneField(
-        CorrelatorMeta,
+    file = models.OneToOneField(
+        CorrelatorFile,
         on_delete=models.CASCADE,
         related_name="tape",
         help_text="The file meta information.",
     )
+
+    @property
+    def file_address(self) -> str:
+        """The address to the file.
+        """
+        return join(self.path, self.file.name)
