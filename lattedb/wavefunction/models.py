@@ -123,7 +123,11 @@ class Hadron(SCSWaveFunction):
         null=False, help_text="Isospin in \(z\)-direction times 2"
     )
 
-    momentum = models.SmallIntegerField(help_text="Momentum in units of 2 pi / L")
+    nx = models.SmallIntegerField(help_text="Momentum in units of 2 pi / L")
+
+    ny = models.SmallIntegerField(help_text="Momentum in units of 2 pi / L")
+
+    nz = models.SmallIntegerField(help_text="Momentum in units of 2 pi / L")
 
     class Meta:
         constraints = [
@@ -137,7 +141,9 @@ class Hadron(SCSWaveFunction):
                     "spin_z_x2",
                     "isospin_x2",
                     "isospin_z_x2",
-                    "momentum",
+                    "nx",
+                    "ny",
+                    "nz",
                 ],
                 name="unique_hadron_hadron",
             )

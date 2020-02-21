@@ -19,9 +19,11 @@ class Local(Current):
         null=False, blank=False, help_text="Dirac structure of the current"
     )
 
-    momentum = models.SmallIntegerField(
-        help_text="Current insertion momentum in units of 2 pi / L"
-    )
+    nx = models.SmallIntegerField(help_text="Current insertion momentum in units of 2 pi / L")
+
+    ny = models.SmallIntegerField(help_text="Current insertion momentum in units of 2 pi / L")
+
+    nz = models.SmallIntegerField(help_text="Current insertion momentum in units of 2 pi / L")
 
     description = models.TextField(
         null=True, blank=True, help_text="Description of current"
@@ -30,7 +32,7 @@ class Local(Current):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["diracstruct", "momentum"], name="unique_current_local"
+                fields=["diracstruct", "nx", "ny", "nz"], name="unique_current_local"
             )
         ]
 
