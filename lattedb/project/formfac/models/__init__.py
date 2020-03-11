@@ -34,7 +34,7 @@ from lattedb.project.formfac.models.data.tsliced_savged_spec4d import (
 )
 
 from lattedb.project.formfac.models.data.correlator import (
-    CorrelatorFile,
+    CorrelatorMeta,
     DiskCorrelatorH5Dset,
     TapeCorrelatorH5Dset,
 )
