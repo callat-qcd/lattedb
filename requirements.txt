@@ -8,3 +8,4 @@ markdown
 django-filter
 djangorestframework
 djangorestframework-datatables
+h5py
