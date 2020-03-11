@@ -12,10 +12,11 @@ from django.db import models
 from espressodb.base.models import Base
 
 
-class AbstractH5File(Base):
+class AbstractH5Dset(Base):
     """Table for physical file information summarizing disk or tape h5 file status.
     """
 
+    name = models.TextField(help_text="The name of the file.")
     path = models.TextField(help_text="The directory path of the file.")
     dset = models.TextField(help_text="The path to the dset.")
     exists = models.BooleanField(
@@ -26,7 +27,6 @@ class AbstractH5File(Base):
     machine = models.CharField(
         max_length=100, help_text="The machine the file can be found on."
     )
-    size = models.BigIntegerField(null=True, help_text="Size of the file in Bytes.")
     date_modified = models.DateTimeField(
         null=True, help_text="The last time the file was modified."
     )
@@ -40,22 +40,34 @@ class AbstractH5File(Base):
         """
         return cls.__doc__
 
+    @property
+    def file_address(self) -> str:
+        """The address to the file.
+        """
+        return join(self.path, self.name)
 
-class CorrelatorFile(Base):
+
+TYPE_CHOICES = [
+    ("phi_qq", "Connected pion-like meson"),
+    ("mres", "Residual quark mass"),
+    ("spec", "Pi+, proton, proton np"),
+    ("ff", "Form Factor of proton for MANY currents"),
+    ("h_spec", "Hyperon Spectrum"),
+]
+
+
+class CorrelatorMeta(Base):
     """Correlator file meta information table.
 
-    Options for type are `["spec",  "ff",  "mres_l",  "mres_s", "h_spec"]`.
+    Options for type are:
+
+    `"phi_qq"`: Connected pion-like meson,
+    `"mres"`: Residual quark mass,
+    `"spec"`: Pi+, proton, proton np,
+    `"ff"`: Form Factor of proton for MANY currents,
+    `"h_spec"`: Hyperon Spectrum.
     """
 
-    TYPE_CHOICES = [
-        ("spec", "Spectrum"),
-        ("ff", "Form Factor"),
-        ("mres_l", "Residual Mass Light"),
-        ("mres_s", "Residual Mass Strange"),
-        ("h_spec", "Hyperon? Spectrum"),
-    ]
-
-    name = models.TextField(help_text="The file name.")
     type = models.CharField(
         max_length=20, choices=TYPE_CHOICES, help_text="Type of the correlator."
     )
@@ -78,24 +90,18 @@ class CorrelatorFile(Base):
         return cls.__doc__
 
 
-class DiskCorrelatorH5Dset(AbstractH5File):
+class DiskCorrelatorH5Dset(AbstractH5Dset):
     """Correlator h5dset on Disk information
     """
 
     verbose_name = "Correlator h5dset on Disk"
 
-    file = models.OneToOneField(
-        CorrelatorFile,
+    meta = models.OneToOneField(
+        CorrelatorMeta,
         on_delete=models.CASCADE,
         related_name="disk",
         help_text="The file meta information.",
     )
-
-    @property
-    def file_address(self) -> str:
-        """The address to the file.
-        """
-        return join(self.path, self.file.name)
 
     @property
     def data(self) -> "array":
@@ -106,21 +112,15 @@ class DiskCorrelatorH5Dset(AbstractH5File):
         return data
 
 
-class TapeCorrelatorH5Dset(AbstractH5File):
+class TapeCorrelatorH5Dset(AbstractH5Dset):
     """Correlator h5dset on tape information
     """
 
     verbose_name = "Correlator h5dset on Tape"
 
-    file = models.OneToOneField(
-        CorrelatorFile,
+    meta = models.OneToOneField(
+        CorrelatorMeta,
         on_delete=models.CASCADE,
         related_name="tape",
         help_text="The file meta information.",
     )
-
-    @property
-    def file_address(self) -> str:
-        """The address to the file.
-        """
-        return join(self.path, self.file.name)
