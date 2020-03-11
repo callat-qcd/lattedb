@@ -32,3 +32,9 @@ from lattedb.project.formfac.models.data.tsliced_savged_spec4d import (
     DiskTSlicedSAveragedSpectrum4DFile,
     TapeTSlicedSAveragedSpectrum4DFile,
 )
+
+from lattedb.project.formfac.models.data.correlator import (
+    CorrelatorMeta,
+    DiskCorrelatorH5Dset,
+    TapeCorrelatorH5Dset,
+)
