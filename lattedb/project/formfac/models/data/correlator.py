@@ -59,7 +59,7 @@ TYPE_CHOICES = [
 class CorrelatorMeta(Base):
     """Correlator file meta information table.
 
-    Options for type are:
+    Options for `corr` are:
 
     `"phi_qq"`: Connected pion-like meson,
     `"mres"`: Residual quark mass,
@@ -68,7 +68,7 @@ class CorrelatorMeta(Base):
     `"h_spec"`: Hyperon Spectrum.
     """
 
-    type = models.CharField(
+    corr = models.CharField(
         max_length=20, choices=TYPE_CHOICES, help_text="Type of the correlator."
     )
     configuration = models.IntegerField(help_text="Configuration number.")
@@ -78,7 +78,7 @@ class CorrelatorMeta(Base):
 
     class Meta:  # pylint: disable=C0111, R0903
         unique_together = [
-            "type",
+            "corr",
             "configuration",
             "source",
         ]
