@@ -75,12 +75,24 @@ class CorrelatorMeta(Base):
     source = models.CharField(
         max_length=20, help_text="Source location (e.g., `xXyYzZtT`)."
     )
+    ensemble = models.CharField(
+        max_length=100, help_text="Name of the ensemble. E.g., `a15m135XL`."
+    )
+    stream = models.CharField(
+        max_length=10, help_text="Name of the HMC stream, e.g., `a`."
+    )
+    source_set = models.CharField(
+        max_length=100, help_text="Set of sources in this file. E.g., `16-23`."
+    )
 
     class Meta:  # pylint: disable=C0111, R0903
         unique_together = [
             "corr",
             "configuration",
             "source",
+            "ensemble",
+            "stream",
+            "source_set",
         ]
 
     @classmethod
