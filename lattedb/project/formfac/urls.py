@@ -68,6 +68,6 @@ urlpatterns = [
     path(
         "tape-corr-status",
         TapeCorrelatorH5DsetStatusView.as_view(),
-        name="Tape Disk Status",
+        name="Correlator Tape Status",
     ),
 ]
