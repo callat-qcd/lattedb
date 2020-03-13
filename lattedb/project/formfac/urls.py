@@ -23,6 +23,8 @@ from lattedb.project.formfac.views import DiskTSlicedSAveragedFormFactor4DStatus
 from lattedb.project.formfac.views import TapeTSlicedSAveragedFormFactor4DStatusView
 from lattedb.project.formfac.views import DiskTSlicedFormFactor4DStatusView
 from lattedb.project.formfac.views import DiskFormFactor4DStatusView
+from lattedb.project.formfac.views import DiskCorrelatorH5DsetStatusView
+from lattedb.project.formfac.views import TapeCorrelatorH5DsetStatusView
 from lattedb.project.formfac.rest.serializers import ROUTER
 
 app_name = "Project formfac"
@@ -57,5 +59,15 @@ urlpatterns = [
         "disk-status",
         DiskFormFactor4DStatusView.as_view(),
         name="Form Factor Disk Status",
+    ),
+    path(
+        "disk-corr-status",
+        DiskCorrelatorH5DsetStatusView.as_view(),
+        name="Correlator Disk Status",
+    ),
+    path(
+        "tape-corr-status",
+        TapeCorrelatorH5DsetStatusView.as_view(),
+        name="Tape Disk Status",
     ),
 ]

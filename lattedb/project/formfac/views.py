@@ -14,6 +14,8 @@ from lattedb.project.formfac.models import TapeTSlicedSAveragedFormFactor4DFile
 from lattedb.project.formfac.models import DiskTSlicedSAveragedFormFactor4DFile
 from lattedb.project.formfac.models import DiskFormFactor4DFile
 from lattedb.project.formfac.models import DiskTSlicedFormFactor4DFile
+from lattedb.project.formfac.models import DiskCorrelatorH5Dset
+from lattedb.project.formfac.models import TapeCorrelatorH5Dset
 
 
 class IndexView(TemplateView):
@@ -144,5 +146,35 @@ class DiskFormFactor4DStatusView(FileStatusView):
         "exists": "Exists",
         "machine": "Machine",
         "size": "Size",
+        "date_modified": "Date",
+    }
+
+
+class DiskCorrelatorH5DsetStatusView(FileStatusView):
+    model = DiskCorrelatorH5Dset
+    fieldnames = {
+        "meta.correlator": "Corr",
+        "meta.ensemble": "Ens",
+        "meta.stream": "Stream",
+        "meta.configuration": "Cfg",
+        "meta.source_set": "Src set",
+        "meta.source": "Src",
+        "exists": "Exists",
+        "machine": "Machine",
+        "date_modified": "Date",
+    }
+
+
+class TapeCorrelatorH5DsetStatusView(FileStatusView):
+    model = TapeCorrelatorH5Dset
+    fieldnames = {
+        "meta.correlator": "Corr",
+        "meta.ensemble": "Ens",
+        "meta.stream": "Stream",
+        "meta.configuration": "Cfg",
+        "meta.source_set": "Src set",
+        "meta.source": "Src",
+        "exists": "Exists",
+        "machine": "Machine",
         "date_modified": "Date",
     }
