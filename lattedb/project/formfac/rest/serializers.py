@@ -21,6 +21,9 @@ from lattedb.project.formfac.models import DiskTSlicedFormFactor4DFile
 from lattedb.project.formfac.models import FormFactor4DFile
 from lattedb.project.formfac.models import DiskFormFactor4DFile
 
+from lattedb.project.formfac.models import CorrelatorMeta
+from lattedb.project.formfac.models import DiskCorrelatorH5Dset
+from lattedb.project.formfac.models import TapeCorrelatorH5Dset
 
 VIEWSETS = []
 
@@ -165,6 +168,49 @@ class DiskFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 VIEWSETS.append(DiskFormFactor4DFileViewSet)
+## Correlator Tables
+
+
+class CorrelatorMetaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CorrelatorMeta
+        fields = "__all__"
+
+
+class DiskCorrelatorH5DsetFileSerializer(serializers.ModelSerializer):
+    meta = CorrelatorMetaSerializer()
+
+    class Meta:
+        model = DiskCorrelatorH5Dset
+        fields = "__all__"
+
+
+class DiskCorrelatorH5DsetFileViewSet(viewsets.ReadOnlyModelViewSet):
+    name = "disk-correlator-h5dset"
+    exclude_from_nav = True
+    queryset = DiskCorrelatorH5Dset.objects.all()
+    serializer_class = DiskCorrelatorH5DsetFileSerializer
+
+
+VIEWSETS.append(DiskCorrelatorH5DsetFileViewSet)
+
+
+class TapeCorrelatorH5DsetFileSerializer(serializers.ModelSerializer):
+    meta = CorrelatorMetaSerializer()
+
+    class Meta:
+        model = TapeCorrelatorH5Dset
+        fields = "__all__"
+
+
+class TapeCorrelatorH5DsetFileViewSet(viewsets.ReadOnlyModelViewSet):
+    name = "tape-correlator-h5dset"
+    exclude_from_nav = True
+    queryset = TapeCorrelatorH5Dset.objects.all()
+    serializer_class = TapeCorrelatorH5DsetFileSerializer
+
+
+VIEWSETS.append(TapeCorrelatorH5DsetFileViewSet)
 
 
 ROUTER = routers.DefaultRouter()
