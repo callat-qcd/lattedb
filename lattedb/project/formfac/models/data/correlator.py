@@ -48,8 +48,14 @@ class AbstractH5Dset(Base):
 
 
 TYPE_CHOICES = [
-    ("phi_qq", "Connected pion-like meson"),
-    ("mres", "Residual quark mass"),
+    (
+        "res_phi_ll",
+        "Residual quark mass and connected pion-like meson correlators for quark mass m_l",
+    ),
+    (
+        "res_phi_ss",
+        "Residual quark mass and connected pion-like meson correlators for quark mass m_s",
+    ),
     ("spec", "Pi+, proton, proton np"),
     ("ff", "Form Factor of proton for MANY currents"),
     ("h_spec", "Hyperon Spectrum"),
@@ -59,21 +65,19 @@ TYPE_CHOICES = [
 class CorrelatorMeta(Base):
     """Correlator file meta information table.
 
-    Options for `corr` are:
+    Options for `correlator` are:
 
-    `"phi_qq"`: Connected pion-like meson,
-    `"mres"`: Residual quark mass,
-    `"spec"`: Pi+, proton, proton np,
-    `"ff"`: Form Factor of proton for MANY currents,
+    `"res_phi_ll"`: Residual quark mass and connected
+        pion-like meson correlators for quark mass m_l;
+    `"res_phi_ss"`: Residual quark mass and connected
+        pion-like meson correlators for quark mass m_s;
+    `"spec"`: Pi+, proton, proton np;
+    `"ff"`: Form Factor of proton for MANY currents;
     `"h_spec"`: Hyperon Spectrum.
     """
 
-    corr = models.CharField(
+    correlator = models.CharField(
         max_length=20, choices=TYPE_CHOICES, help_text="Type of the correlator."
-    )
-    configuration = models.IntegerField(help_text="Configuration number.")
-    source = models.CharField(
-        max_length=20, help_text="Source location (e.g., `xXyYzZtT`)."
     )
     ensemble = models.CharField(
         max_length=100, help_text="Name of the ensemble. E.g., `a15m135XL`."
@@ -81,18 +85,22 @@ class CorrelatorMeta(Base):
     stream = models.CharField(
         max_length=10, help_text="Name of the HMC stream, e.g., `a`."
     )
+    configuration = models.IntegerField(help_text="Configuration number.")
     source_set = models.CharField(
         max_length=100, help_text="Set of sources in this file. E.g., `16-23`."
+    )
+    source = models.CharField(
+        max_length=20, help_text="Source location (e.g., `xXyYzZtT`)."
     )
 
     class Meta:  # pylint: disable=C0111, R0903
         unique_together = [
-            "corr",
-            "configuration",
-            "source",
+            "correlator",
             "ensemble",
             "stream",
+            "configuration",
             "source_set",
+            "source",
         ]
 
     @classmethod
