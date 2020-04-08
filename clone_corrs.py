@@ -97,7 +97,13 @@ def assert_queryset_equal(qs1, qs2):
 
 
 def update_default_from_local():
-    """
+    """Updates default db using local db.
+
+    Checks if all the data in present in the default db is also present in the local
+    db (e.g., the default db has not changed between creating and updating local).
+
+    If this check passes it lists the number of rows to add. After this, the default
+    db is updated.
     """
     new_local_objects = OrderedDict()
     # First check that all the data present on default is also present on local
