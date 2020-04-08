@@ -35,7 +35,18 @@ Done. You can now copy this file to any new machine and work with it.
 
 ```
 ENGINE: django.db.backends.sqlite3
-NAME: /path/to/local/file/db-name.sqlite
+NAME: /remote/path/to/local/file/db-name.sqlite
 ```
 
 4. Run scripts as before.
+
+## Updating the default db
+
+1. `rsync` the remote db `/remote/path/to/local/file/db-name.sqlite` back to your local machine (same place as before).
+2. Backup the default db as usual (you don't want to screw up now)
+3. Insert new data from the sql file back to the default db
+```bash
+python clone_corrs.py -u
+```
+
+This runs some checks and asks you if things make sense before continuing, still someone else may want to test this :)
