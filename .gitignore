@@ -11,3 +11,4 @@ logo.png
 db.json
 settings.yaml
 settings*.yaml
+venv/

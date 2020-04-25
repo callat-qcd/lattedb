@@ -1,0 +1,4 @@
+graft lattedb
+global-exclude __pycache__
+global-exclude .py[cod]
+global-exclude .gitignore
