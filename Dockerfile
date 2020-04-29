@@ -10,7 +10,8 @@ WORKDIR /opt/app
 
 # Install requirements
 COPY requirements.txt /opt/app
-RUN pip install -r requirements.txt  --cache-dir /opt/app/.pip_cache
+RUN pip install --upgrade pip --cache-dir /opt/app/.pip_cache
+RUN pip install -r requirements.txt --cache-dir /opt/app/.pip_cache
 
 # Install lattedb
 # DO NOT COPY PRIVATE FILES LIKE db-config.yaml or settings.yaml
