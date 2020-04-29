@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+    db:
+        image: postgres
+        environment:
+            - POSTGRES_DB=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+    app:
+        build: .
+        command: >
+            sh -c "lattedb migrate &&
+                   lattedb collectstatic &&
+                   lattedb runserver 0.0.0.0:8000"
+        environment:
+            - LATTEDB_ROOT_DIR=/www/
+        volumes:
+            - /www/
+            - /www/static/
+            - /www/media/
+            - ./settings.yaml:/www/settings.yaml
+            - ./db-config.yaml:/www/db-config.yaml
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db
