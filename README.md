@@ -20,6 +20,19 @@ For a general setup, take a look at the [EspressoDB documentation](https://espre
 
 If you want to connect to a specific database, contact the admin of this instance.
 
+### Docker
+
+Run
+```bash
+docker-compose up
+```
+To build and run the local docker image (needs Docker installation).
+
+You can interface with the image by running
+```bash
+docker-compose run app <bash command like lattedb --version>
+```
+
 ## Test the install
 Run
 ```pash
