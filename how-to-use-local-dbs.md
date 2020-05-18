@@ -1,3 +1,5 @@
+Yes, the PR #42 implements this. Notes on how to use it are in the `how-to-use-local-dbs.md`:
+
 # How to use local dbs
 
 This file specifies how to create a local back up of `formfac.correlator` data.
@@ -6,15 +8,15 @@ This file specifies how to create a local back up of `formfac.correlator` data.
 
 1. Work on the `feature-dual-db` branch
 2. Work on a machine which has access to ithems
-3. Make sure that `db-config.yaml` is set up such that you connect to ithems
-4. Create a new file `db-config-local.yaml` with the content
+3. Make sure that `db-config.yaml` is set up such that you connect to the ithems postgres db
+4. Create a new file `db-config-local.yaml` with the content (this will spawn the sqlite db for copying data back and forth)
 
 ```
 ENGINE: django.db.backends.sqlite3
 NAME: /path/to/local/file/db-name.sqlite
 ```
 
-5. Migrate models to new local db (you should make sure that models are up to date before `python makemigrations`)
+5. Migrate models to **new local db** (you should make sure that models are up to date (as in most recent commit). You can check this by running `python makemigrations`)
 
 ```bash
 lattedb migrate --database=local
@@ -31,7 +33,7 @@ Done. You can now copy this file to any new machine and work with it.
 
 1. `rsync` the local db `/path/to/local/file/db-name.sqlite` to your remote machine.
 2. Make sure lattedb is up to date
-3. set up **`db-config.yaml`** to the local config (note this is a different setting than on the machine used for cloning)
+3. set up **`db-config.yaml` to the local config** (note this is a different setting than on the machine used for cloning)
 
 ```
 ENGINE: django.db.backends.sqlite3
