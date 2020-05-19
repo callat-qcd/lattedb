@@ -12,16 +12,20 @@ from lattedb.project.formfac.models import DiskConcatenatedFormFactor4DFile
 from lattedb.project.formfac.models import TapeConcatenatedFormFactor4DFile
 from lattedb.project.formfac.models import DiskTSlicedSAveragedFormFactor4DFile
 from lattedb.project.formfac.models import TapeTSlicedSAveragedFormFactor4DFile
+from lattedb.project.formfac.models import TSlicedSAveragedFormFactor4DFile
 from lattedb.project.formfac.models import DiskTSlicedFormFactor4DFile
 from lattedb.project.formfac.models import DiskFormFactor4DFile
 
 from lattedb.project.formfac.models import DiskCorrelatorH5Dset
 from lattedb.project.formfac.models import TapeCorrelatorH5Dset
+from lattedb.project.formfac.models import CorrelatorMeta
 
 from lattedb.project.formfac.models import DiskTSlicedSAveragedSpectrum4DFile
 from lattedb.project.formfac.models import TapeTSlicedSAveragedSpectrum4DFile
 from lattedb.project.formfac.models import DiskTSlicedSpectrum4DFile
 from lattedb.project.formfac.models import DiskSpectrum4DFile
+from lattedb.project.formfac.models import TSlicedSAveragedSpectrum4DFile
+from lattedb.project.formfac.models import TSlicedSpectrum4DFile
 
 
 class IndexView(TemplateView):
@@ -38,7 +42,8 @@ class FileStatusView(LoginRequiredMixin, TemplateView, ABC):  # pylint: disable=
     """
 
     login_url = reverse_lazy("login")
-
+    title = None
+    subtitle = None
     model = None
     template_name = "table.html"
     fieldnames = {
@@ -82,6 +87,64 @@ class FileStatusView(LoginRequiredMixin, TemplateView, ABC):  # pylint: disable=
             reverse_lazy(f"Project formfac:{self.model.__name__.lower()}-list")
             + "?format=datatables"
         )
+
+        context["title"] = self.title or self.model.verbose_name
+        context["subtitle"] = self.subtitle or self.model.get_doc()
+
+        return context
+
+
+class MetaStatusView(LoginRequiredMixin, TemplateView, ABC):  # pylint: disable=R0901
+    """Status view for file meta information.
+
+    This view is abstract. You should use the Disk and tape specific views.
+    """
+
+    login_url = reverse_lazy("login")
+    title = None
+    subtitle = None
+    model = None
+    template_name = "table.html"
+    fieldnames = {
+        "ensemble": "Ens",
+        "stream": "Stream",
+        "configuration_range": "Cfg range",
+        "source_set": "Src set",
+        "current": "Curr",
+        "state": "State",
+        "parity": "Parity",
+        "flavor": "Flavor",
+        "spin": "Spin",
+    }
+
+    def get_context_data(self, **kwargs):
+        """Filters model and returns table
+        """
+        if not self.model:
+            raise ValueError(
+                "You need to specify a model for initializing a `FileStatusView`."
+            )
+
+        context = super().get_context_data(**kwargs)
+
+        instances = self.model.objects.all()
+
+        context["status"] = {
+            "done": 0,
+            "total": instances.count(),
+        }
+        context["status"]["pending"] = (
+            context["status"]["total"] - context["status"]["done"]
+        )
+        context["model"] = self.model
+        context["columns"] = self.fieldnames
+        context["api_url"] = (
+            reverse_lazy(f"Project formfac:{self.model.__name__.lower()}-list")
+            + "?format=datatables"
+        )
+
+        context["title"] = self.title or self.model.verbose_name
+        context["subtitle"] = self.subtitle or self.model.get_doc()
 
         return context
 
@@ -161,6 +224,25 @@ class DiskFormFactor4DStatusView(FileStatusView):
     }
 
 
+class NonExistentSlicedSAveragedFormFactor4DView(MetaStatusView):
+    """Presents sliced and avereged ff4d meta entries which are neither on tape nor disk
+    """
+
+    title = "Non-existent t-sliced & averaged Form Factor 4D entries"
+    subtitle = (
+        "This view presents t-sliced & averaged Form Factor 4D entries"
+        " which are neither on file, nor on tape."
+    )
+    model = TSlicedSAveragedFormFactor4DFile
+    fieldnames = {
+        "ensemble": "Ens",
+        "stream": "Stream",
+        "source_set": "Src set",
+        "configuration": "Cfg",
+        "t_separation": "T sep",
+    }
+
+
 # -------------------------------------
 # Correlator
 # -------------------------------------
@@ -196,6 +278,27 @@ class TapeCorrelatorH5DsetStatusView(FileStatusView):
     }
 
 
+class NonExistentCorrelatorH5DsetView(MetaStatusView):
+    """Presents sliced and avereged correlator meta entries which are neither on tape
+    nor disk
+    """
+
+    title = "Non-existent correlator entries"
+    subtitle = (
+        "This view presents correlator entries"
+        " which are neither on file, nor on tape."
+    )
+    model = CorrelatorMeta
+    fieldnames = {
+        "correlator": "Corr",
+        "ensemble": "Ens",
+        "stream": "Stream",
+        "configuration": "Cfg",
+        "source_set": "Src set",
+        "source": "Src",
+    }
+
+
 # -------------------------------------
 # Spectrum
 # -------------------------------------
@@ -219,3 +322,42 @@ class DiskTSlicedSpectrum4DStatusView(DiskTSlicedFormFactor4DStatusView):
 
 class DiskSpectrum4DStatusView(DiskFormFactor4DStatusView):
     model = DiskSpectrum4DFile
+
+
+class NonExistentSlicedSAveragedSpectrum4DView(MetaStatusView):
+    """Presents sliced and avereged ff4d meta entries which are neither on tape nor disk
+    """
+
+    title = "Non-existent t-sliced & averaged Spectrum 4D entries"
+    subtitle = (
+        "This view presents t-sliced & averaged Spectrum 4D entries"
+        " which are neither on file, nor on tape."
+    )
+    model = TSlicedSAveragedSpectrum4DFile
+    fieldnames = {
+        "ensemble": "Ens",
+        "stream": "Stream",
+        "source_set": "Src set",
+        "configuration": "Cfg",
+        "t_separation": "T sep",
+    }
+
+
+class NonExistentSlicedSpectrum4DView(MetaStatusView):
+    """Presents sliced and avereged ff4d meta entries which are neither on tape nor disk
+    """
+
+    title = "Non-existent t-sliced Spectrum 4D entries"
+    subtitle = (
+        "This view presents t-sliced Spectrum 4D entries"
+        " which are neither on file, nor on tape."
+    )
+    model = TSlicedSpectrum4DFile
+    fieldnames = {
+        "ensemble": "Ens",
+        "stream": "Stream",
+        "source_set": "Src set",
+        "configuration": "Cfg",
+        "t_separation": "T sep",
+        "source": "Src",
+    }

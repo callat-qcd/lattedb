@@ -23,14 +23,29 @@ from lattedb.project.formfac.views import DiskTSlicedSAveragedFormFactor4DStatus
 from lattedb.project.formfac.views import TapeTSlicedSAveragedFormFactor4DStatusView
 from lattedb.project.formfac.views import DiskTSlicedFormFactor4DStatusView
 from lattedb.project.formfac.views import DiskFormFactor4DStatusView
+from lattedb.project.formfac.views import NonExistentSlicedSAveragedFormFactor4DView
 
 from lattedb.project.formfac.views import DiskCorrelatorH5DsetStatusView
 from lattedb.project.formfac.views import TapeCorrelatorH5DsetStatusView
+from lattedb.project.formfac.views import NonExistentCorrelatorH5DsetView
+
+
+# from lattedb.project.formfac.views import NonExistentCorrelatorH5DsetFileViewSet
+
 
 from lattedb.project.formfac.views import DiskTSlicedSAveragedSpectrum4DStatusView
 from lattedb.project.formfac.views import TapeTSlicedSAveragedSpectrum4DStatusView
 from lattedb.project.formfac.views import DiskTSlicedSpectrum4DStatusView
 from lattedb.project.formfac.views import DiskSpectrum4DStatusView
+from lattedb.project.formfac.views import NonExistentSlicedSAveragedSpectrum4DView
+from lattedb.project.formfac.views import NonExistentSlicedSpectrum4DView
+
+
+# from lattedb.project.formfac.views import (
+#    NonExistentSlicedSAveragedSpectrum4DFileViewSet,
+# )
+# from lattedb.project.formfac.views import NonExistentSlicedSpectrum4DFileViewSet
+
 
 from lattedb.project.formfac.rest.serializers import ROUTER
 
@@ -58,12 +73,22 @@ urlpatterns = [
         name="Sliced Averaged Form Factor Tape Status",
     ),
     path(
+        "non-existent-sliced-averaged-status",
+        NonExistentSlicedSAveragedFormFactor4DView.as_view(),
+        name="Non Existent Sliced Averaged Form Factor Status",
+    ),
+    path(
         "disk-sliced-status",
         DiskTSlicedFormFactor4DStatusView.as_view(),
         name="Sliced Form Factor Disk Status",
     ),
     path(
         "disk-status",
+        DiskFormFactor4DStatusView.as_view(),
+        name="Form Factor Disk Status",
+    ),
+    path(
+        "non-existent-disk-status",
         DiskFormFactor4DStatusView.as_view(),
         name="Form Factor Disk Status",
     ),
@@ -76,6 +101,11 @@ urlpatterns = [
         "tape-corr-status",
         TapeCorrelatorH5DsetStatusView.as_view(),
         name="Correlator Tape Status",
+    ),
+    path(
+        "non-existent-correlator",
+        NonExistentCorrelatorH5DsetView.as_view(),
+        name="Non Existent Correlator Status",
     ),
     path(
         "disk-spec-sliced-averaged-status",
@@ -96,5 +126,15 @@ urlpatterns = [
         "disk-spec-status",
         DiskSpectrum4DStatusView.as_view(),
         name="Spectrum Disk Status",
+    ),
+    path(
+        "non-existent-sliced-averaged-spectrum",
+        NonExistentSlicedSAveragedSpectrum4DView.as_view(),
+        name="Non Existent Sliced Averaged Spectrum Status",
+    ),
+    path(
+        "non-existent-sliced-spectrum",
+        NonExistentSlicedSpectrum4DView.as_view(),
+        name="Non Existent Sliced Spectrum Status",
     ),
 ]
