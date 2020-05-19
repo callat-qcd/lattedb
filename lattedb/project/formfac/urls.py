@@ -23,8 +23,15 @@ from lattedb.project.formfac.views import DiskTSlicedSAveragedFormFactor4DStatus
 from lattedb.project.formfac.views import TapeTSlicedSAveragedFormFactor4DStatusView
 from lattedb.project.formfac.views import DiskTSlicedFormFactor4DStatusView
 from lattedb.project.formfac.views import DiskFormFactor4DStatusView
+
 from lattedb.project.formfac.views import DiskCorrelatorH5DsetStatusView
 from lattedb.project.formfac.views import TapeCorrelatorH5DsetStatusView
+
+from lattedb.project.formfac.views import DiskTSlicedSAveragedSpectrum4DStatusView
+from lattedb.project.formfac.views import TapeTSlicedSAveragedSpectrum4DStatusView
+from lattedb.project.formfac.views import DiskTSlicedSpectrum4DStatusView
+from lattedb.project.formfac.views import DiskSpectrum4DStatusView
+
 from lattedb.project.formfac.rest.serializers import ROUTER
 
 app_name = "Project formfac"
@@ -69,5 +76,25 @@ urlpatterns = [
         "tape-corr-status",
         TapeCorrelatorH5DsetStatusView.as_view(),
         name="Correlator Tape Status",
+    ),
+    path(
+        "disk-spec-sliced-averaged-status",
+        DiskTSlicedSAveragedSpectrum4DStatusView.as_view(),
+        name="Sliced Averaged Spectrum Disk Status",
+    ),
+    path(
+        "tape-spec-sliced-averaged-status",
+        TapeTSlicedSAveragedSpectrum4DStatusView.as_view(),
+        name="Sliced Averaged Spectrum Tape Status",
+    ),
+    path(
+        "disk-spec-sliced-status",
+        DiskTSlicedSpectrum4DStatusView.as_view(),
+        name="Sliced Spectrum Disk Status",
+    ),
+    path(
+        "disk-spec-status",
+        DiskSpectrum4DStatusView.as_view(),
+        name="Spectrum Disk Status",
     ),
 ]

@@ -10,12 +10,18 @@ from django.urls import reverse_lazy
 
 from lattedb.project.formfac.models import DiskConcatenatedFormFactor4DFile
 from lattedb.project.formfac.models import TapeConcatenatedFormFactor4DFile
-from lattedb.project.formfac.models import TapeTSlicedSAveragedFormFactor4DFile
 from lattedb.project.formfac.models import DiskTSlicedSAveragedFormFactor4DFile
-from lattedb.project.formfac.models import DiskFormFactor4DFile
+from lattedb.project.formfac.models import TapeTSlicedSAveragedFormFactor4DFile
 from lattedb.project.formfac.models import DiskTSlicedFormFactor4DFile
+from lattedb.project.formfac.models import DiskFormFactor4DFile
+
 from lattedb.project.formfac.models import DiskCorrelatorH5Dset
 from lattedb.project.formfac.models import TapeCorrelatorH5Dset
+
+from lattedb.project.formfac.models import DiskTSlicedSAveragedSpectrum4DFile
+from lattedb.project.formfac.models import TapeTSlicedSAveragedSpectrum4DFile
+from lattedb.project.formfac.models import DiskTSlicedSpectrum4DFile
+from lattedb.project.formfac.models import DiskSpectrum4DFile
 
 
 class IndexView(TemplateView):
@@ -78,6 +84,11 @@ class FileStatusView(LoginRequiredMixin, TemplateView, ABC):  # pylint: disable=
         )
 
         return context
+
+
+# -------------------------------------
+# Form Factor
+# -------------------------------------
 
 
 class DiskConcatenatedFormFactor4DStatusView(FileStatusView):
@@ -150,6 +161,11 @@ class DiskFormFactor4DStatusView(FileStatusView):
     }
 
 
+# -------------------------------------
+# Correlator
+# -------------------------------------
+
+
 class DiskCorrelatorH5DsetStatusView(FileStatusView):
     model = DiskCorrelatorH5Dset
     fieldnames = {
@@ -178,3 +194,28 @@ class TapeCorrelatorH5DsetStatusView(FileStatusView):
         "machine": "Machine",
         "date_modified": "Date",
     }
+
+
+# -------------------------------------
+# Spectrum
+# -------------------------------------
+
+
+class DiskTSlicedSAveragedSpectrum4DStatusView(
+    DiskTSlicedSAveragedFormFactor4DStatusView
+):
+    model = DiskTSlicedSAveragedSpectrum4DFile
+
+
+class TapeTSlicedSAveragedSpectrum4DStatusView(
+    TapeTSlicedSAveragedFormFactor4DStatusView
+):
+    model = TapeTSlicedSAveragedSpectrum4DFile
+
+
+class DiskTSlicedSpectrum4DStatusView(DiskTSlicedFormFactor4DStatusView):
+    model = DiskTSlicedSpectrum4DFile
+
+
+class DiskSpectrum4DStatusView(DiskFormFactor4DStatusView):
+    model = DiskSpectrum4DFile

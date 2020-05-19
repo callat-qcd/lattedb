@@ -17,10 +17,10 @@
                 <li class="dropdown-submenu">
                     <a class="dropdown-item dropdown-toggle" href="#">Disk</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'Project formfac:Form Factor Disk Status' %}">Base</a></li>
                         <li><a class="dropdown-item" href="{% url 'Project formfac:Sliced Form Factor Disk Status' %}">T-sliced</a></li>
                         <li><a class="dropdown-item" href="{% url 'Project formfac:Sliced Averaged Form Factor Disk Status' %}">T-sliced & source averaged</a></li>
                         <li><a class="dropdown-item" href="{% url 'Project formfac:Concatenated Form Factor Disk Status' %}">Concatenated</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Form Factor Disk Status' %}">Raw</a></li>
                     </ul>
                 </li>
                 <li class="dropdown-submenu">
@@ -38,13 +38,32 @@
                 <li class="dropdown-submenu">
                     <a class="dropdown-item dropdown-toggle" href="#">Disk</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'Project formfac:Correlator Disk Status' %}">Base</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Correlator Disk Status' %}">Raw</a></li>
                     </ul>
                 </li>
                 <li class="dropdown-submenu">
                     <a class="dropdown-item dropdown-toggle" href="#">Tape</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'Project formfac:Correlator Tape Status' %}">Base</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Correlator Tape Status' %}">Raw</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="dropdown-submenu">
+            <a class="dropdown-item dropdown-toggle" href="#">Spectrum 4D</a>
+            <ul class="dropdown-menu">
+                <li class="dropdown-submenu">
+                    <a class="dropdown-item dropdown-toggle" href="#">Disk</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Sliced Averaged Spectrum Disk Status' %}">T-sliced & source averaged</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Sliced Spectrum Disk Status' %}">T-sliced</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Spectrum Disk Status' %}">Raw</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown-submenu">
+                    <a class="dropdown-item dropdown-toggle" href="#">Tape</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Sliced Averaged Spectrum Tape Status' %}">T-sliced & source averaged</a></li>
                     </ul>
                 </li>
             </ul>

@@ -25,10 +25,21 @@ from lattedb.project.formfac.models import CorrelatorMeta
 from lattedb.project.formfac.models import DiskCorrelatorH5Dset
 from lattedb.project.formfac.models import TapeCorrelatorH5Dset
 
+from lattedb.project.formfac.models import TSlicedSAveragedSpectrum4DFile
+from lattedb.project.formfac.models import DiskTSlicedSAveragedSpectrum4DFile
+from lattedb.project.formfac.models import TapeTSlicedSAveragedSpectrum4DFile
+
+from lattedb.project.formfac.models import TSlicedSpectrum4DFile
+from lattedb.project.formfac.models import DiskTSlicedSpectrum4DFile
+
+from lattedb.project.formfac.models import Spectrum4DFile
+from lattedb.project.formfac.models import DiskSpectrum4DFile
+
 VIEWSETS = []
 
-
-## ConcatenatedFormFactor4D
+# -------------------------------------
+# ConcatenatedFormFactor4D
+# -------------------------------------
 
 
 class ConcatenatedFormFactor4DFileSerializer(serializers.ModelSerializer):
@@ -72,7 +83,9 @@ class TapeConcatenatedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
 
 VIEWSETS.append(TapeConcatenatedFormFactor4DFileViewSet)
 
-## TSlicedSAveragedFormFactor4D
+# -------------------------------------
+# TSlicedSAveragedFormFactor4D
+# -------------------------------------
 
 
 class TSlicedSAveragedFormFactor4DFileSerializer(serializers.ModelSerializer):
@@ -116,7 +129,9 @@ class TapeTSlicedSAveragedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet)
 
 VIEWSETS.append(TapeTSlicedSAveragedFormFactor4DFileViewSet)
 
-## TSlicedFormFactor4D
+# -------------------------------------
+# TSlicedFormFactor4D
+# -------------------------------------
 
 
 class TSlicedFormFactor4DFileSerializer(serializers.ModelSerializer):
@@ -142,8 +157,9 @@ class DiskTSlicedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
 
 VIEWSETS.append(DiskTSlicedFormFactor4DFileViewSet)
 
-
-## TSlicedSAveragedFormFactor4D
+# -------------------------------------
+# TSlicedSAveragedFormFactor4D
+# -------------------------------------
 
 
 class FormFactor4DFileSerializer(serializers.ModelSerializer):
@@ -168,7 +184,10 @@ class DiskFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 VIEWSETS.append(DiskFormFactor4DFileViewSet)
-## Correlator Tables
+
+# -------------------------------------
+# Correlator Tables
+# -------------------------------------
 
 
 class CorrelatorMetaSerializer(serializers.ModelSerializer):
@@ -211,6 +230,108 @@ class TapeCorrelatorH5DsetFileViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 VIEWSETS.append(TapeCorrelatorH5DsetFileViewSet)
+
+# -------------------------------------
+# Spectrum
+# -------------------------------------
+
+
+class TSlicedSAveragedSpectrum4DFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TSlicedSAveragedSpectrum4DFile
+        fields = "__all__"
+
+
+class DiskTSlicedSAveragedSpectrum4DFileSerializer(serializers.ModelSerializer):
+    file = TSlicedSAveragedSpectrum4DFileSerializer()
+
+    class Meta:
+        model = DiskTSlicedSAveragedSpectrum4DFile
+        fields = "__all__"
+
+
+class TapeTSlicedSAveragedSpectrum4DFileSerializer(serializers.ModelSerializer):
+    file = TSlicedSAveragedSpectrum4DFileSerializer()
+
+    class Meta:
+        model = TapeTSlicedSAveragedSpectrum4DFile
+        fields = "__all__"
+
+
+class DiskTSlicedSAveragedSpectrum4DFileViewSet(viewsets.ReadOnlyModelViewSet):
+    name = "disk-sliced-averaged"
+    exclude_from_nav = True
+    queryset = DiskTSlicedSAveragedSpectrum4DFile.objects.all()
+    serializer_class = DiskTSlicedSAveragedSpectrum4DFileSerializer
+
+
+VIEWSETS.append(DiskTSlicedSAveragedSpectrum4DFileViewSet)
+
+
+class TapeTSlicedSAveragedSpectrum4DFileViewSet(viewsets.ReadOnlyModelViewSet):
+    name = "tape-sliced-averaged-status"
+    exclude_from_nav = True
+    queryset = TapeTSlicedSAveragedSpectrum4DFile.objects.all()
+    serializer_class = TapeTSlicedSAveragedSpectrum4DFileSerializer
+
+
+VIEWSETS.append(TapeTSlicedSAveragedSpectrum4DFileViewSet)
+
+# -------------------------------------
+# TSlicedSpectrum4D
+# -------------------------------------
+
+
+class TSlicedSpectrum4DFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TSlicedSpectrum4DFile
+        fields = "__all__"
+
+
+class DiskTSlicedSpectrum4DFileSerializer(serializers.ModelSerializer):
+    file = TSlicedSpectrum4DFileSerializer()
+
+    class Meta:
+        model = DiskTSlicedSpectrum4DFile
+        fields = "__all__"
+
+
+class DiskTSlicedSpectrum4DFileViewSet(viewsets.ReadOnlyModelViewSet):
+    name = "disk-sliced"
+    exclude_from_nav = True
+    queryset = DiskTSlicedSpectrum4DFile.objects.all()
+    serializer_class = DiskTSlicedSpectrum4DFileSerializer
+
+
+VIEWSETS.append(DiskTSlicedSpectrum4DFileViewSet)
+
+# -------------------------------------
+# TSlicedSAveragedSpectrum4D
+# -------------------------------------
+
+
+class Spectrum4DFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Spectrum4DFile
+        fields = "__all__"
+
+
+class DiskSpectrum4DFileSerializer(serializers.ModelSerializer):
+    file = Spectrum4DFileSerializer()
+
+    class Meta:
+        model = DiskSpectrum4DFile
+        fields = "__all__"
+
+
+class DiskSpectrum4DFileViewSet(viewsets.ReadOnlyModelViewSet):
+    name = "disk"
+    exclude_from_nav = True
+    queryset = DiskSpectrum4DFile.objects.all()
+    serializer_class = DiskSpectrum4DFileSerializer
+
+
+VIEWSETS.append(DiskSpectrum4DFileViewSet)
 
 
 ROUTER = routers.DefaultRouter()
