@@ -7,6 +7,8 @@ server.
 """
 from rest_framework import routers, serializers, viewsets
 
+from django.db.models import Q
+
 from lattedb.project.formfac.models import ConcatenatedFormFactor4DFile
 from lattedb.project.formfac.models import DiskConcatenatedFormFactor4DFile
 from lattedb.project.formfac.models import TapeConcatenatedFormFactor4DFile
@@ -36,6 +38,11 @@ from lattedb.project.formfac.models import Spectrum4DFile
 from lattedb.project.formfac.models import DiskSpectrum4DFile
 
 VIEWSETS = []
+
+
+Q_ON_TAPE_FALSE = Q(tape__isnull=True) | (Q(tape__isnull=False) & Q(tape__exists=False))
+Q_ON_DISK_FALSE = Q(disk__isnull=True) | (Q(disk__isnull=False) & Q(disk__exists=False))
+Q_DOES_NOT_EXIST = Q_ON_DISK_FALSE & Q_ON_TAPE_FALSE
 
 # -------------------------------------
 # ConcatenatedFormFactor4D
@@ -128,6 +135,16 @@ class TapeTSlicedSAveragedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet)
 
 
 VIEWSETS.append(TapeTSlicedSAveragedFormFactor4DFileViewSet)
+
+
+class NonExistentSlicedSAveragedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
+    name = "non-existent-sliced-averaged-formfactor"
+    exclude_from_nav = True
+    queryset = TSlicedSAveragedFormFactor4DFile.objects.filter(Q_DOES_NOT_EXIST)
+    serializer_class = TSlicedSAveragedFormFactor4DFileSerializer
+
+
+VIEWSETS.append(NonExistentSlicedSAveragedFormFactor4DFileViewSet)
 
 # -------------------------------------
 # TSlicedFormFactor4D
@@ -231,6 +248,17 @@ class TapeCorrelatorH5DsetFileViewSet(viewsets.ReadOnlyModelViewSet):
 
 VIEWSETS.append(TapeCorrelatorH5DsetFileViewSet)
 
+
+class NonExistentCorrelatorH5DsetFileViewSet(viewsets.ReadOnlyModelViewSet):
+    name = "non-existent-correlator-h5dset"
+    exclude_from_nav = True
+    queryset = CorrelatorMeta.objects.filter(Q_DOES_NOT_EXIST)
+    serializer_class = CorrelatorMetaSerializer
+
+
+VIEWSETS.append(NonExistentCorrelatorH5DsetFileViewSet)
+
+
 # -------------------------------------
 # Spectrum
 # -------------------------------------
@@ -277,6 +305,16 @@ class TapeTSlicedSAveragedSpectrum4DFileViewSet(viewsets.ReadOnlyModelViewSet):
 
 VIEWSETS.append(TapeTSlicedSAveragedSpectrum4DFileViewSet)
 
+
+class NonExistentSlicedSAveragedSpectrum4DFileViewSet(viewsets.ReadOnlyModelViewSet):
+    name = "non-existent-sliced-averaged-spectrum"
+    exclude_from_nav = True
+    queryset = TSlicedSAveragedSpectrum4DFile.objects.filter(Q_DOES_NOT_EXIST)
+    serializer_class = TSlicedSAveragedSpectrum4DFileSerializer
+
+
+VIEWSETS.append(NonExistentSlicedSAveragedSpectrum4DFileViewSet)
+
 # -------------------------------------
 # TSlicedSpectrum4D
 # -------------------------------------
@@ -304,6 +342,16 @@ class DiskTSlicedSpectrum4DFileViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 VIEWSETS.append(DiskTSlicedSpectrum4DFileViewSet)
+
+
+class NonExistentSlicedSpectrum4DFileViewSet(viewsets.ReadOnlyModelViewSet):
+    name = "non-existent-sliced-spectrum"
+    exclude_from_nav = True
+    queryset = TSlicedSpectrum4DFile.objects.filter(Q_ON_DISK_FALSE)
+    serializer_class = TSlicedSpectrum4DFileSerializer
+
+
+VIEWSETS.append(NonExistentSlicedSpectrum4DFileViewSet)
 
 # -------------------------------------
 # TSlicedSAveragedSpectrum4D
