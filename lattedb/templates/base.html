@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head-extra %}
+     <link href="{% static 'css/lattedb-base.css' %}" rel="stylesheet">
+{% endblock head-extra %}
+
+{% block nav-app-links %}
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown" aria-expanded="false">
+        File Status
+    </a>
+    <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+            <a class="dropdown-item dropdown-toggle" href="#">Form Factor 4D</a>
+            <ul class="dropdown-menu">
+                <li class="dropdown-submenu">
+                    <a class="dropdown-item dropdown-toggle" href="#">Disk</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Sliced Form Factor Disk Status' %}">T-sliced</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Sliced Averaged Form Factor Disk Status' %}">T-sliced & source averaged</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Concatenated Form Factor Disk Status' %}">Concatenated</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Form Factor Disk Status' %}">Raw</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown-submenu">
+                    <a class="dropdown-item dropdown-toggle" href="#">Tape</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Sliced Averaged Form Factor Tape Status' %}">T-sliced & source averaged</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Concatenated Form Factor Tape Status' %}">Concatenated</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="dropdown-submenu">
+            <a class="dropdown-item dropdown-toggle" href="#">Correlator</a>
+            <ul class="dropdown-menu">
+                <li class="dropdown-submenu">
+                    <a class="dropdown-item dropdown-toggle" href="#">Disk</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Correlator Disk Status' %}">Raw</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown-submenu">
+                    <a class="dropdown-item dropdown-toggle" href="#">Tape</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Correlator Tape Status' %}">Raw</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="dropdown-submenu">
+            <a class="dropdown-item dropdown-toggle" href="#">Spectrum 4D</a>
+            <ul class="dropdown-menu">
+                <li class="dropdown-submenu">
+                    <a class="dropdown-item dropdown-toggle" href="#">Disk</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Sliced Averaged Spectrum Disk Status' %}">T-sliced & source averaged</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Sliced Spectrum Disk Status' %}">T-sliced</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Spectrum Disk Status' %}">Raw</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown-submenu">
+                    <a class="dropdown-item dropdown-toggle" href="#">Tape</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'Project formfac:Sliced Averaged Spectrum Tape Status' %}">T-sliced & source averaged</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</li>
+{% endblock nav-app-links %}

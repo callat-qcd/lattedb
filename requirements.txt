@@ -1,5 +1,5 @@
-espressodb>=1.0.0
-Django==2.2.*
+espressodb>=1.2.0
+Django>=3.0
 django-bootstrap4
 django-extensions
 django-widget-tweaks
@@ -9,3 +9,4 @@ django-filter
 djangorestframework
 djangorestframework-datatables
 h5py
+psycopg2
