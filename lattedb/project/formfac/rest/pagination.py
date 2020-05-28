@@ -15,8 +15,16 @@ class Paginator(DatatablesPageNumberPagination):
     def paginate_queryset(self, queryset, request, view=None):
         """Paginates queryset and sets `recordsExist`.
         """
+        entry = queryset.first()
+
         pages = super().paginate_queryset(queryset, request, view=view)
-        self.recordsExist = queryset.filter(exists=True).count()  # pylint:disable=C0103
+
+        self.recordsExist = (  # pylint:disable=C0103
+            queryset.filter(exists=True).count()
+            if entry
+            and "exists" in set(field.name for field in entry.get_open_fields())
+            else None
+        )
         return pages
 
     def get_paginated_response(self, data):
