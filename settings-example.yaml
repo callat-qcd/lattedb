@@ -18,4 +18,5 @@ ALLOWED_HOSTS:
     - 127.0.0.1
     - localhost
     - ithems.lbl.gov
+    - testserver
 DEBUG: True
