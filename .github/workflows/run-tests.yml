@@ -21,6 +21,9 @@ jobs:
             - name: Upgrade pip
               run: python -m pip install --upgrade pip
 
+            - name: Remove psycopg2 from requirements (fails on MacOS install)
+              run: awk '!/psycopg2/' requirements.txt  > temp.txt && mv temp.txt requirements.txt
+
             - name: Install dependencies
               run: |
                   pip install -r requirements.txt
