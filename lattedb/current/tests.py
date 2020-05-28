@@ -16,6 +16,9 @@ class LocalParser(ObjectParser):
         "diracstruct": "gamma_5",
         "momentum": "0",
         "description": "pseudoscalar",
+        "nx": 1,
+        "ny": 2,
+        "nz": 3,
     }
 
 

@@ -51,6 +51,9 @@ class HadronParser(ObjectParser):
         "isospin_x2": "1",
         "isospin_z_x2": "1",
         "momentum": "0",
+        "nx": 1,
+        "ny": 2,
+        "nz": 3,
     }
 
     _consistency_check_changes = [
@@ -80,6 +83,9 @@ class MesonParser(ObjectParser):
         "isospin_x2": "1",
         "isospin_z_x2": "1",
         "momentum": "0",
+        "nx": 1,
+        "ny": 2,
+        "nz": 3,
     }
 
 
