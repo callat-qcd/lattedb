@@ -201,21 +201,59 @@ class TapeCorrelatorH5DsetStatusView(FileStatusView):
 # -------------------------------------
 
 
-class DiskTSlicedSAveragedSpectrum4DStatusView(
-    DiskTSlicedSAveragedFormFactor4DStatusView
-):
+class DiskTSlicedSAveragedSpectrum4DStatusView(FileStatusView):
     model = DiskTSlicedSAveragedSpectrum4DFile
+    fieldnames = {
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.source_set": "Src set",
+        "file.configuration": "Cfg",
+        "exists": "Exists",
+        "machine": "Machine",
+        "size": "Size",
+        "date_modified": "Date",
+    }
 
 
-class TapeTSlicedSAveragedSpectrum4DStatusView(
-    TapeTSlicedSAveragedFormFactor4DStatusView
-):
+class TapeTSlicedSAveragedSpectrum4DStatusView(FileStatusView):
     model = TapeTSlicedSAveragedSpectrum4DFile
+    fieldnames = {
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.source_set": "Src set",
+        "file.configuration": "Cfg",
+        "exists": "Exists",
+        "machine": "Machine",
+        "size": "Size",
+        "date_modified": "Date",
+    }
 
 
-class DiskTSlicedSpectrum4DStatusView(DiskTSlicedFormFactor4DStatusView):
+class DiskTSlicedSpectrum4DStatusView(FileStatusView):
     model = DiskTSlicedSpectrum4DFile
+    fieldnames = {
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.source_set": "Src set",
+        "file.configuration": "Cfg",
+        "file.source": "Src",
+        "exists": "Exists",
+        "machine": "Machine",
+        "size": "Size",
+        "date_modified": "Date",
+    }
 
 
-class DiskSpectrum4DStatusView(DiskFormFactor4DStatusView):
+class DiskSpectrum4DStatusView(FileStatusView):
     model = DiskSpectrum4DFile
+    fieldnames = {
+        "file.ensemble": "Ens",
+        "file.stream": "Stream",
+        "file.source_set": "Src set",
+        "file.configuration": "Cfg",
+        "file.source": "Src",
+        "exists": "Exists",
+        "machine": "Machine",
+        "size": "Size",
+        "date_modified": "Date",
+    }
