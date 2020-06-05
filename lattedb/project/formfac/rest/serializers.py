@@ -65,7 +65,7 @@ class TapeConcatenatedFormFactor4DFileSerializer(serializers.ModelSerializer):
 
 
 class DiskConcatenatedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
-    name = "disk-concat"
+    name = "disk-ff4d-concat"
     exclude_from_nav = True
     queryset = DiskConcatenatedFormFactor4DFile.objects.all()
     serializer_class = DiskConcatenatedFormFactor4DFileSerializer
@@ -75,7 +75,7 @@ VIEWSETS.append(DiskConcatenatedFormFactor4DFileViewSet)
 
 
 class TapeConcatenatedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
-    name = "tape-concat"
+    name = "tape-ff4d-concat"
     exclude_from_nav = True
     queryset = TapeConcatenatedFormFactor4DFile.objects.all()
     serializer_class = TapeConcatenatedFormFactor4DFileSerializer
@@ -111,7 +111,7 @@ class TapeTSlicedSAveragedFormFactor4DFileSerializer(serializers.ModelSerializer
 
 
 class DiskTSlicedSAveragedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
-    name = "disk-sliced-averaged"
+    name = "disk-ff4d-sliced-averaged"
     exclude_from_nav = True
     queryset = DiskTSlicedSAveragedFormFactor4DFile.objects.all()
     serializer_class = DiskTSlicedSAveragedFormFactor4DFileSerializer
@@ -121,7 +121,7 @@ VIEWSETS.append(DiskTSlicedSAveragedFormFactor4DFileViewSet)
 
 
 class TapeTSlicedSAveragedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
-    name = "tape-sliced-averaged-status"
+    name = "tape-ff4d-sliced-averaged-status"
     exclude_from_nav = True
     queryset = TapeTSlicedSAveragedFormFactor4DFile.objects.all()
     serializer_class = TapeTSlicedSAveragedFormFactor4DFileSerializer
@@ -149,7 +149,7 @@ class DiskTSlicedFormFactor4DFileSerializer(serializers.ModelSerializer):
 
 
 class DiskTSlicedFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
-    name = "disk-sliced"
+    name = "disk-ff4d-sliced"
     exclude_from_nav = True
     queryset = DiskTSlicedFormFactor4DFile.objects.all()
     serializer_class = DiskTSlicedFormFactor4DFileSerializer
@@ -177,7 +177,7 @@ class DiskFormFactor4DFileSerializer(serializers.ModelSerializer):
 
 
 class DiskFormFactor4DFileViewSet(viewsets.ReadOnlyModelViewSet):
-    name = "disk"
+    name = "disk-ff4d"
     exclude_from_nav = True
     queryset = DiskFormFactor4DFile.objects.all()
     serializer_class = DiskFormFactor4DFileSerializer
@@ -205,7 +205,7 @@ class DiskCorrelatorH5DsetFileSerializer(serializers.ModelSerializer):
 
 
 class DiskCorrelatorH5DsetFileViewSet(viewsets.ReadOnlyModelViewSet):
-    name = "disk-correlator-h5dset"
+    name = "disk-corr-h5dset"
     exclude_from_nav = True
     queryset = DiskCorrelatorH5Dset.objects.all()
     serializer_class = DiskCorrelatorH5DsetFileSerializer
@@ -223,7 +223,7 @@ class TapeCorrelatorH5DsetFileSerializer(serializers.ModelSerializer):
 
 
 class TapeCorrelatorH5DsetFileViewSet(viewsets.ReadOnlyModelViewSet):
-    name = "tape-correlator-h5dset"
+    name = "tape-corr-h5dset"
     exclude_from_nav = True
     queryset = TapeCorrelatorH5Dset.objects.all()
     serializer_class = TapeCorrelatorH5DsetFileSerializer
@@ -259,7 +259,7 @@ class TapeTSlicedSAveragedSpectrum4DFileSerializer(serializers.ModelSerializer):
 
 
 class DiskTSlicedSAveragedSpectrum4DFileViewSet(viewsets.ReadOnlyModelViewSet):
-    name = "disk-sliced-averaged"
+    name = "disk-spec4d-sliced-averaged"
     exclude_from_nav = True
     queryset = DiskTSlicedSAveragedSpectrum4DFile.objects.all()
     serializer_class = DiskTSlicedSAveragedSpectrum4DFileSerializer
@@ -269,7 +269,7 @@ VIEWSETS.append(DiskTSlicedSAveragedSpectrum4DFileViewSet)
 
 
 class TapeTSlicedSAveragedSpectrum4DFileViewSet(viewsets.ReadOnlyModelViewSet):
-    name = "tape-sliced-averaged-status"
+    name = "tape-spec4d-sliced-averaged-status"
     exclude_from_nav = True
     queryset = TapeTSlicedSAveragedSpectrum4DFile.objects.all()
     serializer_class = TapeTSlicedSAveragedSpectrum4DFileSerializer
@@ -297,7 +297,7 @@ class DiskTSlicedSpectrum4DFileSerializer(serializers.ModelSerializer):
 
 
 class DiskTSlicedSpectrum4DFileViewSet(viewsets.ReadOnlyModelViewSet):
-    name = "disk-sliced"
+    name = "disk-spec4d-sliced"
     exclude_from_nav = True
     queryset = DiskTSlicedSpectrum4DFile.objects.all()
     serializer_class = DiskTSlicedSpectrum4DFileSerializer
@@ -325,7 +325,7 @@ class DiskSpectrum4DFileSerializer(serializers.ModelSerializer):
 
 
 class DiskSpectrum4DFileViewSet(viewsets.ReadOnlyModelViewSet):
-    name = "disk"
+    name = "disk-spec4d"
     exclude_from_nav = True
     queryset = DiskSpectrum4DFile.objects.all()
     serializer_class = DiskSpectrum4DFileSerializer

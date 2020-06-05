@@ -38,34 +38,34 @@ app_name = "Project formfac"
 urlpatterns = [
     path(r"api/", include(ROUTER.urls)),
     path(
-        "disk-concat-status",
+        "disk-ff4d-concat-status",
         DiskConcatenatedFormFactor4DStatusView.as_view(),
-        name="Concatenated Form Factor Disk Status",
+        name="Concatenated Form Factor 4D Disk Status",
     ),
     path(
-        "tape-concat-status",
+        "tape-ff4d-concat-status",
         TapeConcatenatedFormFactor4DStatusView.as_view(),
-        name="Concatenated Form Factor Tape Status",
+        name="Concatenated Form Factor 4D Tape Status",
     ),
     path(
-        "disk-sliced-averaged-status",
+        "disk-ff4d-sliced-averaged-status",
         DiskTSlicedSAveragedFormFactor4DStatusView.as_view(),
-        name="Sliced Averaged Form Factor Disk Status",
+        name="Sliced Averaged Form Factor 4D Disk Status",
     ),
     path(
-        "tape-sliced-averaged-status",
+        "tape-ff4d-sliced-averaged-status",
         TapeTSlicedSAveragedFormFactor4DStatusView.as_view(),
-        name="Sliced Averaged Form Factor Tape Status",
+        name="Sliced Averaged Form Factor 4D Tape Status",
     ),
     path(
-        "disk-sliced-status",
+        "disk-ff4d-sliced-status",
         DiskTSlicedFormFactor4DStatusView.as_view(),
-        name="Sliced Form Factor Disk Status",
+        name="Sliced Form Factor 4D Disk Status",
     ),
     path(
-        "disk-status",
+        "disk-ff4d-status",
         DiskFormFactor4DStatusView.as_view(),
-        name="Form Factor Disk Status",
+        name="Form Factor 4D Disk Status",
     ),
     path(
         "disk-corr-status",
@@ -78,23 +78,23 @@ urlpatterns = [
         name="Correlator Tape Status",
     ),
     path(
-        "disk-spec-sliced-averaged-status",
+        "disk-spec4d-sliced-averaged-status",
         DiskTSlicedSAveragedSpectrum4DStatusView.as_view(),
-        name="Sliced Averaged Spectrum Disk Status",
+        name="Sliced Averaged Spectrum 4D Disk Status",
     ),
     path(
-        "tape-spec-sliced-averaged-status",
+        "tape-spec4d-sliced-averaged-status",
         TapeTSlicedSAveragedSpectrum4DStatusView.as_view(),
-        name="Sliced Averaged Spectrum Tape Status",
+        name="Sliced Averaged Spectrum 4D Tape Status",
     ),
     path(
-        "disk-spec-sliced-status",
+        "disk-spec4d-sliced-status",
         DiskTSlicedSpectrum4DStatusView.as_view(),
-        name="Sliced Spectrum Disk Status",
+        name="Sliced Spectrum 4D Disk Status",
     ),
     path(
-        "disk-spec-status",
+        "disk-spec4d-status",
         DiskSpectrum4DStatusView.as_view(),
-        name="Spectrum Disk Status",
+        name="Spectrum 4D Disk Status",
     ),
 ]
