@@ -10,10 +10,15 @@ jobs:
           - name: Checkout code
             uses: actions/checkout@v2
 
-          - name: Build and push Docker images
-            uses: docker/build-push-action@v1
-            with:
-              username: ${{ secrets.SPIN_USERNAME }}
-              password: ${{ secrets.SPIN_TOKEN }}
-              repository: registry.spin.nersc.gov/lattedb/lattedb
-              tags: latest
+          - name: Docker login
+            run: docker login ${{ secrets.SPIN_USERNAME }} -p ${{ secrets.SPIN_TOKEN }}
+          - name: Build:
+            run: docker build -t lattedb .
+          - name: Tag
+            run: |
+                docker tag lattedb registry.spin.nersc.gov/lattedb/lattedb:${{ github.sha }}
+                docker tag lattedb registry.spin.nersc.gov/lattedb/lattedb:latest
+          - name: Push
+            run: |
+                docker push registry.spin.nersc.gov/lattedb/lattedb:${{ github.sha }}
+                docker push registry.spin.nersc.gov/lattedb/lattedb:latest
