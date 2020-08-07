@@ -1,4 +1,7 @@
-lattedb test
+#!/bin/sh
+set -e
+
+pytest -x $LATTEDB_APP_DIR
 lattedb migrate
 lattedb collectstatic --noinput
 lattedb check --deploy
@@ -9,7 +12,7 @@ touch access.log
 
 # Start Gunicorn processes
 echo Starting Gunicorn.
-exec gunicorn lattedb.config.wsgi:application \
+gunicorn lattedb.manage:main \
     --name lattedb \
     --bind 0.0.0.0:8000 \
     --workers 3 \

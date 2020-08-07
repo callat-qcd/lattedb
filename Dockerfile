@@ -31,6 +31,8 @@ RUN pip install -r requirements.txt --cache-dir $LATTEDB_APP_DIR/.pip_cache
 COPY setup.py $LATTEDB_APP_DIR
 COPY README.md $LATTEDB_APP_DIR
 COPY MANIFEST.in $LATTEDB_APP_DIR
+COPY manage.py $LATTEDB_APP_DIR
+COPY pytest.ini $LATTEDB_APP_DIR
 COPY lattedb $LATTEDB_APP_DIR/lattedb
 RUN pip install . --cache-dir $LATTEDB_APP_DIR/.pip_cache
 
@@ -39,7 +41,7 @@ EXPOSE 8000
 
 # Copy entrypoint script into the image
 ## Check if tests pass
-RUN lattedb test
 WORKDIR $LATTEDB_WORK_DIR
-COPY ./docker-entrypoint.sh .
-ENTRYPOINT ["/docker-entrypoint.sh"]
+COPY ./docker-entrypoint.sh $LATTEDB_WORK_DIR
+RUN chmod +x docker-entrypoint.sh
+# ENTRYPOINT ["./docker-entrypoint.sh"]

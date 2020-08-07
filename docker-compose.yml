@@ -9,10 +9,6 @@ services:
             - POSTGRES_PASSWORD=postgres
     app:
         build: .
-        command: >
-            sh -c "lattedb migrate &&
-                   lattedb collectstatic &&
-                   lattedb runserver 0.0.0.0:8000"
         environment:
             - LATTEDB_ROOT_DIR=/www
             - LATTEDB_APP_DIR=/opt/app
@@ -25,6 +21,6 @@ services:
             - ./settings.yaml:/www/settings.yaml
             - ./db-config.yaml:/www/db-config.yaml
         ports:
-            - "8000:8000"
+            - 8000:8000
         depends_on:
             - db
