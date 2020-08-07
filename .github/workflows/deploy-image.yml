@@ -1,0 +1,17 @@
+on:
+  push:
+    branches:
+      - master
+
+
+steps:
+  - name: Checkout code
+    uses: actions/checkout@v2
+
+  - name: Build and push Docker images
+    uses: docker/build-push-action@v1
+    with:
+      username: ${{ secrets.SPIN_USERNAME }}
+      password: ${{ secrets.SPIN_TOKEN }}
+      repository: registry.spin.nersc.gov/lattedb/lattedb
+      tags: latest
