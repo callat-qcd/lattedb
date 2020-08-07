@@ -11,3 +11,4 @@ djangorestframework-datatables
 h5py
 psycopg2
 pytest
+pytest-django
