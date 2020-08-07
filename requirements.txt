@@ -10,3 +10,4 @@ djangorestframework
 djangorestframework-datatables
 h5py
 psycopg2
+gunicorn

@@ -14,11 +14,14 @@ services:
                    lattedb collectstatic &&
                    lattedb runserver 0.0.0.0:8000"
         environment:
-            - LATTEDB_ROOT_DIR=/www/
+            - LATTEDB_ROOT_DIR=/www
+            - LATTEDB_APP_DIR=/opt/app
+            - LATTEDB_WORK_DIR=/lattedb
         volumes:
             - /www/
             - /www/static/
             - /www/media/
+            - /lattedb/
             - ./settings.yaml:/www/settings.yaml
             - ./db-config.yaml:/www/db-config.yaml
         ports:
