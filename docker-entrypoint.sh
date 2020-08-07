@@ -1,3 +1,4 @@
+lattedb test
 lattedb migrate
 lattedb collectstatic --noinput
 lattedb check --deploy
