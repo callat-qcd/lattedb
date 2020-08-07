@@ -21,6 +21,6 @@ services:
             - ./settings.yaml:/www/settings.yaml
             - ./db-config.yaml:/www/db-config.yaml
         ports:
-            - 8000:8000
+            - "8000:8000"
         depends_on:
             - db

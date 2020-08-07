@@ -42,6 +42,6 @@ EXPOSE 8000
 # Copy entrypoint script into the image
 ## Check if tests pass
 WORKDIR $LATTEDB_WORK_DIR
-COPY ./docker-entrypoint.sh $LATTEDB_WORK_DIR
-RUN chmod +x docker-entrypoint.sh
-# ENTRYPOINT ["./docker-entrypoint.sh"]
+COPY ./startup.sh /startup.sh
+RUN chmod +x /startup.sh
+CMD ["/startup.sh"]
