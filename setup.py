@@ -28,6 +28,7 @@ setup(
     keywords=[],
     packages=find_packages(exclude=["docs", "tests"]),
     install_requires=REQUIREMENTS,
+    include_package_data=True,
     entry_points={"console_scripts": ["lattedb=lattedb.manage:main"]},
     classifiers=[
         "Programming Language :: Python :: 3.6",

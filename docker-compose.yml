@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+    db:
+        image: postgres
+        environment:
+            - POSTGRES_DB=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+    app:
+        build: .
+        environment:
+            - LATTEDB_ROOT_DIR=/www
+            - LATTEDB_APP_DIR=/opt/app
+            - LATTEDB_WORK_DIR=/lattedb
+        volumes:
+            - /www/
+            - /www/static/
+            - /www/media/
+            - /lattedb/
+            - ./settings.yaml:/www/settings.yaml
+            - ./db-config.yaml:/www/db-config.yaml
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db
