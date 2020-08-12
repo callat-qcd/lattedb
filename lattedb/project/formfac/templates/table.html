@@ -14,8 +14,8 @@
 
 {% block content %}
 <div class="jumbotron">
-    <h1>{{model.verbose_name}}</h1>
-    {% if model %}<p>{{model.get_doc}}</p>{% endif %}
+    <h1>{{title}}</h1>
+    {% if subtitle %}<p>{{subtitle}}</p>{% endif %}
 </div>
 <div class="w-100 px-5">
     {% if status.total > 0 %}
