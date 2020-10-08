@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+import yaml
+
 from espressodb.management.utilities.files import get_project_settings
 from espressodb.management.utilities.files import get_db_config
 from espressodb.management.utilities.files import ESPRESSO_DB_ROOT
@@ -99,6 +101,27 @@ WSGI_APPLICATION = "lattedb.config.wsgi.application"
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 DB_CONFIG = get_db_config(_SETTINGS_DIR)
 DATABASES = {"default": DB_CONFIG}
+
+def load_local_db():
+    """Loading local db config.
+    """
+    local_db_file = os.path.join(ROOT_DIR, "db-config-local.yaml")
+    db_config = None
+    if os.path.exists(local_db_file):
+        with open(local_db_file, "r") as fin:
+            db_config = yaml.safe_load(fin.read())
+
+        if "ENGINE" not in db_config or "NAME" not in db_config:
+            raise KeyError(f"Local db file {LOCAL_DB} not configured correctly.")
+
+    return db_config
+
+LOCAL_DB = load_local_db()
+
+if LOCAL_DB is not None:
+    DATABASES["local"] = LOCAL_DB
+
+
 
 
 # Password validation
